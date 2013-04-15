@@ -53,9 +53,9 @@
         if (this.useCollisions && !this.hCollisions(v0)) {
             this.entity.x += (this.v.x + v0.x) / 2 * Time.deltaTime;
         }
-        // if (this.useCollisions && !this.vCollisions(v0)) {
+        if (this.useCollisions && !this.vCollisions(v0)) {
             this.entity.y += (this.v.y + v0.y) / 2 * Time.deltaTime;
-        // }
+        }
     };
 
     /**
@@ -108,8 +108,36 @@
             // If the entity collides with an obstacle
             if (Game.map.obstacles.indexOf(Game.map.tilemap[i][futureX]) != -1) {
                 // We replace the entity right on the edge of the obstacle, to end the movement
-                newX = futureX * Game.map.TS + Game.map.TS * (this.v.x < 0 ? 1 : -1);
-                this.entity.x = newX;
+                newX = futureX * Game.map.TS + Game.map.TS * (this.v.x < 0 ? 1 : -this.entity.t_width);
+                this.entity.x = newX + (this.v.x < 0 ? this.entity.t_width : -this.entity.t_width);
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /**
+     * Detects if the entity has a collision in the vertical axis with an obstacle in the map
+     * @param  {Object} v0 The entity's velocity in the previous frame
+     * @return {boolean}
+     */
+    Physics.prototype.vCollisions = function(v0) {
+        var futureY = this.entity.y + (this.v.y + v0.y) / 2 * Time.deltaTime;
+
+        var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.t_height * Game.map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
+            xMin = ( (this.entity.x / Game.map.TS) ) | 0,
+            xMax = ( (this.entity.x / Game.map.TS) + this.entity.t_width ) | 0,
+            newY = 0;
+
+        futureY = (hittingEdge / Game.map.TS) | 0;
+        // Parsing the columns containing the entity
+        for (var j = xMin; j <= xMax; j++) {
+            // If the entity collides with an obstacle
+            // console.log('futureY, j: ', futureY, j);
+            if (Game.map.obstacles.indexOf(Game.map.tilemap[futureY][j]) != -1) {
+                // We replace the entity right on the edge of the obstacle, to end the movement
+                newY = futureY * Game.map.TS + Game.map.TS * (this.v.y < 0 ? 1 : -this.entity.t_height);
+                this.entity.y = newY + (this.v.y < 0 ? this.entity.t_height : -this.entity.t_height);
                 return true;
             }
         }
