@@ -48,7 +48,6 @@ Game.update = function() {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     // We draw the map
-    Game.map.scroll(Game.player);
     Game.map.draw(context);
 
     // Updating all the entities
