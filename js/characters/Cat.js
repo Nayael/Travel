@@ -1,6 +1,6 @@
-// The Character character class file
+// The Cat class
 (function() {
-    var Character = function() {
+    var Cat = function() {
         this.x = (Game.CANVAS_WIDTH >> 1) + 70;
         this.realX = this.x + Game.map.scrollX;
         this.y = 0;
@@ -20,14 +20,12 @@
 
         this.physics = new Game.Physics(this);
         this.physics.jumpHeight = 20;
-        // this.physics.useGravity = false;
-        // this.physics.useCollisions = false;
     };
 
     /**
      * Called on each frame
      */
-    Character.prototype.update = function() {
+    Cat.prototype.update = function() {
         this.realX = this.x + Game.map.scrollX;
         this.realY = this.y + Game.map.scrollY;
 
@@ -35,7 +33,6 @@
             realY0 = this.realY;
 
         this.physics.update();
-                console.log('this.realY: ', this.realY);
 
         var dX = this.realX - realX0,
             dY = this.realY - realY0;
@@ -67,13 +64,10 @@
     };
 
     /**
-     * Renders the character
+     * Renders the cat
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
-    Character.prototype.render = function(context) {
-///////////////
-// TEMPORARY //
-///////////////
+    Cat.prototype.render = function(context) {
         for (var i = 0, j = 0; i < this.body.t_height; i++) {
             for (j = 0; j < this.body.t_width; j++) {
                 context.fillStyle = 'rgb(0, 0, 255)';
@@ -83,30 +77,27 @@
     };
 
     /**
-     * Applies the player's controls on the character
+     * Applies the player's controls on the cat
      */
-    Character.prototype.control = function() {
+    Cat.prototype.control = function() {
         if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
             this.physics.addForce(-this.speed.x, 0);
         }
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
             this.physics.addForce(this.speed.x, 0);
         }
-        if (Keyboard.isDown(Keyboard.UP_ARROW)) {
-            // this.physics.addForce(0, -this.speed.y);
-        }
-        if (Keyboard.isDown(Keyboard.DOWN_ARROW)) {
-            // this.physics.addForce(0, this.speed.y);
-        }
 
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
             this.jump();
         }
+        if (Keyboard.isDown(Keyboard.ESCAPE)) {
+            Game.Npc.leaveNpc(this);
+        }
     };
 
-    Character.prototype.jump = function() {
+    Cat.prototype.jump = function() {
         this.physics.addForce(0, -this.speed.y);
     };
 
-    Game.Character = Character;
+    Game.Cat = Cat;
 })();

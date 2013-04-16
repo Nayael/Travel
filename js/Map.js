@@ -35,6 +35,8 @@
 ////////////////////////////
                     context.fillStyle = 'rgb(255, 0, 0)';
                     context.fillRect(tileX, tileY, this.TS, this.TS);
+                } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
+                    Game.createNpc(this.tilemap[i][j], j, i);
                 }
             }
         }

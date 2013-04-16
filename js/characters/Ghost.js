@@ -97,6 +97,7 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Ghost.prototype.render = function(context) {
+        context.globalAlpha = 0.5;
         switch (this.state){
             case "IDLE_RIGHT":
                 context.drawImage(this.walkrImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
@@ -104,36 +105,33 @@
                     this.frame++;
                 if (this.frame == 8)
                     this.frame = 0;
-            break;
+                break;
             case "IDLE_LEFT":
                 context.drawImage(this.walklImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
                 if (Game.frameCount % 8 == 0)
                     this.frame++;
                 if (this.frame == 8)
                     this.frame = 0;
-            break;
+                break;
             case "WALK_R":
                 context.drawImage(this.walkrImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
-                if (Game.frameCount % 8  == 0)
-                {
+                if (Game.frameCount % 8  == 0) {
                     this.frame++;
-                    console.log(this.frame);
                 }
                 if (this.frame == 8)
                     this.frame = 0;
-            break;
+                break;
             case "WALK_L":
                 context.drawImage(this.walklImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
-                if (Game.frameCount % 8  == 0)
-                {
+                if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
-                if (this.frame == 8)
-                {
+                if (this.frame == 8) {
                     this.frame = 0;
                 }
-            break;
+                break;
         }
+        context.globalAlpha = 1;
     };
 
     /**
@@ -141,7 +139,6 @@
      */
     Ghost.prototype.control = function() {
         this.previousState = this.state;
-        console.log(this.previousState);
         if (Keyboard.isDown(Keyboard.UP_ARROW)){
             this.physics.addForce(0, -this.speed.y)
         }
@@ -179,9 +176,9 @@
             this.takeControl();
         }
 
-
-        if (this.previousState != this.state)
+        if (this.previousState != this.state) {
             this.frame = 0;
+        }
     };
 
     Ghost.prototype.jump = function() {
@@ -192,7 +189,13 @@
      * The ghost takes control of a NPC
      */
     Ghost.prototype.takeControl = function() {
-
+        // Take control of the npc he is colliding
+        for (var i = 0; i < Game.npcs.length; i++) {
+            if (this.body.collide(Game.npcs[i])) {
+                Game.Npc.possessNpc(i);
+                break;
+            }
+        }
     };
 
     Game.Ghost = Ghost;
