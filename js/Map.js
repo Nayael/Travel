@@ -4,6 +4,15 @@
         this.TS = 32;           // The size of a tile in pixels
         this.obstacles = [1];   // Indexes in the tilemap that correspond to physical obstacles
         this.tilemap = window.map;   // Getting the map from the global object
+
+        this.scrollable = true;
+        this.scrollX = 0;
+        this.scrollY = 0;
+
+        this.scrollXMin = 200;
+        this.scrollXMax = 600;
+        this.scrollYMin = 150;
+        this.scrollYMax = 450;
     };
 
     /**
@@ -22,10 +31,25 @@
 // Drawing filled squares //
 ////////////////////////////
                     context.fillStyle = 'rgb(255, 0, 0)';
-                    context.fillRect(j * this.TS, i * this.TS, this.TS, this.TS);
+                    context.fillRect(j * this.TS - this.scrollX, i * this.TS - this.scrollY, this.TS, this.TS);
                 }
             }
         }
+    };
+
+    Map.prototype.scroll = function(player) {
+        // if (player.x <= this.scrollXMin) {
+        //     this.scrollX -= player.physics.v.x < 0 ? 1 : 0;
+        // }
+        // if (player.x + player.t_width * this.TS >= this.scrollXMax) {
+        //     this.scrollX += player.physics.v.x > 0? 1 : 0;
+        // }
+        // if (player.y <= this.scrollYMin) {
+        //     this.scrollY -= player.physics.v.y < 0? 1 : 0;
+        // }
+        // if (player.y + player.t_height * this.TS >= this.scrollYMin) {
+        //     this.scrollY += player.physics.v.y > 0? 1 : 0;
+        // }
     };
 
     Game.Map = Map;

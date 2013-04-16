@@ -2,7 +2,7 @@ var Game = {};  // The game main namespace
 
 // Constants
 Game.CANVAS_WIDTH  = 800;
-Game.CANVAS_HEIGHT = 600;
+Game.CANVAS_HEIGHT = 576;
 
 /**
  * Initializes the game
@@ -33,12 +33,8 @@ Game.update = function() {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     // We draw the map
+    Game.map.scroll(Game.player);
     Game.map.draw(context);
-
-    // Updating the player's character's controls
-    if (Game.player) {
-        Game.player.control();
-    }
     
     // Updating all the entities
     for (var entity in entities) {
@@ -46,5 +42,10 @@ Game.update = function() {
             entities[entity].update();
             entities[entity].render(context);
         }
+    }
+
+    // Updating the player's character's controls
+    if (Game.player) {
+        Game.player.control();
     }
 };
