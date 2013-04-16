@@ -13,6 +13,7 @@ Game.init = function() {
     this.canvas.width  = this.CANVAS_WIDTH;
     this.canvas.height = this.CANVAS_HEIGHT;
     this.context       = this.canvas.getContext('2d');
+    this.frameCount    = 0;
 
     this.map      = new this.Map();
     this.useGhost();   // Playable character
@@ -21,6 +22,8 @@ Game.init = function() {
 
     this.npcs     = [];                 // Non-playable characters
     this.entities = [this.player];      // All the entities in the game
+
+    Game.sound();
 };
 
 /**
@@ -31,6 +34,7 @@ Game.update = function() {
         context  = Game.context,
         entities = Game.entities;
 
+    Game.frameCount++;
     // Clearing the canvas
     context.fillStyle = 'rgb(0, 0, 0)';
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -38,7 +42,7 @@ Game.update = function() {
     // We draw the map
     Game.map.scroll(Game.player);
     Game.map.draw(context);
-    
+
     // Updating all the entities
     for (var entity in entities) {
         if (entities.hasOwnProperty(entity)) {
@@ -59,4 +63,20 @@ Game.update = function() {
 Game.useGhost = function() {
     this.player = new this.Ghost();   // Playable character
     this.map.scrollable = false;
+};
+
+
+Game.sound = function () {
+
+    var mySound1 = new buzz.sound("audio/08 - Elizabeth", {
+        formats: [ "mp3"],
+        preload: true,
+        loop: true
+    });
+
+    if(this.player instanceof this.Ghost)
+    {
+        mySound1.play();
+    }
+
 };

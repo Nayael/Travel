@@ -22,6 +22,17 @@
         this.physics.jumpHeight = 20;
         this.physics.useGravity = false;
         this.physics.useCollisions = false;
+
+        this.state = "IDLE";
+        this.previousState = "IDLE";
+        this.frame = 0;
+        this.elapsedPixels = 0;
+        this.idleImage = new Image();
+        this.walkrImage = new Image();
+        this.walklImage = new Image();
+        this.idleImage.src = "images/sprites/ghost_right.png";
+        this.walkrImage.src = "images/sprites/ghost_right.png";
+        this.walklImage.src = "images/sprites/ghost_left.png";
     };
 
     /**
@@ -86,14 +97,42 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Ghost.prototype.render = function(context) {
-///////////////
-// TEMPORARY //
-///////////////
-        for (var i = 0, j = 0; i < this.body.t_height; i++) {
-            for (j = 0; j < this.body.t_width; j++) {
-                context.fillStyle = 'rgb(0, 0, 255)';
-                context.fillRect((this.x + j * Game.map.TS) | 0, (this.y + i * Game.map.TS) | 0, Game.map.TS, Game.map.TS);
-            }
+        switch (this.state){
+            case "IDLE_RIGHT":
+                context.drawImage(this.walkrImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
+                if (Game.frameCount % 8 == 0)
+                    this.frame++;
+                if (this.frame == 8)
+                    this.frame = 0;
+            break;
+            case "IDLE_LEFT":
+                context.drawImage(this.walklImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
+                if (Game.frameCount % 8 == 0)
+                    this.frame++;
+                if (this.frame == 8)
+                    this.frame = 0;
+            break;
+            case "WALK_R":
+                context.drawImage(this.walkrImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
+                if (Game.frameCount % 8  == 0)
+                {
+                    this.frame++;
+                    console.log(this.frame);
+                }
+                if (this.frame == 8)
+                    this.frame = 0;
+            break;
+            case "WALK_L":
+                context.drawImage(this.walklImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
+                if (Game.frameCount % 8  == 0)
+                {
+                    this.frame++;
+                }
+                if (this.frame == 8)
+                {
+                    this.frame = 0;
+                }
+            break;
         }
     };
 
@@ -101,17 +140,35 @@
      * Applies the player's controls on the character
      */
     Ghost.prototype.control = function() {
+        this.previousState = this.state;
+        console.log(this.previousState);
+        if (Keyboard.isDown(Keyboard.UP_ARROW)){
+            this.physics.addForce(0, -this.speed.y)
+        }
+
+        if (Keyboard.isDown(Keyboard.DOWN_ARROW)){
+            this.physics.addForce(0, this.speed.y)
+        }
+
         if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
+            this.state = "WALK_L";
             this.physics.addForce(-this.speed.x, 0);
         }
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
+            this.state = "WALK_R";
             this.physics.addForce(this.speed.x, 0);
         }
-        if (Keyboard.isDown(Keyboard.UP_ARROW)) {
-            this.physics.addForce(0, -this.speed.y);
+
+        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_R") {
+            this.state = "IDLE_RIGHT";
         }
-        if (Keyboard.isDown(Keyboard.DOWN_ARROW)) {
-            this.physics.addForce(0, this.speed.y);
+
+        if(Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_L"){
+            this.state = "IDLE_LEFT";
+        }
+
+        if(Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "IDLE"){
+            this.state = "IDLE_RIGHT";
         }
 
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
@@ -121,6 +178,10 @@
         if (Keyboard.isDown(Keyboard.CTRL)) {
             this.takeControl();
         }
+
+
+        if (this.previousState != this.state)
+            this.frame = 0;
     };
 
     Ghost.prototype.jump = function() {
@@ -131,7 +192,7 @@
      * The ghost takes control of a NPC
      */
     Ghost.prototype.takeControl = function() {
-        
+
     };
 
     Game.Ghost = Ghost;
