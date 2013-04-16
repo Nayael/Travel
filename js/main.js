@@ -8,6 +8,13 @@ Game.CANVAS_HEIGHT = 576;
  * Initializes the game
  */
 Game.init = function() {
+
+    this.loader = new PxLoader(),
+        this.idleImage = this.loader.addImage("images/sprites/ghost_right.png"),
+        this.walkrImage = this.loader.addImage("images/sprites/ghost_right.png"),
+        this.walklImage = this.loader.addImage("images/sprites/ghost_left.png"),
+        this.platformImage = this.loader.addImage("images/sprites/platform.png");
+
     this.canvas        = document.createElement('canvas');
     this.canvas.id     = 'main';
     this.canvas.width  = this.CANVAS_WIDTH;
@@ -22,6 +29,8 @@ Game.init = function() {
 
     this.npcs     = [new this.Cat()];   // Non-playable characters
     this.entities = [this.player];      // All the entities in the game
+
+    this.loader.start();
 };
 
 /**
@@ -31,7 +40,6 @@ Game.init = function() {
  * @param  {integer} y
  */
 Game.createNpc = function(value, x, y) {
-    // console.log('test');
 };
 
 /**
@@ -73,5 +81,4 @@ Game.useGhost = function() {
     this.player = new this.Ghost();   // Playable character
     this.map.scrollable = false;
     Game.Sound.startBGM(this.player);
-    this.player.onPossess();
 };
