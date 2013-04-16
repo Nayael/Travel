@@ -20,10 +20,8 @@ Game.init = function() {
     this.player.x = 400;
     this.player.y = 200;
 
-    this.npcs     = [new this.Cat()];                 // Non-playable characters
+    this.npcs     = [new this.Cat()];   // Non-playable characters
     this.entities = [this.player];      // All the entities in the game
-
-    Game.sound();
 };
 
 /**
@@ -75,16 +73,5 @@ Game.update = function() {
 Game.useGhost = function() {
     this.player = new this.Ghost();   // Playable character
     this.map.scrollable = false;
-};
-
-Game.sound = function () {
-    var mySound1 = new buzz.sound("audio/08 - Elizabeth", {
-        formats: [ "mp3"],
-        preload: true,
-        loop: true
-    });
-
-    if(this.player instanceof this.Ghost) {
-        mySound1.play();
-    }
+    Game.Sound.startBGM(this.player);
 };
