@@ -42,5 +42,62 @@
         }
     };
 
+    /**
+     * Manually fix the scrolling
+     */
+    Map.prototype.scroll = function() {
+        // If the scroll is already OK, don't do anything
+        if (Game.player.x >= this.scrollXMin && Game.player.x <= this.scrollXMax && Game.player.y >= this.scrollYMin && Game.player.y <= this.scrollYMax) {
+            return;
+        }
+
+        var dX = 0, dY = 0;
+        var self = this;
+
+        // X-axis scrolling
+        if (Game.player.x < this.scrollXMin) {
+            dX = this.scrollXMin - Game.player.x;
+        } else if(Game.player.x + Game.player.body.width > this.scrollXMax) {
+            dX = this.scrollXMax - (Game.player.x + Game.player.body.width);
+        }
+
+        var xInterval = 0, yInterval = 0;
+
+        if (dX != 0) {
+            xInterval = (Game.Npc.STUN_TIME / Math.abs(dX)) | 0;
+            self.scrollX += dX < 0 ? 1 : -1;
+            var xTimer = setInterval(function() {
+                if (!self.scrollable || (Game.player.x >= self.scrollXMin && Game.player.x + Game.player.body.width <= self.scrollXMax)) {
+                    clearInterval(xTimer);
+                    return;
+                }
+                self.scrollX += dX < 0 ? 1 : -1;
+            }, xInterval);
+        }
+
+        // Y-axis scrolling
+        if (Game.player.y < this.scrollYMin) {
+            dY = this.scrollYMin - Game.player.y;
+        } else if(Game.player.y + Game.player.body.height > this.scrollYMax) {
+            dY = this.scrollYMax - (Game.player.y + Game.player.body.height);
+        }
+
+        if (dY != 0) {
+            yInterval = (Game.Npc.STUN_TIME / Math.abs(dY)) | 0;
+            self.scrollY += dY < 0 ? 1 : -1;
+            var yTimer = setInterval(function() {
+                if (!self.scrollable || (Game.player.y >= self.scrollYMin && Game.player.y + Game.player.body.height <= self.scrollYMax)) {
+                    clearInterval(yTimer);
+                    return;
+                }
+                self.scrollY += dY < 0 ? 1 : -1;
+            }, yInterval);
+        }
+
+        // console.log('Game.player.x, Game.player.y: ', Game.player.x, Game.player.y);
+        // console.log('dX, dY: ', dX, dY);
+        // console.log('xInterval, yInterval: ', xInterval, yInterval);
+    };
+
     Game.Map = Map;
 })();

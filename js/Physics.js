@@ -79,8 +79,8 @@
             }
 
             if (newX != false && newY != false) {
-                this.entity.realY = newY;
                 this.entity.realX = newX;
+                this.entity.realY = newY;
             }
         } else {
             this.entity.realX += (this.v.x + v0.x) / 2 * 0.1;

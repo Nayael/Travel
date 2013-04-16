@@ -14,7 +14,7 @@
         });
 
         if(player instanceof Game.Ghost) {
-            mySound1.play();
+            // mySound1.play();
         }
     };
 

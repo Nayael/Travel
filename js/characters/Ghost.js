@@ -13,6 +13,7 @@
             x: 350,
             y: 350
         }
+        this.controllable = true;
 
         this.body          = new Game.Body(this);
         this.body.t_width  = 1;  // The width in tile unit
@@ -38,6 +39,10 @@
      * Called on each frame
      */
     Ghost.prototype.update = function() {
+        if (this.previousState != this.state) {
+            this.frame = 0;
+        }
+
         this.realX = this.x + Game.map.scrollX;
         this.realY = this.y + Game.map.scrollY;
 
@@ -60,6 +65,7 @@
             this.x = Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS - 1;
             this.physics.v.x = 0;
         }
+
         if (this.y <= 0) {
             this.y = 1;
             this.physics.v.y = 0;
@@ -138,45 +144,38 @@
      */
     Ghost.prototype.control = function() {
         this.previousState = this.state;
-        if (Keyboard.isDown(Keyboard.UP_ARROW)){
+        if (this.controllable && Keyboard.isDown(Keyboard.UP_ARROW)) {
             this.physics.addForce(0, -this.speed.y)
         }
 
-        if (Keyboard.isDown(Keyboard.DOWN_ARROW)){
+        if (this.controllable && Keyboard.isDown(Keyboard.DOWN_ARROW)) {
             this.physics.addForce(0, this.speed.y)
         }
 
-        if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
+        if (this.controllable && Keyboard.isDown(Keyboard.LEFT_ARROW)) {
             this.state = "WALK_L";
             this.physics.addForce(-this.speed.x, 0);
         }
-        if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
+
+        if (this.controllable && Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
             this.state = "WALK_R";
             this.physics.addForce(this.speed.x, 0);
         }
 
-        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_R") {
+        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && (this.previousState == "WALK_R" || this.previousState == "IDLE")) {
             this.state = "IDLE_RIGHT";
         }
 
-        if(Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_L"){
+        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_L") {
             this.state = "IDLE_LEFT";
         }
 
-        if(Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "IDLE"){
-            this.state = "IDLE_RIGHT";
-        }
-
-        if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
+        if (this.controllable && Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
             this.jump();
         }
 
-        if (Keyboard.isDown(Keyboard.CTRL)) {
+        if (this.controllable && Keyboard.isDown(Keyboard.CTRL)) {
             this.takeControl();
-        }
-
-        if (this.previousState != this.state) {
-            this.frame = 0;
         }
     };
 
@@ -195,6 +194,16 @@
                 break;
             }
         }
+    };
+
+    /**
+     * Triggered when the character is being possessed
+     */
+    Ghost.prototype.onPossess = function() {
+        // var self = this;
+        // setTimeout(function() {
+        //     self.controllable = true;
+        // }, Game.Npc.STUN_TIME);
     };
 
     Game.Ghost = Ghost;

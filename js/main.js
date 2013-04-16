@@ -73,4 +73,5 @@ Game.useGhost = function() {
     this.player = new this.Ghost();   // Playable character
     this.map.scrollable = false;
     Game.Sound.startBGM(this.player);
+    this.player.onPossess();
 };

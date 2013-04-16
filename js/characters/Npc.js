@@ -10,6 +10,7 @@
         Game.player = Game.npcs[i];
         Game.map.scrollable = true;
         Game.npcs.splice(i, 1);
+        Game.player.onPossess();
     }
 
     /**
@@ -22,6 +23,8 @@
         Game.player.x = npc.x;
         Game.player.y = npc.y - Game.map.TS;
     }
+
+    Npc.STUN_TIME = 500;    // The time during which a character is not controllable after the possession
 
     Game.Npc = Npc;
 })();
