@@ -188,9 +188,9 @@
      */
     Ghost.prototype.takeControl = function() {
         // Take control of the npc he is colliding
-        for (var i = 0; i < Game.npcs.length; i++) {
-            if (this.body.collide(Game.npcs[i])) {
-                Game.Npc.possessNpc(i);
+        for (var npc in Game.npcs) {
+            if (Game.npcs.hasOwnProperty(npc) && this.body.collide(Game.npcs[npc])) {
+                Game.Npc.possessNpc(npc);
                 break;
             }
         }
@@ -200,10 +200,10 @@
      * Triggered when the character is being possessed
      */
     Ghost.prototype.onPossess = function() {
-        // var self = this;
-        // setTimeout(function() {
-        //     self.controllable = true;
-        // }, Game.Npc.STUN_TIME);
+        var self = this;
+        setTimeout(function() {
+            self.controllable = true;
+        }, Game.Npc.STUN_TIME);
     };
 
     Game.Ghost = Ghost;

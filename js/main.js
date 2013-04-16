@@ -23,23 +23,14 @@ Game.init = function() {
     this.frameCount    = 0;
 
     this.map      = new this.Map();
-    this.useGhost();   // Playable character
+    this.useGhost();    // Playable character
     this.player.x = 400;
     this.player.y = 200;
 
-    this.npcs     = [new this.Cat()];   // Non-playable characters
-    this.entities = [this.player];      // All the entities in the game
+    this.npcs = {};     // The non-playable characters displayed on the stage
+    // this.entities = [this.player];      // All the entities in the game
 
     this.loader.start();
-};
-
-/**
- * Creates a NPC on the map
- * @param  {integer} value The type of npc to create
- * @param  {integer} x
- * @param  {integer} y
- */
-Game.createNpc = function(value, x, y) {
 };
 
 /**
@@ -59,10 +50,17 @@ Game.update = function() {
     Game.map.draw(context);
 
     // Updating all the entities
-    for (var entity in npcs) {
-        if (npcs.hasOwnProperty(entity)) {
-            npcs[entity].update();
-            npcs[entity].render(context);
+    // The index of a NPC corresponds to the position of it in the tilemap
+    for (entity in Game.npcs) {
+        if (Game.npcs.hasOwnProperty(entity)) {
+            npc = npcs[entity];
+            npc.update();
+            // If the character steps out of the view, we destroy it
+            if (npc.x < -npc.body.width || npc.x > Game.CANVAS_WIDTH || npc.y < -npc.body.height || npc.y > Game.CANVAS_HEIGHT) {
+                delete npcs[entity];
+                continue;
+            }
+            npc.render(context);
         }
     }
 
@@ -81,4 +79,5 @@ Game.useGhost = function() {
     this.player = new this.Ghost();   // Playable character
     this.map.scrollable = false;
     Game.Sound.startBGM(this.player);
+    this.player.onPossess();
 };

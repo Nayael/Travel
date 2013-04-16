@@ -28,11 +28,16 @@
             for (j = 0; j < cols; j++) {
                 tileX = (j * this.TS - this.scrollX);
                 tileY = (i * this.TS - this.scrollY);
+                // Drawing tiles
                 if (this.obstacles.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     context.fillRect(tileX, tileY, this.TS, this.TS);
                     context.drawImage(Game.platformImage ,j * this.TS - this.scrollX, i * this.TS - this.scrollY);
+                // Creating NPCs that will be drawn
                 } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
-                    Game.createNpc(this.tilemap[i][j], j, i);
+                    // If the NPC ins't already on the stage
+                    if (Game.npcs[i * this.tilemap[i].length + j] == undefined && Game.player.npcMapIndex != (i * this.tilemap[i].length + j)) {
+                        Game.Npc.pop(this.tilemap[i][j], j, i);
+                    }
                 }
             }
         }
@@ -89,10 +94,6 @@
                 self.scrollY += dY < 0 ? 1 : -1;
             }, yInterval);
         }
-
-        // console.log('Game.player.x, Game.player.y: ', Game.player.x, Game.player.y);
-        // console.log('dX, dY: ', dX, dY);
-        // console.log('xInterval, yInterval: ', xInterval, yInterval);
     };
 
     Game.Map = Map;

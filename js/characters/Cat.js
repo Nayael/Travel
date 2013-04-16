@@ -1,9 +1,9 @@
 // The Cat class
 (function() {
-    var Cat = function() {
-        this.x = (Game.CANVAS_WIDTH >> 1) + 70;
+    var Cat = function(x, y) {
+        this.x = x || 0;
         this.realX = this.x + Game.map.scrollX;
-        this.y = 0;
+        this.y = y || 0;
         this.realY = this.y + Game.map.scrollY;
         this.speed = {
             x: 200,
