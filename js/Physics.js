@@ -86,15 +86,6 @@
             this.entity.realX += (this.v.x + v0.x) / 2 * 0.1;
             this.entity.realY += (this.v.y + v0.y) / 2 * 0.1;
         }
-
-        // if (!this.useCollisions || !this.hCollisions(v0)) {
-        // this.entity.x += (this.v.x + v0.x) / 2 * 0.1;
-        // }
-
-        // If there is a collision with an obstacle, we don't apply the velocity on the entity
-        // if (!this.useCollisions || !this.vCollisions(v0)) {
-        // this.entity.y += (this.v.y + v0.y) / 2 * 0.1;
-        // }
     };
 
     /**
@@ -134,10 +125,11 @@
      * @return {boolean}
      */
     Physics.prototype.hCollisions = function(v0) {
+        var headShift = 10;
         var futureX = this.entity.realX + (this.v.x + v0.x) / 2 * 0.1;
 
         var hittingEdge = futureX + (this.v.x < 0 ? 0 : (this.entity.body.t_width * Game.map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
-            yMin = ( (this.entity.realY/ Game.map.TS) ) | 0,
+            yMin = ( (this.entity.realY / Game.map.TS) ) | 0,
             yMax = ( (this.entity.realY / Game.map.TS) + this.entity.body.t_height ) | 0,
             newX = 0;
 
@@ -160,6 +152,7 @@
      * @return {boolean}
      */
     Physics.prototype.vCollisions = function(v0) {
+        var headShift = 10;
         var futureY = this.entity.realY + (this.v.y + v0.y) / 2 * 0.1;
 
         var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.t_height * Game.map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
@@ -176,7 +169,7 @@
                 if (futureY * Game.map.TS > this.entity.y) {
                     this.onFloor = true;
                 }
-                newY = futureY * Game.map.TS + Game.map.TS * (this.v.y < 0 ? 1 : -this.entity.body.t_height);
+                newY = futureY * Game.map.TS + Game.map.TS * (this.v.y < 0 ? 1 : -this.entity.body.t_height) - (this.v.y < 0 ? 0 : 0);
                 return newY;
             }
         }

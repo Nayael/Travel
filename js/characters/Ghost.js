@@ -1,7 +1,7 @@
 // The Ghost character class file
 (function() {
     var Ghost = function() {
-        this.x = (Game.CANVAS_WIDTH >> 1) + 70;
+        this.x = 0;
         this.realX = this.x + Game.map.scrollX;
         this.y = 0;
         this.realY = this.y + Game.map.scrollY;
@@ -117,10 +117,21 @@
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
             this.jump();
         }
+
+        if (Keyboard.isDown(Keyboard.CTRL)) {
+            this.takeControl();
+        }
     };
 
     Ghost.prototype.jump = function() {
         this.physics.addForce(0, -this.speed.y);
+    };
+
+    /**
+     * The ghost takes control of a NPC
+     */
+    Ghost.prototype.takeControl = function() {
+        
     };
 
     Game.Ghost = Ghost;

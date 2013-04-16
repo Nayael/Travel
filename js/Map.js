@@ -3,7 +3,8 @@
     var Map = function() {
         this.TS = 32;           // The size of a tile in pixels
         this.obstacles = [1];   // Indexes in the tilemap that correspond to physical obstacles
-        this.tilemap = window.map;   // Getting the map from the global object
+        this.npcs      = [2];   // Indexes in the tilemap that correspond to physical obstacles
+        this.tilemap   = window.map;   // Getting the map from the global object
 
         this.scrollable = true;
         this.scrollX = 0;
@@ -27,7 +28,7 @@
             for (j = 0; j < cols; j++) {
                 tileX = (j * this.TS - this.scrollX);
                 tileY = (i * this.TS - this.scrollY);
-                if (this.tilemap[i][j] == 1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
+                if (this.obstacles.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
 ////////////////////////////
 //        TEMPORARY       //
 // Drawing filled squares //

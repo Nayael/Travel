@@ -16,7 +16,7 @@
 
         this.body = new Game.Body(this);
         this.body.t_width  = 1;  // The width in tile unit
-        this.body.t_height = 2;  // The height in tile unit
+        this.body.t_height = 1;  // The height in tile unit
 
         this.physics = new Game.Physics(this);
         this.physics.jumpHeight = 20;
@@ -35,32 +35,35 @@
             realY0 = this.realY;
 
         this.physics.update();
+                console.log('this.realY: ', this.realY);
 
         var dX = this.realX - realX0,
             dY = this.realY - realY0;
 
         this.x = this.realX - Game.map.scrollX;
         this.y = this.realY - Game.map.scrollY;
+        // console.log('this.realY: ', this.realY);
+        // console.log('this.y: ', this.y);
 
         if (!Game.map.scrollable) {
             return;
         }
 
         // X-axis scrolling
-        if (dX > 0 && this.x >= Game.map.scrollXMax) {
-            this.x = Game.map.scrollXMax - 1;
+        if (dX > 0 && this.x > Game.map.scrollXMax) {
+            this.x = Game.map.scrollXMax;
             Game.map.scrollX += dX;
-        } else if (dX < 0 && this.x <= Game.map.scrollXMin) {
-            this.x = Game.map.scrollXMin + 1;
+        } else if (dX < 0 && this.x < Game.map.scrollXMin) {
+            this.x = Game.map.scrollXMin;
             Game.map.scrollX += dX;
         }
 
         // Y-axis scrolling
-        if (dY > 0 && this.y >= Game.map.scrollYMax) {
-            this.y = Game.map.scrollYMax - 1;
+        if (dY > 0 && this.y > Game.map.scrollYMax) {
+            this.y = Game.map.scrollYMax;
             Game.map.scrollY += dY;
-        } else if (dY < 0 && this.y <= Game.map.scrollYMin) {
-            this.y = Game.map.scrollYMin + 1;
+        } else if (dY < 0 && this.y < Game.map.scrollYMin) {
+            this.y = Game.map.scrollYMin;
             Game.map.scrollY += dY;
         }
     };

@@ -15,8 +15,10 @@ Game.init = function() {
     this.context       = this.canvas.getContext('2d');
 
     this.map      = new this.Map();
-    this.player   = new this.Ghost();   // Playable character
-    this.map.scrollable = false;
+    this.useGhost();   // Playable character
+    this.player.x = 400;
+    this.player.y = 200;
+
     this.npcs     = [];                 // Non-playable characters
     this.entities = [this.player];      // All the entities in the game
 };
@@ -49,4 +51,12 @@ Game.update = function() {
     if (Game.player) {
         Game.player.control();
     }
+};
+
+/**
+ * Makes the player control the Ghost
+ */
+Game.useGhost = function() {
+    this.player = new this.Ghost();   // Playable character
+    this.map.scrollable = false;
 };
