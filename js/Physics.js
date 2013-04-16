@@ -69,22 +69,22 @@
                 this.addForce(-(this.v.x + v0.x) / 2 * 0.1, 0);
                 this.v.x = 0;
             } else {
-                this.entity.x += (this.v.x + v0.x) / 2 * 0.1;
+                this.entity.realX += (this.v.x + v0.x) / 2 * 0.1;
             }
             if ( (newY = this.vCollisions(v0)) ) {
                 this.addForce(0, -(this.v.y + v0.y) / 2 * 0.1);
                 this.v.y = 0;
             } else {
-                this.entity.y += (this.v.y + v0.y) / 2 * 0.1;
+                this.entity.realY += (this.v.y + v0.y) / 2 * 0.1;
             }
 
             if (newX != false && newY != false) {
-                this.entity.y = newY;
-                this.entity.x = newX;
+                this.entity.realY = newY;
+                this.entity.realX = newX;
             }
         } else {
-            this.entity.x += (this.v.x + v0.x) / 2 * 0.1;
-            this.entity.y += (this.v.y + v0.y) / 2 * 0.1;
+            this.entity.realX += (this.v.x + v0.x) / 2 * 0.1;
+            this.entity.realY += (this.v.y + v0.y) / 2 * 0.1;
         }
 
         // if (!this.useCollisions || !this.hCollisions(v0)) {
@@ -130,15 +130,15 @@
 
     /**
      * Detects if the entity has a collision in the horizontal axis with an obstacle in the map
-     * @param  {Object} v0 The entity's velocity in the previous frame
+     * @param  {Object} v0 The entitye
      * @return {boolean}
      */
     Physics.prototype.hCollisions = function(v0) {
-        var futureX = this.entity.x + (this.v.x + v0.x) / 2 * 0.1;
+        var futureX = this.entity.realX + (this.v.x + v0.x) / 2 * 0.1;
 
         var hittingEdge = futureX + (this.v.x < 0 ? 0 : (this.entity.body.t_width * Game.map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
-            yMin = ( (this.entity.y/ Game.map.TS) ) | 0,
-            yMax = ( (this.entity.y / Game.map.TS) + this.entity.body.t_height ) | 0,
+            yMin = ( (this.entity.realY/ Game.map.TS) ) | 0,
+            yMax = ( (this.entity.realY / Game.map.TS) + this.entity.body.t_height ) | 0,
             newX = 0;
 
         futureX = (hittingEdge / Game.map.TS) | 0;
@@ -148,7 +148,6 @@
             if (Game.map.obstacles.indexOf(Game.map.tilemap[i][futureX]) != -1) {
                 // We replace the entity right on the edge of the obstacle, to end the movement
                 newX = futureX * Game.map.TS + Game.map.TS * (this.v.x < 0 ? 1 : -this.entity.body.t_width);
-                // this.entity.x = newX/* + (this.v.x < 0 ? this.entity.body.t_width : -this.entity.body.t_width)*/;
                 return newX;
             }
         }
@@ -161,11 +160,11 @@
      * @return {boolean}
      */
     Physics.prototype.vCollisions = function(v0) {
-        var futureY = this.entity.y + (this.v.y + v0.y) / 2 * 0.1;
+        var futureY = this.entity.realY + (this.v.y + v0.y) / 2 * 0.1;
 
         var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.t_height * Game.map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
-            xMin = ( (this.entity.x / Game.map.TS) ) | 0,
-            xMax = ( (this.entity.x / Game.map.TS) + this.entity.body.t_width ) | 0,
+            xMin = ( (this.entity.realX / Game.map.TS) ) | 0,
+            xMax = ( (this.entity.realX / Game.map.TS) + this.entity.body.t_width ) | 0,
             newY = 0;
 
         futureY = (hittingEdge / Game.map.TS) | 0;
@@ -176,10 +175,8 @@
                 // We replace the entity right on the edge of the obstacle, to end the movement
                 if (futureY * Game.map.TS > this.entity.y) {
                     this.onFloor = true;
-                    // this.v.y = 0;
                 }
                 newY = futureY * Game.map.TS + Game.map.TS * (this.v.y < 0 ? 1 : -this.entity.body.t_height);
-                // this.entity.y = newY/* + (this.v.y < 0 ? this.entity.body.t_height : -this.entity.body.t_height)*/;
                 return newY;
             }
         }

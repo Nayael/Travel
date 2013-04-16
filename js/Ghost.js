@@ -2,14 +2,16 @@
 (function() {
     var Ghost = function() {
         this.x = (Game.CANVAS_WIDTH >> 1) + 70;
+        this.realX = this.x + Game.map.scrollX;
         this.y = 0;
+        this.realY = this.y + Game.map.scrollY;
         this.speed = {
-            x: 50,
-            y: 50
+            x: 200,
+            y: 300
         };
         this.maxSpeed = {
-            x: 100,
-            y: 100
+            x: 250,
+            y: 300
         }
 
         this.body = new Game.Body(this);
@@ -26,7 +28,37 @@
      * Called on each frame
      */
     Ghost.prototype.update = function() {
+        this.realX = this.x + Game.map.scrollX;
+        this.realY = this.y + Game.map.scrollY;
+
+        var realX0 = this.realX,
+            realY0 = this.realY;
+
         this.physics.update();
+
+        var dX = this.realX - realX0,
+            dY = this.realY - realY0;
+
+        this.x = this.realX - Game.map.scrollX;
+        this.y = this.realY - Game.map.scrollY;
+
+        // X-axis scrolling
+        if (dX > 0 && this.x >= Game.map.scrollXMax) {
+            this.x = Game.map.scrollXMax - 1;
+            Game.map.scrollX += dX;
+        } else if (dX < 0 && this.x <= Game.map.scrollXMin) {
+            this.x = Game.map.scrollXMin + 1;
+            Game.map.scrollX += dX;
+        }
+
+        // Y-axis scrolling
+        if (dY > 0 && this.y >= Game.map.scrollYMax) {
+            this.y = Game.map.scrollYMax - 1;
+            Game.map.scrollY += dY;
+        } else if (dY < 0 && this.y <= Game.map.scrollYMin) {
+            this.y = Game.map.scrollYMin + 1;
+            Game.map.scrollY += dY;
+        }
     };
 
     /**
@@ -68,7 +100,7 @@
     };
 
     Ghost.prototype.jump = function() {
-        this.physics.addForce(0, -500);
+        this.physics.addForce(0, -this.speed.y);
     };
 
     Game.Ghost = Ghost;

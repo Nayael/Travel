@@ -11,8 +11,8 @@
 
         this.scrollXMin = 200;
         this.scrollXMax = 600;
-        this.scrollYMin = 150;
-        this.scrollYMax = 450;
+        this.scrollYMin = 100;
+        this.scrollYMax = 400;
     };
 
     /**
@@ -21,17 +21,19 @@
      */
     Map.prototype.draw = function(context) {
         var rows = this.tilemap.length,
-            cols;
+            cols, tileX, tileY;
         for (var i = 0, j = 0; i < rows; i++) {
             cols = this.tilemap[i].length;
             for (j = 0; j < cols; j++) {
-                if (this.tilemap[i][j] == 1) {
+                tileX = (j * this.TS - this.scrollX);
+                tileY = (i * this.TS - this.scrollY);
+                if (this.tilemap[i][j] == 1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
 ////////////////////////////
 //        TEMPORARY       //
 // Drawing filled squares //
 ////////////////////////////
                     context.fillStyle = 'rgb(255, 0, 0)';
-                    context.fillRect(j * this.TS - this.scrollX, i * this.TS - this.scrollY, this.TS, this.TS);
+                    context.fillRect(tileX, tileY, this.TS, this.TS);
                 }
             }
         }
