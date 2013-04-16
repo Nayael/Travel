@@ -42,20 +42,5 @@
         }
     };
 
-    Map.prototype.scroll = function(player) {
-        // if (player.x <= this.scrollXMin) {
-        //     this.scrollX -= player.physics.v.x < 0 ? 1 : 0;
-        // }
-        // if (player.x + player.t_width * this.TS >= this.scrollXMax) {
-        //     this.scrollX += player.physics.v.x > 0? 1 : 0;
-        // }
-        // if (player.y <= this.scrollYMin) {
-        //     this.scrollY -= player.physics.v.y < 0? 1 : 0;
-        // }
-        // if (player.y + player.t_height * this.TS >= this.scrollYMin) {
-        //     this.scrollY += player.physics.v.y > 0? 1 : 0;
-        // }
-    };
-
     Game.Map = Map;
 })();

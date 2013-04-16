@@ -14,23 +14,22 @@
             y: 350
         }
 
-        this.body = new Game.Body(this);
+        this.body          = new Game.Body(this);
         this.body.t_width  = 1;  // The width in tile unit
         this.body.t_height = 2;  // The height in tile unit
 
-        this.physics = new Game.GhostPhysics(this);
-        this.physics.jumpHeight = 20;
-        this.physics.useGravity = false;
+        this.physics               = new Game.GhostPhysics(this);
+        this.physics.jumpHeight    = 20;
+        this.physics.useGravity    = false;
         this.physics.useCollisions = false;
 
-        this.state = "IDLE";
-        this.previousState = "IDLE";
-        this.frame = 0;
-        this.elapsedPixels = 0;
-        this.idleImage = new Image();
-        this.walkrImage = new Image();
-        this.walklImage = new Image();
-        this.idleImage.src = "images/sprites/ghost_right.png";
+        this.state          = "IDLE";
+        this.previousState  = "IDLE";
+        this.frame          = 0;
+        this.idleImage      = new Image();
+        this.walkrImage     = new Image();
+        this.walklImage     = new Image();
+        this.idleImage.src  = "images/sprites/ghost_right.png";
         this.walkrImage.src = "images/sprites/ghost_right.png";
         this.walklImage.src = "images/sprites/ghost_left.png";
     };
