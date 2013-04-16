@@ -28,7 +28,6 @@ Game.init = function() {
     this.player.y = 200;
 
     this.npcs = {};     // The non-playable characters displayed on the stage
-    // this.entities = [this.player];      // All the entities in the game
 
     this.loader.start();
 };
