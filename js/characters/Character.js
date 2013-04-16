@@ -1,6 +1,6 @@
-// The Ghost character class file
+// The Character character class file
 (function() {
-    var Ghost = function() {
+    var Character = function() {
         this.x = (Game.CANVAS_WIDTH >> 1) + 70;
         this.realX = this.x + Game.map.scrollX;
         this.y = 0;
@@ -27,7 +27,7 @@
     /**
      * Called on each frame
      */
-    Ghost.prototype.update = function() {
+    Character.prototype.update = function() {
         this.realX = this.x + Game.map.scrollX;
         this.realY = this.y + Game.map.scrollY;
 
@@ -41,6 +41,10 @@
 
         this.x = this.realX - Game.map.scrollX;
         this.y = this.realY - Game.map.scrollY;
+
+        if (!Game.map.scrollable) {
+            return;
+        }
 
         // X-axis scrolling
         if (dX > 0 && this.x >= Game.map.scrollXMax) {
@@ -65,7 +69,7 @@
      * Renders the character
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
-    Ghost.prototype.render = function(context) {
+    Character.prototype.render = function(context) {
 ///////////////
 // TEMPORARY //
 ///////////////
@@ -80,7 +84,7 @@
     /**
      * Applies the player's controls on the character
      */
-    Ghost.prototype.control = function() {
+    Character.prototype.control = function() {
         if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
             this.physics.addForce(-this.speed.x, 0);
         }
@@ -99,9 +103,9 @@
         }
     };
 
-    Ghost.prototype.jump = function() {
+    Character.prototype.jump = function() {
         this.physics.addForce(0, -this.speed.y);
     };
 
-    Game.Ghost = Ghost;
+    Game.Character = Character;
 })();

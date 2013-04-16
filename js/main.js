@@ -16,6 +16,7 @@ Game.init = function() {
 
     this.map      = new this.Map();
     this.player   = new this.Ghost();   // Playable character
+    this.map.scrollable = false;
     this.npcs     = [];                 // Non-playable characters
     this.entities = [this.player];      // All the entities in the game
 };
