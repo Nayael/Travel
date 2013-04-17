@@ -62,8 +62,8 @@
         if (this.y <= 0) {
             this.y = 1;
             this.physics.v.y = 0;
-        } else if (this.y >= Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS) {
-            this.y = Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS - 1;
+        } else if (this.y >= Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20) {
+            this.y = Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20 - 1;
             this.physics.v.y = 0;
         }
 
