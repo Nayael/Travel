@@ -8,29 +8,47 @@ Game.CANVAS_HEIGHT = 576;
  * Initializes the game
  */
 Game.init = function() {
+    Game.canvas        = document.createElement('canvas');
+    Game.canvas.id     = 'main';
+    Game.canvas.width  = Game.CANVAS_WIDTH;
+    Game.canvas.height = Game.CANVAS_HEIGHT;
+    Game.context       = Game.canvas.getContext('2d');
+    Game.frameCount    = 0;
 
+    Game.map      = new Game.Map();
+    Game.useGhost();    // Playable character
+    Game.player.x = 400;
+    Game.player.y = 200;
+
+    Game.npcs = {};     // The non-playable characters displayed on the stage
+
+    // Adding the canvas to the stage
+    document.body.appendChild(Game.canvas);
+
+    // Launching the main loop
+    onEachFrame(Game.update);
+};
+
+/**
+ * Preloads the assets
+ */
+Game.load = function() {
+    // Declaring all the assets in PxLoader
     this.loader = new PxLoader(),
         this.idleImage = this.loader.addImage("images/sprites/ghost_right.png"),
         this.walkrImage = this.loader.addImage("images/sprites/ghost_right.png"),
         this.walklImage = this.loader.addImage("images/sprites/ghost_left.png"),
         this.platformImage = this.loader.addImage("images/sprites/platform.png");
+    
+    // Progression bar
+    this.loader.addProgressListener(function(e) { 
+        console.log(e.completedCount * 100 / e.totalCount + '%');
+    });
 
-    this.canvas        = document.createElement('canvas');
-    this.canvas.id     = 'main';
-    this.canvas.width  = this.CANVAS_WIDTH;
-    this.canvas.height = this.CANVAS_HEIGHT;
-    this.context       = this.canvas.getContext('2d');
-    this.frameCount    = 0;
-
-    this.map      = new this.Map();
-    this.useGhost();    // Playable character
-    this.player.x = 400;
-    this.player.y = 200;
-
-    this.npcs = {};     // The non-playable characters displayed on the stage
-
+    this.loader.addCompletionListener(this.init);
+    // Starting the loading
     this.loader.start();
-};
+}
 
 /**
  * The main game loop

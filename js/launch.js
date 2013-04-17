@@ -1,10 +1,6 @@
-// Initializing the game
-Game.init();
-
+/**
+ * Preloads the assets
+ */
 window.onload = function() {
-    // Adding the canvas to the stage
-    document.body.appendChild(Game.canvas);
-
-    // Launching the main loop
-    onEachFrame(Game.update);
+    Game.load();
 };
