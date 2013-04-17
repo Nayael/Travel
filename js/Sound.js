@@ -6,16 +6,12 @@
      * Starts the BGM corresponding to a character
      * @param  {Character} player The character
      */
-    Sound.startBGM = function(player) {
-        var mySound1 = new buzz.sound("audio/08 - Elizabeth", {
-            formats: [ "mp3"],
-            preload: true,
-            loop: true
-        });
+    Sound.startBGM = function(name) {
 
-        if(player instanceof Game.Ghost) {
-            mySound1.play();
-        }
+            buzz.all().stop();
+            console.log(name);
+            Game.sounds[name].bgm.play();
+
     };
 
     Game.Sound = Sound;

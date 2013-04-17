@@ -95,8 +95,6 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Ghost.prototype.render = function(context) {
-        // context.fillStyle = 'rgb(255, 0, 0)';
-        // context.fillRect(this.x, this.y, this.body.width, this.body.height);
         context.globalAlpha = 0.5;
         switch (this.state){
             case "IDLE_RIGHT":
@@ -188,6 +186,7 @@
      */
     Ghost.prototype.onPossess = function() {
         var self = this;
+        Game.Sound.startBGM(this.name);
         setTimeout(function() {
             self.controllable = true;
         }, Game.Npc.STUN_TIME);
