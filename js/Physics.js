@@ -170,8 +170,8 @@
         var headShift = 10;
         var futureY = this.entity.realY + (this.v.y + v0.y) / 2 * Time.deltaTime;
         var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.height)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
-            xMin = ( ((this.entity.realX + 1) / Game.map.TS) ) | 0,
-            xMax = ( ((this.entity.realX - 1) / Game.map.TS) + this.entity.body.t_width ) | 0,
+            xMin = ( ((this.entity.realX + 5) / Game.map.TS) ) | 0,
+            xMax = ( ((this.entity.realX - 5) / Game.map.TS) + this.entity.body.t_width ) | 0,
             newY = 0;
 
         futureY = (hittingEdge / Game.map.TS) | 0;

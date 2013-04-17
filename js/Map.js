@@ -1,16 +1,16 @@
 // The Map class file
 (function() {
     var Map = function() {
-        this.yShiftUp = 4;      // The y position of the square tiles in the tiles spritesheet
-        this.yShiftDown = 14;    // The height of extra graphics on the bottom of the tile
+        this.yShiftUp = 0;      // The y position of the square tiles in the tiles spritesheet
+        this.yShiftDown = 9;    // The height of extra graphics on the bottom of the tile
         this.TS = 32;           // The size of a tile in pixels
         this.obstacles = [1, 2, 3, 4, 5, 6, 7, 8, 9];   // Indexes in the tilemap that correspond to physical obstacles
         this.npcs      = [200];   // Indexes in the tilemap that correspond to physical obstacles
         this.tilemap   = window.map;   // Getting the map from the global object
 
         this.scrollable = true;
-        this.scrollX = 0;
-        this.scrollY = 0;
+        this.scrollX = 512;
+        this.scrollY = 1792;
 
         this.scrollXMin = Game.CANVAS_WIDTH >> 2;
         this.scrollXMax = Game.CANVAS_WIDTH - this.scrollXMin;

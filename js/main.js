@@ -15,8 +15,8 @@ Game.init = function() {
 
     Game.map      = new Game.Map();
     Game.useGhost();    // Playable character
-    Game.player.x = 400;
-    Game.player.y = 200;
+    Game.player.x = 736;
+    Game.player.y = 448;
 
     Game.Vec2     = illuminated.Vec2;
     Game.Lamp     = illuminated.Lamp;
@@ -115,7 +115,7 @@ Game.update = function() {
 
     Game.frameCount++;
     // Clearing the canvas
-    context.fillStyle = 'rgb(0, 0, 0)';
+    context.fillStyle = 'rgb(127, 127, 127)';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     // Updating all the entities

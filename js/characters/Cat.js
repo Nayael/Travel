@@ -7,12 +7,12 @@
         this.y = y || 0;
         this.realY = this.y + Game.map.scrollY;
         this.speed = {
-            x: 30,
-            y: 50
+            x: 20,
+            y: 55
         };
         this.maxSpeed = {
             x: 30,
-            y: 60
+            y: 55
         }
         this.controllable = false;
 
