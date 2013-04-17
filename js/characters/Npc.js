@@ -4,7 +4,7 @@
 
     // The list of all the NPCs available in the game, and their values in the tilemap
     Npc.list = {
-        200: Game.Cat
+        200: Game.Cat,
         300: Game.Oldwoman
     }
 
