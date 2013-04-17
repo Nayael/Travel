@@ -79,21 +79,21 @@
     Cat.prototype.render = function(context) {
         switch (this.state){
             case "IDLE_RIGHT":
-                context.drawImage(Game.images[this.name].idlerImage, 35 * this.frame, 0, 35, 34, this.x - 3, this.y, 35, 34);
+                context.drawImage(Game.images[this.name].idlerImage, 35 * this.frame, 0, 35, 34, this.x - 3, this.y - 2, 35, 34);
                 if (Game.frameCount % 15 == 0)
                     this.frame++;
                 if (this.frame == 4)
                     this.frame = 0;
                 break;
             case "IDLE_LEFT":
-                context.drawImage(Game.images[this.name].idlelImage, 35 * this.frame, 0, 35, 34, this.x, this.y, 35, 34);
+                context.drawImage(Game.images[this.name].idlelImage, 35 * this.frame, 0, 35, 34, this.x, this.y - 2, 35, 34);
                 if (Game.frameCount % 15 == 0)
                     this.frame++;
                 if (this.frame == 4)
                     this.frame = 0;
                 break;
             case "WALK_R":
-                context.drawImage(Game.images[this.name].walkrImage, 44 * (this.frame), 0, 44, 35, this.x - 12, this.y, 44, 35);
+                context.drawImage(Game.images[this.name].walkrImage, 44 * (this.frame), 0, 44, 35, this.x - 12, this.y - 2, 44, 35);
                 if (Game.frameCount % 6  == 0) {
                     this.frame++;
                 }
@@ -101,7 +101,7 @@
                     this.frame = 0;
                 break;
             case "WALK_L":
-                context.drawImage(Game.images[this.name].walklImage, 44 * (this.frame), 0, 44,35,this.x,this.y,44,35);
+                context.drawImage(Game.images[this.name].walklImage, 44 * (this.frame), 0, 44, 35, this.x, this.y - 2, 44, 35);
                 if (Game.frameCount % 6  == 0) {
                     this.frame++;
                 }
@@ -116,11 +116,11 @@
      * Renders the special effect on the map
      */
     Cat.prototype.renderFX = function() {
-        // if (Game.player == this) {
-        //     Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
-        //     Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
-        //     Game.darkmask.render(Game.context);
-        // }
+        if (Game.player == this) {
+            Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
+            Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
+            Game.darkmask.render(Game.context);
+        }
     };
 
     /**
