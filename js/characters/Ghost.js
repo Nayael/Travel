@@ -86,7 +86,7 @@
         context.globalAlpha = 0.5;
         switch (this.state){
             case 'WALK_R':
-                context.drawImage(Game.images.ghost.walkrImage, 31.95 * (this.frame),0, 31.95,43,this.x,this.y,31.95,43);
+                context.drawImage(Game.images.ghost.walkrImage, 31.5 * (this.frame),0, 31.5,43,this.x,this.y,31.5,43);
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
@@ -96,7 +96,7 @@
                 break;
 
             case 'WALK_L':
-                context.drawImage(Game.images.ghost.walklImage, 31.95 * (this.frame),0, 31.95,43,this.x,this.y,31.95,43);
+                context.drawImage(Game.images.ghost.walklImage, 31.5 * (this.frame),0, 31.5,43,this.x,this.y,31.5,43);
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
