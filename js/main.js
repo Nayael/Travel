@@ -1,9 +1,5 @@
 var Game = {};  // The game main namespace
 
-// Constants
-Game.CANVAS_WIDTH  = 800;
-Game.CANVAS_HEIGHT = 576;
-
 /**
  * Initializes the game
  */
@@ -104,7 +100,5 @@ Game.update = function() {
  */
 Game.useGhost = function() {
     this.player = new this.Ghost();   // Playable character
-    this.map.scrollable = false;
-    Game.Sound.startBGM(this.player);
     this.player.onPossess();
 };

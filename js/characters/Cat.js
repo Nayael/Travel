@@ -98,6 +98,7 @@
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
             this.jump();
         }
+
         if (Keyboard.isDown(Keyboard.ESCAPE)) {
             Game.Npc.leaveNpc(this);
         }

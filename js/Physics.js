@@ -58,7 +58,6 @@
         }
 
         var newX = null, newY = null;
-        // console.log('this.v.y: ', this.v.y);
 
         // If there is a collision with an obstacle, we don't apply the velocity on the entity
         this.onFloor = false;
@@ -170,7 +169,6 @@
     Physics.prototype.vCollisions = function(v0) {
         var headShift = 10;
         var futureY = this.entity.realY + (this.v.y + v0.y) / 2 * Time.deltaTime;
-
         var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.height)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
             xMin = ( ((this.entity.realX + 1) / Game.map.TS) ) | 0,
             xMax = ( ((this.entity.realX - 1) / Game.map.TS) + this.entity.body.t_width ) | 0,
@@ -182,10 +180,10 @@
             // If the entity collides with an obstacle
             if (Game.map.obstacles.indexOf(Game.map.tilemap[futureY][j]) != -1) {
                 // We replace the entity right on the edge of the obstacle, to end the movement
-                if (futureY * Game.map.TS > this.entity.y) {
+                if (((this.v.y + v0.y) / 2 * Time.deltaTime) > 0) {
                     this.onFloor = true;
-                    this.jumpForces = [];
                 }
+                this.jumpForces = [];
                 newY = futureY * Game.map.TS + Game.map.TS * (this.v.y < 0 ? 1 : -this.entity.body.t_height) - (this.v.y < 0 ? 0 : 0);
                 return newY;
             }

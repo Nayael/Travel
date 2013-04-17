@@ -7,16 +7,16 @@
         this.y = y || 0;
         this.realY = this.y + Game.map.scrollY;
         this.speed = {
-            x: 30,
-            y: 50
+            x: 15,
+            y: 15
         };
         this.maxSpeed = {
-            x: 30,
-            y: 60
+            x: 20,
+            y: 20
         }
         this.controllable = true;
 
-        this.body          = new Game.Body(this, 1, 2);
+        this.body = new Game.Body(this, 1, 2);
 
         this.physics               = new Game.Physics(this);
         this.physics.jumpHeight    = 90;
@@ -165,21 +165,9 @@
             this.state = "IDLE_LEFT";
         }
 
-        if (this.controllable && Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
-            this.jump();
-        }
-
         if (this.controllable && Keyboard.isDown(Keyboard.CTRL)) {
             this.takeControl();
         }
-    };
-
-    Ghost.prototype.startJump = function() {
-        this.jumping = true;
-    };
-
-    Ghost.prototype.jump = function() {
-        this.physics.addJumpForce(-this.speed.y);
     };
 
     /**
@@ -203,6 +191,7 @@
         setTimeout(function() {
             self.controllable = true;
         }, Game.Npc.STUN_TIME);
+        Game.map.scrollable = false;
     };
 
     Game.Ghost = Ghost;

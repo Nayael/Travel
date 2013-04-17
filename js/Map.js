@@ -10,10 +10,10 @@
         this.scrollX = 0;
         this.scrollY = 0;
 
-        this.scrollXMin = 200;
-        this.scrollXMax = 600;
-        this.scrollYMin = 100;
-        this.scrollYMax = 400;
+        this.scrollXMin = Game.CANVAS_WIDTH >> 2;
+        this.scrollXMax = Game.CANVAS_WIDTH - this.scrollXMin;
+        this.scrollYMin = Game.CANVAS_HEIGHT >> 2;
+        this.scrollYMax = Game.CANVAS_HEIGHT - this.scrollYMin;
     };
 
     /**
