@@ -56,6 +56,7 @@ Game.load = function() {
     // Declaring all the assets in PxLoader
     this.loader = new PxLoader(),
     this.images = {
+        bg: this.loader.addImage("images/bg.png"),
         ghost: {
             idleImage : this.loader.addImage("images/sprites/ghost/right.png"),
             walkrImage: this.loader.addImage("images/sprites/ghost/right.png"),
@@ -117,23 +118,23 @@ Game.load = function() {
  */
 Game.update = function() {
     var canvas  = Game.canvas,
-        context = Game.context,
-        npcs    = Game.npcs;
+        context = Game.context;
 
     Game.frameCount++;
     // Clearing the canvas
     context.fillStyle = 'rgb(127, 127, 127)';
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+    // context.drawImage(Game.images.bg, Game.map.scrollX, Game.map.scrollY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
 
     // Updating all the entities
     // The index of a NPC corresponds to the position of it in the tilemap
     for (entity in Game.npcs) {
         if (Game.npcs.hasOwnProperty(entity)) {
-            npc = npcs[entity];
+            npc = Game.npcs[entity];
             npc.update();
             // If the character steps out of the view, we destroy it
             if (npc.x < -npc.body.width || npc.x > Game.CANVAS_WIDTH || npc.y < -npc.body.height || npc.y > Game.CANVAS_HEIGHT) {
-                delete npcs[entity];
+                delete Game.npcs[entity];
                 continue;
             }
             npc.render(context);
