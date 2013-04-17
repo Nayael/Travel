@@ -1,10 +1,11 @@
 // The Map class file
 (function() {
     var Map = function() {
-        this.yShift = 4;        // The y position of the square tiles in the tiles spritesheet
+        this.yShiftUp = 4;      // The y position of the square tiles in the tiles spritesheet
+        this.yShiftDown = 14;    // The height of extra graphics on the bottom of the tile
         this.TS = 32;           // The size of a tile in pixels
-        this.obstacles = [1, 3, 4, 5, 6, 7, 8, 9];   // Indexes in the tilemap that correspond to physical obstacles
-        this.npcs      = [2];   // Indexes in the tilemap that correspond to physical obstacles
+        this.obstacles = [1, 2, 3, 4, 5, 6, 7, 8, 9];   // Indexes in the tilemap that correspond to physical obstacles
+        this.npcs      = [200];   // Indexes in the tilemap that correspond to physical obstacles
         this.tilemap   = window.map;   // Getting the map from the global object
 
         this.scrollable = true;
@@ -28,12 +29,12 @@
             cols = this.tilemap[i].length;
             for (j = 0; j < cols; j++) {
                 tileX = (j * this.TS - this.scrollX);
-                tileY = (i * this.TS - this.scrollY) - this.yShift;
+                tileY = (i * this.TS - this.scrollY) - this.yShiftUp;
                 // Drawing tiles
                 if (this.obstacles.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     // context.fillStyle = 'rgb(255, 0, 0)';
                     // context.fillRect(tileX, tileY, this.TS, this.TS);
-                    context.drawImage(Game.images[Game.player.name].tiles, this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShift, tileX, tileY, this.TS, this.TS + this.yShift);
+                    context.drawImage(Game.images[Game.player.name].tiles, this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShiftUp + this.yShiftDown, tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
                 // Creating NPCs that will be drawn
                 } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     // If the NPC ins't already on the stage

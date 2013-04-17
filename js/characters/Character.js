@@ -35,7 +35,6 @@
             realY0 = this.realY;
 
         this.physics.update();
-                console.log('this.realY: ', this.realY);
 
         var dX = this.realX - realX0,
             dY = this.realY - realY0;
