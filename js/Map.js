@@ -23,11 +23,11 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Map.prototype.draw = function(context) {
-        var rows = this.tilemap.length,
+        var rows = Game.CANVAS_HEIGHT / this.TS + 2,
             cols, tileX, tileY;
-        for (var i = 0, j = 0; i < rows; i++) {
-            cols = this.tilemap[i].length;
-            for (j = 0; j < cols; j++) {
+        for (var i = ((this.scrollY / this.TS) | 0), j = 0; i < ((this.scrollY / this.TS) | 0) + rows; i++) {
+            cols = Game.CANVAS_WIDTH / this.TS + 2;
+            for (j = ((this.scrollX / this.TS) | 0); j < cols + ((this.scrollX / this.TS) | 0); j++) {
                 tileX = (j * this.TS - this.scrollX);
                 tileY = (i * this.TS - this.scrollY) - this.yShiftUp;
                 // Drawing tiles
