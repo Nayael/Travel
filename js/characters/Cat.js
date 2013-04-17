@@ -77,13 +77,18 @@
             for (j = 0; j < this.body.t_width; j++) {
                 context.fillStyle = 'rgb(0, 0, 255)';
                 context.fillRect((this.x + j * Game.map.TS) | 0, (this.y + i * Game.map.TS) | 0, Game.map.TS, Game.map.TS);
-                if(Game.player == this)
-                {
-                    Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
-                    Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
-                    Game.darkmask.render(Game.context);
-                }
             }
+        }
+    };
+
+    /**
+     * Renders the special effect on the map
+     */
+    Cat.prototype.renderFX = function() {
+        if (Game.player == this) {
+            Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
+            Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
+            Game.darkmask.render(Game.context);
         }
     };
 

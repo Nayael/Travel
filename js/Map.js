@@ -1,6 +1,7 @@
 // The Map class file
 (function() {
     var Map = function() {
+        this.yShift = 4;        // The y position of the square tiles in the tiles spritesheet
         this.TS = 32;           // The size of a tile in pixels
         this.obstacles = [1, 3, 4, 5, 6, 7, 8, 9];   // Indexes in the tilemap that correspond to physical obstacles
         this.npcs      = [2];   // Indexes in the tilemap that correspond to physical obstacles
@@ -27,12 +28,12 @@
             cols = this.tilemap[i].length;
             for (j = 0; j < cols; j++) {
                 tileX = (j * this.TS - this.scrollX);
-                tileY = (i * this.TS - this.scrollY);
+                tileY = (i * this.TS - this.scrollY) - this.yShift;
                 // Drawing tiles
                 if (this.obstacles.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     // context.fillStyle = 'rgb(255, 0, 0)';
                     // context.fillRect(tileX, tileY, this.TS, this.TS);
-                    context.drawImage(Game.images[Game.player.name].tiles, this.tilemap[i][j] * this.TS, 0, this.TS, this.TS, tileX, tileY, this.TS, this.TS);
+                    context.drawImage(Game.images[Game.player.name].tiles, this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShift, tileX, tileY, this.TS, this.TS + this.yShift);
                 // Creating NPCs that will be drawn
                 } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     // If the NPC ins't already on the stage
@@ -95,6 +96,9 @@
                 self.scrollY += dY < 0 ? 1 : -1;
             }, yInterval);
         }
+        // console.log('scrollXMax, scrollYMax: ', this.scrollXMax, this.scrollYMax);
+        // console.log('dX, dY: ', dX, dY);
+        // console.log('xInterval, yInterval: ', xInterval, yInterval);
     };
 
     Game.Map = Map;

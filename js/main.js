@@ -1,15 +1,9 @@
 var Game = {};  // The game main namespace
 
-// Constants
-Game.CANVAS_WIDTH  = 800;
-Game.CANVAS_HEIGHT = 576;
-
 /**
  * Initializes the game
  */
 Game.init = function() {
-
-
     Game.canvas        = document.createElement('canvas');
     Game.canvas.id     = 'main';
     Game.canvas.width  = Game.CANVAS_WIDTH;
@@ -17,19 +11,18 @@ Game.init = function() {
     Game.context       = Game.canvas.getContext('2d');
     Game.frameCount    = 0;
 
-    this.intensity = 1;
-
+    Game.intensity = 1;
 
     Game.map      = new Game.Map();
     Game.useGhost();    // Playable character
     Game.player.x = 400;
     Game.player.y = 200;
 
-    Game.Vec2 = illuminated.Vec2;
-    Game.Lamp = illuminated.Lamp;
+    Game.Vec2     = illuminated.Vec2;
+    Game.Lamp     = illuminated.Lamp;
     Game.Lighting = illuminated.Lighting;
     Game.DarkMask = illuminated.DarkMask;
-    Game.light1 = new Game.Lamp({
+    Game.light1   = new Game.Lamp({
         position: new Game.Vec2(Game.player.x, Game.player.y),
         distance: 100,
         diffuse: 2,
@@ -40,11 +33,11 @@ Game.init = function() {
     });
 
     Game.lighting1 = new Game.Lighting({
-      light: Game.light1
+        light: Game.light1
     });
     Game.darkmask = new Game.DarkMask({
-    lights: [Game.light1],
-    color: 'rgba(0,0,0,1)'
+        lights: [Game.light1],
+        color: 'rgba(0,0,0,1)'
     });
 
     Game.npcs = {};     // The non-playable characters displayed on the stage
@@ -79,22 +72,22 @@ Game.load = function() {
 
     this.sounds = {
         ghost: {
-            bgm: new buzz.sound("audio/Super Mario - Eminence", {
-                formats: [ "mp3"],
+            bgm: new buzz.sound("audio/ghost/bgm", {
+                formats: ["mp3"],
                 preload: true,
                 loop: true
             })
         },
-        oldWoman: {
-            bgm: new buzz.sound("audio/08 - Elizabeth", {
-                formats: [ "mp3"],
+        oldwoman: {
+            bgm: new buzz.sound("audio/oldwoman/bgm", {
+                formats: ["mp3"],
                 preload: true,
                 loop: true
             })
         },
         cat: {
-            bgm: new buzz.sound("audio/music_cat", {
-                formats: [ "mp3"],
+            bgm: new buzz.sound("audio/cat/bgm", {
+                formats: ["mp3"],
                 preload: true,
                 loop: true
             })
@@ -124,11 +117,6 @@ Game.update = function() {
     context.fillStyle = 'rgb(0, 0, 0)';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-
-
-    // We draw the map
-    Game.map.draw(context);
-
     // Updating all the entities
     // The index of a NPC corresponds to the position of it in the tilemap
     for (entity in Game.npcs) {
@@ -144,17 +132,30 @@ Game.update = function() {
         }
     }
 
-    // Updating the player's character's controls
-    if (Game.player) {
+    // Updating and rendering the player's character
+    if (Game.player instanceof Game.Ghost) {
+        // We draw the map before the character
+        Game.map.draw(context);
+
         Game.player.update();
         Game.player.render(context);
         Game.player.control();
+    } else {
+        Game.player.update();
+        Game.player.render(context);
+        Game.player.control();
+        
+        // We draw the map after the character
+        Game.map.draw(context);
+        if (Game.player.renderFX) {
+            Game.player.renderFX();
+        }
     }
 
-    if (this.intensity > 0){
-        Game.context.fillStyle = "rgba(0,0,0,"+ intensity + ")";
-        Game.context.fillRect(0,0,Game.canvas.width,Game.canvas.height);
-        this.intensity -= 0.005;
+    if (Game.intensity > 0){
+        Game.context.fillStyle = "rgba(0, 0, 0, "+ Game.intensity + ")";
+        Game.context.fillRect(0, 0, Game.canvas.width, Game.canvas.height);
+        Game.intensity -= 0.005;
     }
 };
 
@@ -163,6 +164,5 @@ Game.update = function() {
  */
 Game.useGhost = function() {
     this.player = new this.Ghost();   // Playable character
-    this.map.scrollable = false;
     this.player.onPossess();
 };

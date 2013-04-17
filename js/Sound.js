@@ -7,11 +7,8 @@
      * @param  {Character} player The character
      */
     Sound.startBGM = function(name) {
-
-            buzz.all().stop();
-            console.log(name);
-            Game.sounds[name].bgm.play();
-
+        buzz.all().stop();
+        Game.sounds[name].bgm.play();
     };
 
     Game.Sound = Sound;
