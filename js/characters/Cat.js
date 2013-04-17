@@ -1,10 +1,10 @@
 // The Cat class
 (function() {
     var Cat = function(x, y) {
-        this.name = 'cat';
-        this.x = x || 0;
+        this.name  = 'cat';
+        this.x     = x || 0;
+        this.y     = y || 0;
         this.realX = this.x + Game.map.scrollX;
-        this.y = y || 0;
         this.realY = this.y + Game.map.scrollY;
         this.speed = {
             x: 20,
@@ -23,8 +23,8 @@
         this.physics = new Game.Physics(this);
         this.physics.jumpHeight = 20;
 
-        this.state          = "IDLE_RIGHT";
-        this.previousState  = "IDLE_RIGHT";
+        this.state          = 'IDLE_RIGHT';
+        this.previousState  = 'IDLE_RIGHT';
         this.frame          = 0;
     };
 
@@ -49,6 +49,27 @@
         this.x = this.realX - Game.map.scrollX;
         this.y = this.realY - Game.map.scrollY;
 
+        // Update the state
+        this.previousState = this.state;
+        if (this.realX < realX0) {
+            this.state = 'WALK_L';
+        }
+
+        if (this.realX > realX0) {
+            this.state = 'WALK_R';
+        }
+
+        if (this.physics.onFloor && this.realX == realX0) {
+            this.state = (this.previousState == 'WALK_R' || this.previousState == 'IDLE_RIGHT') ? 'IDLE_RIGHT' : 'IDLE_LEFT';
+        }
+        
+        if (!this.physics.onFloor && this.physics.jumpForces.length > 0) {
+            this.state = 'JUMPING';
+        } else if (!this.physics.onFloor) {
+            this.state = 'FALLING';
+        }
+
+        // Update the scrolling if the character is controlled by the player
         if (this != Game.player || !this.controllable || !Game.map.scrollable) {
             return;
         }
@@ -77,31 +98,59 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Cat.prototype.render = function(context) {
-        switch (this.state){
-            case "IDLE_RIGHT":
+        switch (this.state) {
+            case 'IDLE_RIGHT':
                 context.drawImage(Game.images[this.name].idlerImage, 35 * this.frame, 0, 35, 34, this.x - 3, this.y - 2, 35, 34);
-                if (Game.frameCount % 15 == 0)
+                if (Game.frameCount % 15 == 0) {
                     this.frame++;
-                if (this.frame == 4)
+                }
+                if (this.frame == 4) {
                     this.frame = 0;
+                }
                 break;
-            case "IDLE_LEFT":
+
+            case 'IDLE_LEFT':
                 context.drawImage(Game.images[this.name].idlelImage, 35 * this.frame, 0, 35, 34, this.x, this.y - 2, 35, 34);
-                if (Game.frameCount % 15 == 0)
+                if (Game.frameCount % 15 == 0) {
                     this.frame++;
-                if (this.frame == 4)
+                }
+                if (this.frame == 4) {
                     this.frame = 0;
+                }
                 break;
-            case "WALK_R":
+
+            case 'WALK_R':
                 context.drawImage(Game.images[this.name].walkrImage, 44 * (this.frame), 0, 44, 35, this.x - 12, this.y - 2, 44, 35);
                 if (Game.frameCount % 6  == 0) {
                     this.frame++;
                 }
-                if (this.frame == 5)
+                if (this.frame == 5) {
                     this.frame = 0;
+                }
                 break;
-            case "WALK_L":
+
+            case 'WALK_L':
                 context.drawImage(Game.images[this.name].walklImage, 44 * (this.frame), 0, 44, 35, this.x, this.y - 2, 44, 35);
+                if (Game.frameCount % 6  == 0) {
+                    this.frame++;
+                }
+                if (this.frame == 5) {
+                    this.frame = 0;
+                }
+                break;
+
+            case 'JUMPING':
+                context.drawImage(Game.images[this.name].idlelImage, 44 * (this.frame), 0, 44, 35, this.x, this.y - 2, 44, 35);
+                if (Game.frameCount % 6  == 0) {
+                    this.frame++;
+                }
+                if (this.frame == 5) {
+                    this.frame = 0;
+                }
+                break;
+
+            case 'FALLING':
+                context.drawImage(Game.images[this.name].idlelImage, 44 * (this.frame), 0, 44, 35, this.x, this.y - 2, 44, 35);
                 if (Game.frameCount % 6  == 0) {
                     this.frame++;
                 }
@@ -116,39 +165,27 @@
      * Renders the special effect on the map
      */
     Cat.prototype.renderFX = function() {
-        if (Game.player == this) {
-            Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
-            Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
-            Game.darkmask.render(Game.context);
-        }
+        // if (Game.player == this) {
+        //     Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
+        //     Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
+        //     Game.darkmask.render(Game.context);
+        // }
     };
 
     /**
      * Applies the player's controls on the cat
      */
     Cat.prototype.control = function() {
-        this.previousState = this.state;
         if (!this.controllable) {
             return;
         }
+
         if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
-            this.state = "WALK_L";
             this.physics.addForce(-this.speed.x, 0);
-            console.log(this.state);
         }
+
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
-            this.state = "WALK_R";
             this.physics.addForce(this.speed.x, 0);
-            console.log(this.state);
-        }
-        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && (this.previousState == "WALK_R" || this.previousState == "IDLE")) {
-            this.state = "IDLE_RIGHT";
-        }
-
-        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_L") {
-
-            this.state = "IDLE_LEFT";
-
         }
 
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
@@ -172,6 +209,10 @@
         Game.map.scroll();
     };
 
+    /**
+     * makes the character jump
+     * @return {[type]} [description]
+     */
     Cat.prototype.jump = function() {
         this.physics.addJumpForce(-this.speed.y);
     };

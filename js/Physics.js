@@ -140,9 +140,7 @@
      * @return {boolean}
      */
     Physics.prototype.hCollisions = function(v0) {
-        var headShift = 10;
         var futureX = this.entity.realX + (this.v.x + v0.x) / 2 * Time.deltaTime;
-
         var hittingEdge = futureX + (this.v.x < 0 ? 0 : this.entity.body.width),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
             yMin = ( ((this.entity.realY + 1) / Game.map.TS) ) | 0,
             yMax = ( ((this.entity.realY - 1) / Game.map.TS) + this.entity.body.t_height ) | 0,
@@ -167,12 +165,12 @@
      * @return {boolean}
      */
     Physics.prototype.vCollisions = function(v0) {
-        var headShift = 10;
         var futureY = this.entity.realY + (this.v.y + v0.y) / 2 * Time.deltaTime;
         var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.height)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
             xMin = ( ((this.entity.realX + 5) / Game.map.TS) ) | 0,
             xMax = ( ((this.entity.realX - 5) / Game.map.TS) + this.entity.body.t_width ) | 0,
-            newY = 0;
+            newY = 0,
+            head = (hittingEdge <= futureY);
 
         futureY = (hittingEdge / Game.map.TS) | 0;
         // Parsing the columns containing the entity
@@ -180,7 +178,7 @@
             // If the entity collides with an obstacle
             if (Game.map.obstacles.indexOf(Game.map.tilemap[futureY][j]) != -1) {
                 // We replace the entity right on the edge of the obstacle, to end the movement
-                if (((this.v.y + v0.y) / 2 * Time.deltaTime) > 0) {
+                if (((this.v.y + v0.y) / 2 * Time.deltaTime) >= 0 && !head) {
                     this.onFloor = true;
                 }
                 this.jumpForces = [];
