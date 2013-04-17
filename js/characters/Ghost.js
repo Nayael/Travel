@@ -1,27 +1,25 @@
 // The Ghost character class file
 (function() {
-    var Ghost = function() {
+    var Ghost = function(x, y) {
         this.name = 'ghost';
-        this.x = 0;
+        this.x = x || 0;
         this.realX = this.x + Game.map.scrollX;
-        this.y = 0;
+        this.y = y || 0;
         this.realY = this.y + Game.map.scrollY;
         this.speed = {
-            x: 300,
-            y: 300
+            x: 30,
+            y: 50
         };
         this.maxSpeed = {
-            x: 350,
-            y: 350
+            x: 30,
+            y: 60
         }
         this.controllable = true;
 
-        this.body          = new Game.Body(this);
-        this.body.t_width  = 1;  // The width in tile unit
-        this.body.t_height = 2;  // The height in tile unit
+        this.body          = new Game.Body(this, 1, 2);
 
-        this.physics               = new Game.GhostPhysics(this);
-        this.physics.jumpHeight    = 20;
+        this.physics               = new Game.Physics(this);
+        this.physics.jumpHeight    = 90;
         this.physics.useGravity    = false;
         this.physics.useCollisions = false;
 
@@ -97,6 +95,8 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Ghost.prototype.render = function(context) {
+        // context.fillStyle = 'rgb(255, 0, 0)';
+        // context.fillRect(this.x, this.y, this.body.width, this.body.height);
         context.globalAlpha = 0.5;
         switch (this.state){
             case "IDLE_RIGHT":
@@ -174,8 +174,12 @@
         }
     };
 
+    Ghost.prototype.startJump = function() {
+        this.jumping = true;
+    };
+
     Ghost.prototype.jump = function() {
-        this.physics.addForce(0, -this.speed.y);
+        this.physics.addJumpForce(-this.speed.y);
     };
 
     /**

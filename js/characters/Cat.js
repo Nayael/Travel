@@ -7,12 +7,12 @@
         this.y = y || 0;
         this.realY = this.y + Game.map.scrollY;
         this.speed = {
-            x: 200,
-            y: 300
+            x: 30,
+            y: 50
         };
         this.maxSpeed = {
-            x: 250,
-            y: 300
+            x: 30,
+            y: 60
         }
         this.controllable = false;
 
@@ -115,7 +115,7 @@
     };
 
     Cat.prototype.jump = function() {
-        this.physics.addForce(0, -this.speed.y);
+        this.physics.addJumpForce(-this.speed.y);
     };
 
     Game.Cat = Cat;

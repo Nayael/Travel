@@ -1,10 +1,10 @@
 // The Body class for an entity
 (function() {
-    var Body = function(entity) {
+    var Body = function(entity, t_width, t_height) {
         this.entity = entity;
 
-        this.t_width  = 1;  // The width in tile unit
-        this.t_height = 1;  // The height in tile unit
+        this.t_width  = t_width || 1;  // The width in tile unit
+        this.t_height = t_height || 1;  // The height in tile unit
         this.width    = this.t_width * Game.map.TS;  // The width in pixles
         this.height   = this.t_height * Game.map.TS;  // The height in pixels
     };
