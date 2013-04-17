@@ -2,7 +2,7 @@
 (function() {
     var Map = function() {
         this.yShiftUp = 0;      // The y position of the square tiles in the tiles spritesheet
-        this.yShiftDown = 9;    // The height of extra graphics on the bottom of the tile
+        this.yShiftDown = 4;    // The height of extra graphics on the bottom of the tile
         this.TS = 32;           // The size of a tile in pixels
         this.obstacles = [1, 2, 3, 4, 5, 6, 7, 8, 9];   // Indexes in the tilemap that correspond to physical obstacles
         this.npcs      = [200];   // Indexes in the tilemap that correspond to physical obstacles
