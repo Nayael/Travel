@@ -22,6 +22,10 @@
 
         this.physics = new Game.Physics(this);
         this.physics.jumpHeight = 20;
+
+        this.state          = "IDLE_RIGHT";
+        this.previousState  = "IDLE_RIGHT";
+        this.frame          = 0;
     };
 
     /**
@@ -73,11 +77,38 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Cat.prototype.render = function(context) {
-        for (var i = 0, j = 0; i < this.body.t_height; i++) {
-            for (j = 0; j < this.body.t_width; j++) {
-                context.fillStyle = 'rgb(0, 0, 255)';
-                context.fillRect((this.x + j * Game.map.TS) | 0, (this.y + i * Game.map.TS) | 0, Game.map.TS, Game.map.TS);
-            }
+        switch (this.state){
+            case "IDLE_RIGHT":
+                context.drawImage(Game.images[this.name].idlerImage, 35 * this.frame,0,35,34,this.x,this.y,35,34);
+                if (Game.frameCount % 15 == 0)
+                    this.frame++;
+                if (this.frame == 4)
+                    this.frame = 0;
+                break;
+            case "IDLE_LEFT":
+                context.drawImage(Game.images[this.name].idlelImage, 35 * this.frame,0,35,34,this.x,this.y,35,34);
+                if (Game.frameCount % 15 == 0)
+                    this.frame++;
+                if (this.frame == 4)
+                    this.frame = 0;
+                break;
+            case "WALK_R":
+                context.drawImage(Game.images[this.name].walkrImage, 44 * (this.frame),0, 44,35,this.x,this.y,44,35);
+                if (Game.frameCount % 6  == 0) {
+                    this.frame++;
+                }
+                if (this.frame == 5)
+                    this.frame = 0;
+                break;
+            case "WALK_L":
+                context.drawImage(Game.images[this.name].walklImage, 44 * (this.frame),0, 44,35,this.x,this.y,44,35);
+                if (Game.frameCount % 6  == 0) {
+                    this.frame++;
+                }
+                if (this.frame == 5) {
+                    this.frame = 0;
+                }
+                break;
         }
     };
 
@@ -96,14 +127,28 @@
      * Applies the player's controls on the cat
      */
     Cat.prototype.control = function() {
+        this.previousState = this.state;
         if (!this.controllable) {
             return;
         }
         if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
+            this.state = "WALK_L";
             this.physics.addForce(-this.speed.x, 0);
+            console.log(this.state);
         }
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
+            this.state = "WALK_R";
             this.physics.addForce(this.speed.x, 0);
+            console.log(this.state);
+        }
+        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && (this.previousState == "WALK_R" || this.previousState == "IDLE")) {
+            this.state = "IDLE_RIGHT";
+        }
+
+        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_L") {
+
+            this.state = "IDLE_LEFT";
+
         }
 
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {

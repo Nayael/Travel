@@ -63,9 +63,10 @@ Game.load = function() {
             tiles: this.loader.addImage("images/sprites/ghost/tiles.png")
         },
         cat: {
-            idleImage : this.loader.addImage("images/sprites/cat/idle_right.png"),
-            walkrImage: this.loader.addImage("images/sprites/cat/idle_right.png"),
-            walklImage: this.loader.addImage("images/sprites/cat/idle_left.png"),
+            idlerImage : this.loader.addImage("images/sprites/cat/idle_right.png"),
+            idlelImage : this.loader.addImage("images/sprites/cat/idle_left.png"),
+            walkrImage: this.loader.addImage("images/sprites/cat/right.png"),
+            walklImage: this.loader.addImage("images/sprites/cat/left.png"),
             tiles: this.loader.addImage("images/sprites/cat/tiles.png")
         }
     };

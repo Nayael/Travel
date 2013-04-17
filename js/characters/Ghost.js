@@ -98,33 +98,33 @@
         context.globalAlpha = 0.5;
         switch (this.state){
             case "IDLE_RIGHT":
-                context.drawImage(Game.images.ghost.walkrImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
+                context.drawImage(Game.images.ghost.walkrImage, 31.95 * this.frame,0,31.95,43,this.x,this.y,31.95,43);
                 if (Game.frameCount % 8 == 0)
                     this.frame++;
-                if (this.frame == 8)
+                if (this.frame == 5)
                     this.frame = 0;
                 break;
             case "IDLE_LEFT":
-                context.drawImage(Game.images.ghost.walklImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
+                context.drawImage(Game.images.ghost.walklImage, 31.95 * this.frame,0,31.95,43,this.x,this.y,31.95,43);
                 if (Game.frameCount % 8 == 0)
                     this.frame++;
-                if (this.frame == 8)
+                if (this.frame == 5)
                     this.frame = 0;
                 break;
             case "WALK_R":
-                context.drawImage(Game.images.ghost.walkrImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
+                context.drawImage(Game.images.ghost.walkrImage, 31.95 * (this.frame),0, 31.95,43,this.x,this.y,31.95,43);
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
-                if (this.frame == 8)
+                if (this.frame == 5)
                     this.frame = 0;
                 break;
             case "WALK_L":
-                context.drawImage(Game.images.ghost.walklImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
+                context.drawImage(Game.images.ghost.walklImage, 31.95 * (this.frame),0, 31.95,43,this.x,this.y,31.95,43);
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
-                if (this.frame == 8) {
+                if (this.frame == 5) {
                     this.frame = 0;
                 }
                 break;
