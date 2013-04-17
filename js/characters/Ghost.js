@@ -1,6 +1,7 @@
 // The Ghost character class file
 (function() {
     var Ghost = function() {
+        this.name = 'ghost';
         this.x = 0;
         this.realX = this.x + Game.map.scrollX;
         this.y = 0;
@@ -27,12 +28,6 @@
         this.state          = "IDLE";
         this.previousState  = "IDLE";
         this.frame          = 0;
-        this.idleImage      = new Image();
-        this.walkrImage     = new Image();
-        this.walklImage     = new Image();
-        this.idleImage.src  = "images/sprites/ghost_right.png";
-        this.walkrImage.src = "images/sprites/ghost_right.png";
-        this.walklImage.src = "images/sprites/ghost_left.png";
     };
 
     /**
@@ -105,21 +100,21 @@
         context.globalAlpha = 0.5;
         switch (this.state){
             case "IDLE_RIGHT":
-                context.drawImage(this.walkrImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
+                context.drawImage(Game.images.ghost.walkrImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
                 if (Game.frameCount % 8 == 0)
                     this.frame++;
                 if (this.frame == 8)
                     this.frame = 0;
                 break;
             case "IDLE_LEFT":
-                context.drawImage(this.walklImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
+                context.drawImage(Game.images.ghost.walklImage, 35 * this.frame,0,35,67,this.x,this.y,35,67);
                 if (Game.frameCount % 8 == 0)
                     this.frame++;
                 if (this.frame == 8)
                     this.frame = 0;
                 break;
             case "WALK_R":
-                context.drawImage(this.walkrImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
+                context.drawImage(Game.images.ghost.walkrImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
@@ -127,7 +122,7 @@
                     this.frame = 0;
                 break;
             case "WALK_L":
-                context.drawImage(this.walklImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
+                context.drawImage(Game.images.ghost.walklImage, 35 * (this.frame),0, 35,67,this.x,this.y,35,67);
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }

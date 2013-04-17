@@ -31,7 +31,7 @@
                 // Drawing tiles
                 if (this.obstacles.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     context.fillRect(tileX, tileY, this.TS, this.TS);
-                    context.drawImage(Game.platformImage ,j * this.TS - this.scrollX, i * this.TS - this.scrollY);
+                    context.drawImage(Game.images[Game.player.name].tiles, this.tilemap[i][j] * this.TS, 0, this.TS, this.TS, tileX, tileY, this.TS, this.TS);
                 // Creating NPCs that will be drawn
                 } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     // If the NPC ins't already on the stage

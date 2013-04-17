@@ -35,10 +35,20 @@ Game.init = function() {
 Game.load = function() {
     // Declaring all the assets in PxLoader
     this.loader = new PxLoader(),
-        this.idleImage = this.loader.addImage("images/sprites/ghost_right.png"),
-        this.walkrImage = this.loader.addImage("images/sprites/ghost_right.png"),
-        this.walklImage = this.loader.addImage("images/sprites/ghost_left.png"),
-        this.platformImage = this.loader.addImage("images/sprites/platform.png");
+    this.images = {
+        ghost: {
+            idleImage : this.loader.addImage("images/sprites/ghost/right.png"),
+            walkrImage: this.loader.addImage("images/sprites/ghost/right.png"),
+            walklImage: this.loader.addImage("images/sprites/ghost/left.png"),
+            tiles: this.loader.addImage("images/sprites/ghost/tiles.png")
+        },
+        cat: {
+            idleImage : this.loader.addImage("images/sprites/cat/idle_right.png"),
+            walkrImage: this.loader.addImage("images/sprites/cat/idle_right.png"),
+            walklImage: this.loader.addImage("images/sprites/cat/idle_left.png"),
+            tiles: this.loader.addImage("images/sprites/cat/tiles.png")
+        }
+    };
     
     // Progression bar
     this.loader.addProgressListener(function(e) { 

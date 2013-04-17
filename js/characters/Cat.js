@@ -1,6 +1,7 @@
 // The Cat class
 (function() {
     var Cat = function(x, y) {
+        this.name = 'cat';
         this.x = x || 0;
         this.realX = this.x + Game.map.scrollX;
         this.y = y || 0;
