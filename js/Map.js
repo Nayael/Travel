@@ -49,9 +49,46 @@
     };
 
     /**
-     * Manually fix the scrolling
+     * Moves the map scrolling with the player's character
+     * @param  {Number} dX The distance the player is moving on the X-axis
+     * @param  {Number} dY The distance the player is moving on the Y-axis
      */
-    Map.prototype.scroll = function() {
+    Map.prototype.scroll = function(dX, dY) {
+        // X-axis scrolling
+        if (this.scrollX != this.limitX && dX > 0 && (Game.player.x + Game.player.body.width) > this.scrollXMax) {
+            Game.player.x = this.scrollXMax - Game.player.body.width;
+            this.scrollX += dX;
+        } else if (this.scrollX != 0 && dX < 0 && Game.player.x < this.scrollXMin) {
+            Game.player.x = this.scrollXMin;
+            this.scrollX += dX;
+        }
+
+        // Y-axis scrolling
+        if (this.scrollY != this.limitY && dY > 0 && Game.player.y + Game.player.body.height > this.scrollYMax) {
+            Game.player.y = this.scrollYMax - Game.player.body.height;
+            this.scrollY += dY;
+        } else if (this.scrollY != 0 && dY < 0 && Game.player.y < this.scrollYMin) {
+            Game.player.y = this.scrollYMin;
+            this.scrollY += dY;
+        }
+
+        if (this.scrollX < 0) {
+            this.scrollX = 0;
+        } else if (this.scrollX > this.limitX) {
+            this.scrollX = this.limitX;
+        }
+        
+        if (this.scrollY < 0) {
+            this.scrollY = 0;
+        } else if (this.scrollY > this.limitY) {
+            this.scrollY = this.limitY;
+        }
+    };
+
+    /**
+     * Automaticaly fix the scrolling
+     */
+    Map.prototype.autoScroll = function() {
         // If the scroll is already OK, don't do anything
         if (Game.player.x >= this.scrollXMin && Game.player.x <= this.scrollXMax && Game.player.y >= this.scrollYMin && Game.player.y <= this.scrollYMax) {
             return;

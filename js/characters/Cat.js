@@ -49,6 +49,25 @@
         this.x = this.realX - Game.map.scrollX;
         this.y = this.realY - Game.map.scrollY;
 
+        // Preventing from getting out of the canvas
+        if (Game.player == this) {
+            if (this.x <= 0) {
+                this.x = 1;
+                this.physics.v.x = 0;
+            } else if (this.x >= Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS) {
+                this.x = Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS - 1;
+                this.physics.v.x = 0;
+            }
+
+            if (this.y <= 0) {
+                this.y = 1;
+                this.physics.v.y = 0;
+            } else if (this.y >= Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20) {
+                this.y = Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20 - 1;
+                this.physics.v.y = 0;
+            }
+        }
+
         // Update the state
         this.previousState = this.state;
         if (this.realX < realX0) {
@@ -74,35 +93,7 @@
             return;
         }
 
-        // X-axis scrolling
-        if (Game.map.scrollX != Game.map.limitX && dX > 0 && (this.x + this.body.width) > Game.map.scrollXMax) {
-            this.x = Game.map.scrollXMax - this.body.width;
-            Game.map.scrollX += dX;
-        } else if (Game.map.scrollX != 0 && dX < 0 && this.x < Game.map.scrollXMin) {
-            this.x = Game.map.scrollXMin;
-            Game.map.scrollX += dX;
-        }
-
-        // Y-axis scrolling
-        if (Game.map.scrollY != Game.map.limitY && dY > 0 && this.y + this.body.height > Game.map.scrollYMax) {
-            this.y = Game.map.scrollYMax - this.body.height;
-            Game.map.scrollY += dY;
-        } else if (Game.map.scrollY != 0 && dY < 0 && this.y < Game.map.scrollYMin) {
-            this.y = Game.map.scrollYMin;
-            Game.map.scrollY += dY;
-        }
-
-        if (Game.map.scrollX < 0) {
-            Game.map.scrollX = 0;
-        } else if (Game.map.scrollX > Game.map.limitX) {
-            Game.map.scrollX = Game.map.limitX;
-        }
-        
-        if (Game.map.scrollY < 0) {
-            Game.map.scrollY = 0;
-        } else if (Game.map.scrollY > Game.map.limitY) {
-            Game.map.scrollY = Game.map.limitY;
-        }
+        Game.map.scroll(dX, dY);
     };
 
     /**
@@ -177,11 +168,11 @@
      * Renders the special effect on the map
      */
     Cat.prototype.renderFX = function() {
-        if (Game.player == this) {
-            Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
-            Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
-            Game.darkmask.render(Game.context);
-        }
+        // if (Game.player == this) {
+        //     Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
+        //     Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
+        //     Game.darkmask.render(Game.context);
+        // }
     };
 
     /**
@@ -218,7 +209,7 @@
         setTimeout(function() {
             self.controllable = true;
         }, Game.Npc.STUN_TIME);
-        Game.map.scroll();
+        Game.map.autoScroll();
     };
 
     /**
