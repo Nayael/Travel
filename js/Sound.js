@@ -8,12 +8,24 @@
      */
     Sound.startBGM = function(name) {
         buzz.all().stop();
-        //Game.sounds[name].bgm.play();
+        Game.sounds[name].bgm.play();
     };
 
-    Sound.startFx = function (name) {
-        buzz.all.stop();
-        Game.sounds[name].fx.play();
+    Sound.startTake = function () {
+        Game.sounds.ghost.take.play();
     }
+
+    Sound.startLeave = function () {
+        Game.sounds.ghost.leave.play();
+    }
+
+    Sound.startFx = function (name) {
+        if(Game.sounds[name].fx)
+        {
+            Game.sounds[name].fx.play();
+        }
+    }
+
+
     Game.Sound = Sound;
 })();

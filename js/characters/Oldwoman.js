@@ -79,7 +79,7 @@
     Oldwoman.prototype.render = function(context) {
         switch (this.state) {
             case 'IDLE_RIGHT':
-                context.drawImage(Game.images[this.name].idlerImage, 46 * this.frame, 0, 46, 71, this.x - 10, this.y - 35, 46, 71);
+                context.drawImage(Game.images[this.name].idlerImage, 46 * this.frame, 0, 46, 71, this.x - 20, this.y - 35, 46, 71);
                 if (Game.frameCount % 20 == 0) {
                     this.frame++;
                 }
@@ -174,7 +174,6 @@
      */
     Oldwoman.prototype.onPossess = function() {
         var self = this;
-        Game.Sound.startBGM(this.name);
         setTimeout(function() {
             self.controllable = true;
         }, Game.Npc.STUN_TIME);

@@ -151,7 +151,6 @@
      */
     Ghost.prototype.onPossess = function() {
         var self = this;
-        Game.Sound.startBGM(this.name);
         setTimeout(function() {
             self.controllable = true;
         }, Game.Npc.STUN_TIME);

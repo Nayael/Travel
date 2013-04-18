@@ -93,14 +93,27 @@ Game.load = function() {
                 preload: true,
                 loop: true
             }),
-            fx: new buzz.sound("audio/ghost/bgm", {
+            take: new buzz.sound("audio/ghost/ghost_take", {
+                formats: ["mp3"],
+                preload: true,
+                loop: false
+            }),
+            leave: new buzz.sound("audio/ghost/ghost_leave", {
+                formats: ["mp3"],
+                preload: true,
+                loop: false
+            })
+        },
+        oldwoman: {
+            bgm: new buzz.sound("audio/oldwoman/bgm", {
                 formats: ["mp3"],
                 preload: true,
                 loop: true
             })
         },
-        oldwoman: {
-            bgm: new buzz.sound("audio/oldwoman/bgm", {
+
+        woodsman: {
+            bgm: new buzz.sound("audio/woodsman/bgm", {
                 formats: ["mp3"],
                 preload: true,
                 loop: true
@@ -111,6 +124,11 @@ Game.load = function() {
                 formats: ["mp3"],
                 preload: true,
                 loop: true
+            }),
+            fx: new buzz.sound("audio/cat/fx", {
+                formats: ["mp3"],
+                preload: true,
+                loop: false
             })
         }
     };
@@ -165,7 +183,7 @@ Game.update = function() {
         Game.player.update();
         Game.player.render(context);
         Game.player.control();
-        
+
         // We draw the map after the character
         Game.map.draw(context);
         if (Game.player.renderFX) {

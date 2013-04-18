@@ -24,6 +24,13 @@
         Game.map.tilemap[mapI][mapJ] = 0;
 
         Game.player.onPossess();
+        Game.Sound.startBGM(Game.player.name);
+        Game.Sound.startTake();
+
+        Game.Sound.startFx(Game.player.name);
+        setInterval(function() {
+            Game.Sound.startFx(Game.player.name);
+        }, 30000);
     }
 
     /**
@@ -42,6 +49,9 @@
 
         Game.player.x = npc.x;
         Game.player.y = npc.y - Game.map.TS;
+
+        Game.Sound.startBGM(Game.player.name);
+        Game.Sound.startLeave();
     }
 
     /**

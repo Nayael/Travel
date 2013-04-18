@@ -84,7 +84,7 @@
 
         if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_R' && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
             this.state = 'JUMPING_R';
-            this.frame = 9;
+            this.frame = 7;
         } else if (!this.physics.onFloor && this.physics.jumpForces.length == 0 && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
             this.state = 'FALLING_R';
             //this.frame = 3;
@@ -96,7 +96,6 @@
             this.state = 'FALLING_L';
             this.frame = 6;
         }
-
         // Update the scrolling if the character is controlled by the player
         if (this != Game.player || !this.controllable || !Game.map.scrollable) {
             return;
@@ -155,10 +154,10 @@
 
             case 'JUMPING_R':
                 context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x - 30, this.y - 2, 61, 42);
-                if (Game.frameCount % 4  == 0) {
+                if (Game.frameCount % 5  == 0) {
                     this.frame--;
                 }
-                if (this.frame <= 4) {
+                if (this.frame <= 3) {
                     this.frame = 3;
                 }
                 break;
@@ -169,10 +168,10 @@
 
                 case 'JUMPING_L':
                 context.drawImage(Game.images[this.name].jumplImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
-                if (Game.frameCount % 4  == 0) {
+                if (Game.frameCount % 5  == 0) {
                     this.frame++;
                 }
-                if (this.frame >= 5) {
+                if (this.frame >= 6) {
                     this.frame = 6;
                 }
                 break;
@@ -246,7 +245,6 @@
      */
     Cat.prototype.onPossess = function() {
         var self = this;
-        Game.Sound.startBGM(this.name);
         setTimeout(function() {
             self.controllable = true;
         }, Game.Npc.STUN_TIME);
