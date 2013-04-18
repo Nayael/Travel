@@ -56,12 +56,12 @@ Game.load = function() {
     // Declaring all the assets in PxLoader
     this.loader = new PxLoader(),
     this.images = {
-        bg: this.loader.addImage("images/bg.png"),
         ghost: {
             idleImage : this.loader.addImage("images/sprites/ghost/right.png"),
             walkrImage: this.loader.addImage("images/sprites/ghost/right.png"),
             walklImage: this.loader.addImage("images/sprites/ghost/left.png"),
-            tiles: this.loader.addImage("images/sprites/ghost/tiles.png")
+            tiles: this.loader.addImage("images/sprites/ghost/tiles.png"),
+            // bg: this.loader.addImage("images/sprites/ghost/bg.jpg")
         },
         cat: {
             idlerImage : this.loader.addImage("images/sprites/cat/idle_right.png"),
@@ -70,19 +70,22 @@ Game.load = function() {
             walklImage: this.loader.addImage("images/sprites/cat/left.png"),
             tiles: this.loader.addImage("images/sprites/cat/tiles.png"),
             jumprImage: this.loader.addImage("images/sprites/cat/jump_r.png"),
-            jumplImage: this.loader.addImage("images/sprites/cat/jump_l.png")
+            jumplImage: this.loader.addImage("images/sprites/cat/jump_l.png"),
+            // bg: this.loader.addImage("images/sprites/cat/bg.jpg")
         },
         oldwoman: {
             idlerImage : this.loader.addImage("images/sprites/oldwoman/idle_right.png"),
             idlelImage : this.loader.addImage("images/sprites/oldwoman/idle_left.png"),
             walkrImage: this.loader.addImage("images/sprites/oldwoman/right.png"),
             walklImage: this.loader.addImage("images/sprites/oldwoman/left.png"),
-            tiles: this.loader.addImage("images/sprites/oldwoman/tiles.png")
+            tiles: this.loader.addImage("images/sprites/oldwoman/tiles.png"),
+            // bg: this.loader.addImage("images/sprites/oldwoman/bg.jpg")
         },
         woodsman: {
             idlerImage : this.loader.addImage("images/sprites/woodsman/idle_right.png"),
             idlelImage : this.loader.addImage("images/sprites/woodsman/idle_left.png"),
-            tiles: this.loader.addImage("images/sprites/woodsman/tiles.png")
+            tiles: this.loader.addImage("images/sprites/woodsman/tiles.png"),
+            // bg: this.loader.addImage("images/sprites/woodsman/bg.jpg")
         }
     };
 
@@ -138,8 +141,8 @@ Game.load = function() {
         console.log(e.completedCount * 100 / e.totalCount + '%');
     });
 
-    this.loader.addCompletionListener(this.init);
     // Starting the loading
+    this.loader.addCompletionListener(this.init);
     this.loader.start();
 }
 
@@ -151,10 +154,14 @@ Game.update = function() {
         context = Game.context;
 
     Game.frameCount++;
+
     // Clearing the canvas
     context.fillStyle = 'rgb(127, 127, 127)';
     context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
-    // context.drawImage(Game.images.bg, Game.map.scrollX, Game.map.scrollY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+    // context.drawImage(Game.images[Game.player.name].bg, Game.map.scrollX, Game.map.scrollY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+
+    // We draw the map after the character
+    Game.map.draw(context);
 
     // Updating all the entities
     // The index of a NPC corresponds to the position of it in the tilemap
@@ -171,24 +178,13 @@ Game.update = function() {
         }
     }
 
+
     // Updating and rendering the player's character
-    if (Game.player instanceof Game.Ghost) {
-        // We draw the map before the character
-        Game.map.draw(context);
-
-        Game.player.update();
-        Game.player.render(context);
-        Game.player.control();
-    } else {
-        Game.player.update();
-        Game.player.render(context);
-        Game.player.control();
-
-        // We draw the map after the character
-        Game.map.draw(context);
-        if (Game.player.renderFX) {
-            Game.player.renderFX();
-        }
+    Game.player.update();
+    Game.player.render(context);
+    Game.player.control();
+    if (Game.player.renderFX) {
+        Game.player.renderFX();
     }
 
     if (Game.intensity > 0){

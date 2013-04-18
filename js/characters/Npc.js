@@ -27,10 +27,9 @@
         Game.Sound.startBGM(Game.player.name);
         Game.Sound.startTake();
 
-        Game.Sound.startFx(Game.player.name);
-        setInterval(function() {
+        Game.player.sfxTimer = setInterval(function() {
             Game.Sound.startFx(Game.player.name);
-        }, 30000);
+        }, 5000);
     }
 
     /**
@@ -38,6 +37,13 @@
      * @param  {Character} npc The NPC to leave
      */
     Npc.leaveNpc = function(npc) {
+        // Can't leave a npc when colliding with another npc
+        for (var i in Game.npcs) {
+            if (Game.npcs.hasOwnProperty(i) && npc.body.collide(Game.npcs[i])) {
+                return;
+            }
+        }
+        clearInterval(Game.player.sfxTimer);
         var newIndex = ( (npc.realY / Game.map.TS) * Game.map.tilemap[0].length + (npc.realX / Game.map.TS) ) | 0;
         Game.useGhost();
         Game.npcs[newIndex] = npc;
@@ -73,7 +79,7 @@
         Game.npcs[npcMapIndex].npcValue = value;
     };
 
-    Npc.STUN_TIME = 500;    // The time during which a character is not controllable after the possession
+    Npc.STUN_TIME = 800;    // The time during which a character is not controllable after the possession
 
     Game.Npc = Npc;
 })();

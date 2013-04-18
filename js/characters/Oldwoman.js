@@ -16,16 +16,13 @@
         }
         this.controllable = false;
 
-        this.body = new Game.Body(this);
-        this.body.t_width  = 1;  // The width in tile unit
-        this.body.t_height = 1;  // The height in tile unit
+        this.body = new Game.Body(this, 1, 2);
 
         this.physics = new Game.Physics(this);
-        //this.physics.jumpHeight = 20;
 
-        this.state          = 'IDLE_RIGHT';
-        this.previousState  = 'IDLE_RIGHT';
-        this.frame          = 0;
+        this.state         = 'IDLE_RIGHT';
+        this.previousState = 'IDLE_RIGHT';
+        this.frame         = 0;
     };
 
     /**
@@ -48,6 +45,25 @@
 
         this.x = this.realX - Game.map.scrollX;
         this.y = this.realY - Game.map.scrollY;
+
+        // Preventing from getting out of the canvas
+        if (Game.player == this) {
+            if (this.x <= 0) {
+                this.x = 1;
+                this.physics.v.x = 0;
+            } else if (this.x >= Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS) {
+                this.x = Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS - 1;
+                this.physics.v.x = 0;
+            }
+
+            if (this.y <= 0) {
+                this.y = 1;
+                this.physics.v.y = 0;
+            } else if (this.y >= Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20) {
+                this.y = Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20 - 1;
+                this.physics.v.y = 0;
+            }
+        }
 
         if (this != Game.player || !this.controllable || !Game.map.scrollable) {
             return;
@@ -79,7 +95,7 @@
     Oldwoman.prototype.render = function(context) {
         switch (this.state) {
             case 'IDLE_RIGHT':
-                context.drawImage(Game.images[this.name].idlerImage, 46 * this.frame, 0, 46, 71, this.x - 20, this.y - 35, 46, 71);
+                context.drawImage(Game.images[this.name].idlerImage, 46 * this.frame, 0, 46, 71, this.x - 20, this.y - 5, 46, 71);
                 if (Game.frameCount % 20 == 0) {
                     this.frame++;
                 }
@@ -89,7 +105,7 @@
                 break;
 
             case 'IDLE_LEFT':
-                context.drawImage(Game.images[this.name].idlelImage, 46 * this.frame, 0, 46, 71, this.x - 12, this.y - 35, 46, 71);
+                context.drawImage(Game.images[this.name].idlelImage, 46 * this.frame, 0, 46, 71, this.x - 12, this.y - 5, 46, 71);
                 if (Game.frameCount % 20 == 0) {
                     this.frame++;
                 }
@@ -99,7 +115,7 @@
                 break;
 
             case 'WALK_R':
-                context.drawImage(Game.images[this.name].walkrImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 35, 45, 72);
+                context.drawImage(Game.images[this.name].walkrImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 5, 45, 72);
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
@@ -109,7 +125,7 @@
                 break;
 
             case 'WALK_L':
-                context.drawImage(Game.images[this.name].walklImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 35, 45, 72);
+                context.drawImage(Game.images[this.name].walklImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 5, 45, 72);
                 if (Game.frameCount % 8 == 0) {
                     this.frame++;
                 }
@@ -136,33 +152,27 @@
      */
     Oldwoman.prototype.control = function() {
         this.previousState = this.state;
-        //this.frame = 0;
         if (!this.controllable) {
             return;
         }
+        
         if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
             this.state = "WALK_L";
             this.physics.addForce(-this.speed.x, 0);
-            console.log(this.state);
         }
+        
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
             this.state = "WALK_R";
             this.physics.addForce(this.speed.x, 0);
-            console.log(this.state);
         }
+
         if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && (this.previousState == "WALK_R" || this.previousState == "IDLE_RIGHT")) {
             this.state = "IDLE_RIGHT";
         }
 
         if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_L") {
-
             this.state = "IDLE_LEFT";
-
         }
-
-        /*if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
-            this.jump();
-        }*/
 
         if (Keyboard.isDown(Keyboard.ESCAPE)) {
             Game.Npc.leaveNpc(this);
@@ -181,12 +191,15 @@
     };
 
     /**
-     * makes the character jump
-     * @return {[type]} [description]
+     * Triggered when the character is being left
      */
-    /*Oldwoman.prototype.jump = function() {
-        this.physics.addJumpForce(-this.speed.y);
-    };*/
+    Oldwoman.prototype.onLeave = function() {
+        if (this.state == 'IDLE_LEFT' || this.state == 'WALK_L') {
+            this.state = 'IDLE_LEFT';
+        } else{
+            this.state = 'IDLE_RIGHT';
+        }
+    };
 
     Game.Oldwoman = Oldwoman;
 })();

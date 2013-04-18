@@ -20,8 +20,7 @@
     }
 
     Sound.startFx = function (name) {
-        if(Game.sounds[name].fx)
-        {
+        if(Game.sounds[name].fx) {
             Game.sounds[name].fx.play();
         }
     }

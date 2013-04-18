@@ -16,9 +16,7 @@
         }
         this.controllable = false;
 
-        this.body = new Game.Body(this);
-        this.body.t_width  = 1;  // The width in tile unit
-        this.body.t_height = 1;  // The height in tile unit
+        this.body = new Game.Body(this, 1, 1);
 
         this.physics = new Game.Physics(this);
         this.physics.jumpHeight = 20;
@@ -109,9 +107,7 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Cat.prototype.render = function(context) {
-         console.log(this.state);
         switch (this.state) {
-
             case 'IDLE_RIGHT':
                 context.drawImage(Game.images[this.name].idlerImage, 35 * this.frame, 0, 35, 34, this.x - 3, this.y - 2, 35, 34);
                 if (Game.frameCount % 15 == 0) {
@@ -249,6 +245,17 @@
             self.controllable = true;
         }, Game.Npc.STUN_TIME);
         Game.map.autoScroll();
+    };
+
+    /**
+     * Triggered when the character is being left
+     */
+    Cat.prototype.onLeave = function() {
+        if (this.state == 'IDLE_LEFT' || this.state == 'WALK_L') {
+            this.state = 'IDLE_LEFT';
+        } else{
+            this.state = 'IDLE_RIGHT';
+        }
     };
 
     /**

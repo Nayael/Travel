@@ -21,5 +21,17 @@
         return !(leftThis > rightTarget || leftTarget > rightThis || topThis > bottomTarget || topTarget > bottomThis);
     };
 
+    Body.prototype.tileCollide = function(tileX, tileY) {
+        var leftThis   = this.entity.realX,
+            rightThis  = this.entity.realX + this.width,
+            topThis    = this.entity.realY,
+            bottomThis = this.entity.realY + this.height,
+            leftTile   = tileX * Game.map.TS,
+            rightTile  = leftTile + Game.map.TS,
+            topTile    = tileY * Game.map.TS,
+            bottomTile = topTile + Game.map.TS;
+        return !(leftThis > rightTile || leftTile > rightThis || topThis > bottomTile || topTile > bottomThis);
+    };
+
     Game.Body = Body;
 })();
