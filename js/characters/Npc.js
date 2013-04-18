@@ -62,9 +62,8 @@
 
         Game.player.x = npc.x;
         Game.player.y = npc.y - Game.map.TS;
-
-        Game.Sound.startBGM(Game.player.name);
         Game.Sound.startLeave();
+        npc.onLeave();
     }
 
     /**

@@ -60,8 +60,8 @@ Game.load = function() {
             idleImage : this.loader.addImage('images/sprites/ghost/right.png'),
             walkrImage: this.loader.addImage('images/sprites/ghost/right.png'),
             walklImage: this.loader.addImage('images/sprites/ghost/left.png'),
-            tiles: this.loader.addImage('images/sprites/ghost/tiles.png'),
-            // bg: this.loader.addImage('images/sprites/ghost/bg.jpg')
+            tiles: this.loader.addImage('images/sprites/ghost/tiles.png')/*,
+            bg: this.loader.addImage('images/sprites/ghost/bg.jpg')*/
         },
         cat: {
             idlerImage : this.loader.addImage('images/sprites/cat/idle_right.png'),
@@ -70,33 +70,43 @@ Game.load = function() {
             walklImage: this.loader.addImage('images/sprites/cat/left.png'),
             tiles: this.loader.addImage('images/sprites/cat/tiles.png'),
             jumprImage: this.loader.addImage('images/sprites/cat/jump_r.png'),
-            jumplImage: this.loader.addImage('images/sprites/cat/jump_l.png'),
-            // bg: this.loader.addImage('images/sprites/cat/bg.jpg')
+            jumplImage: this.loader.addImage('images/sprites/cat/jump_l.png')/*,
+            bg: this.loader.addImage('images/sprites/cat/bg.jpg')*/
         },
         oldwoman: {
             idlerImage : this.loader.addImage('images/sprites/oldwoman/idle_right.png'),
             idlelImage : this.loader.addImage('images/sprites/oldwoman/idle_left.png'),
             walkrImage: this.loader.addImage('images/sprites/oldwoman/right.png'),
             walklImage: this.loader.addImage('images/sprites/oldwoman/left.png'),
-            tiles: this.loader.addImage('images/sprites/oldwoman/tiles.png'),
-            // bg: this.loader.addImage('images/sprites/oldwoman/bg.jpg')
+            tiles: this.loader.addImage('images/sprites/oldwoman/tiles.png')/*,
+            bg: this.loader.addImage('images/sprites/oldwoman/bg.jpg')*/
         },
         woodsman: {
             idlerImage : this.loader.addImage('images/sprites/woodsman/idle_right.png'),
             idlelImage : this.loader.addImage('images/sprites/woodsman/idle_left.png'),
-            tiles: this.loader.addImage('images/sprites/woodsman/tiles.png'),
             walkrImage: this.loader.addImage("images/sprites/woodsman/right.png"),
             walklImage: this.loader.addImage("images/sprites/woodsman/left.png"),
             jumprImage: this.loader.addImage('images/sprites/woodsman/jump_r.png'),
-            jumplImage: this.loader.addImage('images/sprites/woodsman/jump_l.png')
-            // bg: this.loader.addImage('images/sprites/woodsman/bg.jpg')
+            jumplImage: this.loader.addImage('images/sprites/woodsman/jump_l.png'),
+            tiles: this.loader.addImage('images/sprites/woodsman/tiles.png')/*,
+            bg: this.loader.addImage('images/sprites/woodsman/bg.jpg')*/
         },
         bat: {
             walkrImage: this.loader.addImage('images/sprites/bat/right.png'),
             walklImage: this.loader.addImage('images/sprites/bat/left.png'),
-            tiles: this.loader.addImage('images/sprites/bat/tiles.png'),
+            tiles: this.loader.addImage('images/sprites/bat/tiles.png')/*,
+            bg: this.loader.addImage('images/sprites/bat/bg.jpg')*/
         }
     };
+
+    // Loading all the background images for all the characters
+    for (var npc in this.images) {
+        if (this.images.hasOwnProperty(npc)) {
+            for (var i = 0; i < 40; i++) {
+                this.images[npc]['bg_' + (i + 1)] = this.loader.addImage('images/sprites/' + npc + '/bg/bg_' + (i + 1) + '.jpg');
+            }
+        }
+    }
 
     this.sounds = {
         ghost: {
@@ -158,6 +168,13 @@ Game.load = function() {
                 preload: true,
                 loop: false
             })
+        },
+        sfx: {
+            wind: new buzz.sound('audio/sfx/wind', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: true
+            })
         }
     };
 
@@ -183,7 +200,7 @@ Game.update = function() {
     // Clearing the canvas
     context.fillStyle = 'rgb(127, 127, 127)';
     context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
-    // context.drawImage(Game.images[Game.player.name].bg, Game.map.scrollX, Game.map.scrollY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+    Game.map.drawBackground(context);
 
     // We draw the map after the character
     Game.map.draw(context);
@@ -225,4 +242,5 @@ Game.update = function() {
 Game.useGhost = function() {
     this.player = new this.Ghost();   // Playable character
     this.player.onPossess();
+    this.Sound.startBGM(this.player.name);
 };

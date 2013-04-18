@@ -24,6 +24,7 @@
         this.state         = 'IDLE_RIGHT';
         this.previousState = 'IDLE_RIGHT';
         this.frame         = 0;
+        this.useTileFade   = true;
     };
 
     /**
@@ -83,7 +84,6 @@
         if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_R' && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
             this.state = 'JUMPING_R';
             this.frame = 5;
-            console.log(this.state);
         }else if (!this.physics.onFloor && this.physics.jumpForces.length <= 0 && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
             this.state = 'FALLING_R';
             this.frame = 5;

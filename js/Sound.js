@@ -9,6 +9,7 @@
     Sound.startBGM = function(name) {
         buzz.all().stop();
         Game.sounds[name].bgm.play();
+        Game.sounds.sfx.wind.play();
     };
 
     Sound.startTake = function () {
@@ -24,7 +25,6 @@
             Game.sounds[name].fx.play();
         }
     }
-
 
     Game.Sound = Sound;
 })();

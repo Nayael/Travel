@@ -16,7 +16,7 @@
         }
         this.controllable = true;
 
-        this.body = new Game.Body(this, 1, 2);
+        this.body = new Game.Body(this, 1, 1);
 
         this.physics               = new Game.Physics(this);
         this.physics.jumpHeight    = 90;
@@ -100,7 +100,6 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Bat.prototype.render = function(context) {
-        console.log(this.frame);
         switch (this.state){
             case 'WALK_R':
                 context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame),0, 59,46,this.x,this.y,59,46);
