@@ -108,13 +108,13 @@
 
         if (dX != 0) {
             xInterval = (Game.Npc.STUN_TIME / Math.abs(dX)) | 0;
-            self.scrollX += dX < 0 ? 1 : -1;
+            self.scrollX += dX < 0 ? 2 : -2;
             var xTimer = setInterval(function() {
-                if (!self.scrollable || (Game.player.x >= self.scrollXMin && Game.player.x + Game.player.body.width <= self.scrollXMax)) {
+                if (!self.scrollable || self.scrollX == self.limitX || self.scrollX == 0 || (Game.player.x >= self.scrollXMin && Game.player.x + Game.player.body.width <= self.scrollXMax)) {
                     clearInterval(xTimer);
                     return;
                 }
-                self.scrollX += dX < 0 ? 1 : -1;
+                self.scrollX += dX < 0 ? 2 : -2;
             }, xInterval);
         }
 
@@ -129,16 +129,13 @@
             yInterval = (Game.Npc.STUN_TIME / Math.abs(dY)) | 0;
             self.scrollY += dY < 0 ? 1 : -1;
             var yTimer = setInterval(function() {
-                if (!self.scrollable || (Game.player.y >= self.scrollYMin && Game.player.y + Game.player.body.height <= self.scrollYMax)) {
+                if (!self.scrollable || self.scrollY == self.limitY || self.scrollY == 0 || (Game.player.y >= self.scrollYMin && Game.player.y + Game.player.body.height <= self.scrollYMax)) {
                     clearInterval(yTimer);
                     return;
                 }
                 self.scrollY += dY < 0 ? 1 : -1;
             }, yInterval);
         }
-        // console.log('scrollXMax, scrollYMax: ', this.scrollXMax, this.scrollYMax);
-        // console.log('dX, dY: ', dX, dY);
-        // console.log('xInterval, yInterval: ', xInterval, yInterval);
     };
 
     Game.Map = Map;
