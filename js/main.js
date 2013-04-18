@@ -79,7 +79,7 @@ Game.load = function() {
             walklImage: this.loader.addImage("images/sprites/oldwoman/left.png"),
             tiles: this.loader.addImage("images/sprites/oldwoman/tiles.png")
         },
-        woodman: {
+        woodsman: {
             idlerImage : this.loader.addImage("images/sprites/woodsman/idle_right.png"),
             idlelImage : this.loader.addImage("images/sprites/woodsman/idle_left.png"),
             tiles: this.loader.addImage("images/sprites/woodsman/tiles.png")
@@ -89,6 +89,11 @@ Game.load = function() {
     this.sounds = {
         ghost: {
             bgm: new buzz.sound("audio/ghost/bgm", {
+                formats: ["mp3"],
+                preload: true,
+                loop: true
+            }),
+            fx: new buzz.sound("audio/ghost/bgm", {
                 formats: ["mp3"],
                 preload: true,
                 loop: true

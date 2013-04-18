@@ -6,7 +6,7 @@
     Npc.list = {
         200: Game.Cat,
         300: Game.Oldwoman,
-        400: Game.Woodman
+        400: Game.Woodsman
     }
 
     /**

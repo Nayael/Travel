@@ -1,7 +1,7 @@
-// The Woodman class
+// The Woodsman class
 (function() {
-    var Woodman = function(x, y) {
-        this.name  = 'woodman';
+    var Woodsman = function(x, y) {
+        this.name  = 'woodsman';
         this.x     = x || 0;
         this.y     = y || 0;
         this.realX = this.x + Game.map.scrollX;
@@ -31,7 +31,7 @@
     /**
      * Called on each frame
      */
-    Woodman.prototype.update = function() {
+    Woodsman.prototype.update = function() {
         // The character scroll with the map if he is not controlled by the player
         if (this == Game.player && this.controllable) {
             this.realX = this.x + Game.map.scrollX;
@@ -73,10 +73,10 @@
     };
 
     /**
-     * Renders the Woodman
+     * Renders the Woodsman
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
-    Woodman.prototype.render = function(context) {
+    Woodsman.prototype.render = function(context) {
         switch (this.state) {
             case 'IDLE_RIGHT':
                 context.drawImage(Game.images[this.name].idlerImage, 47 * this.frame, 0, 47, 108, this.x - 10, this.y - 72, 47, 108);
@@ -123,7 +123,7 @@
     /**
      * Renders the special effect on the map
      */
-    Woodman.prototype.renderFX = function() {
+    Woodsman.prototype.renderFX = function() {
         // if (Game.player == this) {
         //     Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
         //     Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
@@ -132,9 +132,9 @@
     };
 
     /**
-     * Applies the player's controls on the Woodman
+     * Applies the player's controls on the Woodsman
      */
-    Woodman.prototype.control = function() {
+    Woodsman.prototype.control = function() {
         this.previousState = this.state;
         //this.frame = 0;
         if (!this.controllable) {
@@ -172,7 +172,7 @@
     /**
      * Triggered when the character is being possessed
      */
-    Woodman.prototype.onPossess = function() {
+    Woodsman.prototype.onPossess = function() {
         var self = this;
         Game.Sound.startBGM(this.name);
         setTimeout(function() {
@@ -185,9 +185,9 @@
      * makes the character jump
      * @return {[type]} [description]
      */
-    /*Woodman.prototype.jump = function() {
+    /*Woodsman.prototype.jump = function() {
         this.physics.addJumpForce(-this.speed.y);
     };*/
 
-    Game.Woodman = Woodman;
+    Game.Woodsman = Woodsman;
 })();

@@ -7,7 +7,7 @@
         this.realX = this.x + Game.map.scrollX;
         this.realY = this.y + Game.map.scrollY;
         this.speed = {
-            x: 20,
+            x: 10,
             y: 55
         };
         this.maxSpeed = {
@@ -100,7 +100,7 @@
 
             case 'WALK_R':
                 context.drawImage(Game.images[this.name].walkrImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 35, 45, 72);
-                if (Game.frameCount % 6  == 0) {
+                if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
                 if (this.frame >= 6) {
@@ -110,7 +110,7 @@
 
             case 'WALK_L':
                 context.drawImage(Game.images[this.name].walklImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 35, 45, 72);
-                if (Game.frameCount % 6  == 0) {
+                if (Game.frameCount % 8 == 0) {
                     this.frame++;
                 }
                 if (this.frame >= 6) {

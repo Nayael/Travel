@@ -11,7 +11,7 @@
             y: 55
         };
         this.maxSpeed = {
-            x: 30,
+            x: 20,
             y: 55
         }
         this.controllable = false;
@@ -70,22 +70,31 @@
 
         // Update the state
         this.previousState = this.state;
-        if (this.realX < realX0) {
+        if (this.realX < realX0 && this.previousState != 'JUMPING_L' && this.previousState != 'FALLING_L') {
             this.state = 'WALK_L';
         }
 
-        if (this.realX > realX0) {
+        if (this.realX > realX0 && this.previousState != 'JUMPING_R' && this.previousState != 'FALLING_R') {
             this.state = 'WALK_R';
         }
 
         if (this.physics.onFloor && this.realX == realX0) {
-            this.state = (this.previousState == 'WALK_R' || this.previousState == 'IDLE_RIGHT') ? 'IDLE_RIGHT' : 'IDLE_LEFT';
+            this.state = (this.previousState == 'WALK_R' || this.previousState == 'IDLE_RIGHT' || this.previousState == 'FALLING_R' || this.previousState == 'JUMPING_R') ? 'IDLE_RIGHT' : 'IDLE_LEFT';
         }
 
-        if (!this.physics.onFloor && this.physics.jumpForces.length > 0) {
-            this.state = 'JUMPING';
-        } else if (!this.physics.onFloor) {
-            this.state = 'FALLING';
+        if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_R' && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
+            this.state = 'JUMPING_R';
+            this.frame = 9;
+        } else if (!this.physics.onFloor && this.physics.jumpForces.length == 0 && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
+            this.state = 'FALLING_R';
+            //this.frame = 3;
+        }
+
+        if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_L' && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
+            this.state = 'JUMPING_L';
+        } else if (!this.physics.onFloor && this.physics.jumpForces.length == 0 && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
+            this.state = 'FALLING_L';
+            this.frame = 6;
         }
 
         // Update the scrolling if the character is controlled by the player
@@ -101,13 +110,15 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Cat.prototype.render = function(context) {
+         console.log(this.state);
         switch (this.state) {
+
             case 'IDLE_RIGHT':
                 context.drawImage(Game.images[this.name].idlerImage, 35 * this.frame, 0, 35, 34, this.x - 3, this.y - 2, 35, 34);
                 if (Game.frameCount % 15 == 0) {
                     this.frame++;
                 }
-                if (this.frame == 4) {
+                if (this.frame >= 4) {
                     this.frame = 0;
                 }
                 break;
@@ -117,7 +128,7 @@
                 if (Game.frameCount % 15 == 0) {
                     this.frame++;
                 }
-                if (this.frame == 4) {
+                if (this.frame >= 4) {
                     this.frame = 0;
                 }
                 break;
@@ -127,7 +138,7 @@
                 if (Game.frameCount % 6  == 0) {
                     this.frame++;
                 }
-                if (this.frame == 5) {
+                if (this.frame >= 5) {
                     this.frame = 0;
                 }
                 break;
@@ -137,29 +148,37 @@
                 if (Game.frameCount % 6  == 0) {
                     this.frame++;
                 }
-                if (this.frame == 5) {
-                    this.frame = 0;
-                }
-                break;
-
-            case 'JUMPING':
-                context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
-                if (Game.frameCount % 10  == 0) {
-                    this.frame++;
-                }
                 if (this.frame >= 5) {
                     this.frame = 0;
                 }
                 break;
 
-            case 'FALLING':
-                context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
-                if (Game.frameCount % 10  == 0) {
+            case 'JUMPING_R':
+                context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x - 30, this.y - 2, 61, 42);
+                if (Game.frameCount % 4  == 0) {
+                    this.frame--;
+                }
+                if (this.frame <= 4) {
+                    this.frame = 3;
+                }
+                break;
+
+            case 'FALLING_R':
+                context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x - 30, this.y - 2, 61, 42);
+                break;
+
+                case 'JUMPING_L':
+                context.drawImage(Game.images[this.name].jumplImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
+                if (Game.frameCount % 4  == 0) {
                     this.frame++;
                 }
-                if (this.frame >= 10) {
-                    this.frame = 0;
+                if (this.frame >= 5) {
+                    this.frame = 6;
                 }
+                break;
+
+            case 'FALLING_L':
+                context.drawImage(Game.images[this.name].jumplImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
                 break;
         }
     };
@@ -183,12 +202,34 @@
             return;
         }
 
-        if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) ) {
             this.physics.addForce(-this.speed.x, 0);
         }
 
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
             this.physics.addForce(this.speed.x, 0);
+        }
+
+
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && (this.previousState == 'JUMPING_R' || this.previousState == 'FALLING_R') && this.physics.onFloor) {
+            this.state = 'WALK_R';
+            this.physics.addForce(this.speed.x, 0);
+        }
+
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && (this.previousState == 'JUMPING_R' || this.previousState == 'FALLING_R') && !this.physics.onFloor) {
+            this.state = 'JUMPING_R';
+            this.physics.addForce(this.speed.x, 0);
+        }
+
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && (this.previousState == 'JUMPING_L' || this.previousState == 'FALLING_L') && this.physics.onFloor) {
+            this.state = 'WALK_L';
+            this.frame = 0;
+            this.physics.addForce(-this.speed.x, 0);
+        }
+
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && (this.previousState == 'JUMPING_L' || this.previousState == 'FALLING_L') && !this.physics.onFloor) {
+            this.state = 'JUMPING_L';
+            this.physics.addForce(-this.speed.x, 0);
         }
 
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {

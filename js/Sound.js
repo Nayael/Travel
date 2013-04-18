@@ -11,5 +11,9 @@
         //Game.sounds[name].bgm.play();
     };
 
+    Sound.startFx = function (name) {
+        buzz.all.stop();
+        Game.sounds[name].fx.play();
+    }
     Game.Sound = Sound;
 })();
