@@ -68,7 +68,9 @@ Game.load = function() {
             idlelImage : this.loader.addImage("images/sprites/cat/idle_left.png"),
             walkrImage: this.loader.addImage("images/sprites/cat/right.png"),
             walklImage: this.loader.addImage("images/sprites/cat/left.png"),
-            tiles: this.loader.addImage("images/sprites/cat/tiles.png")
+            tiles: this.loader.addImage("images/sprites/cat/tiles.png"),
+            jumprImage: this.loader.addImage("images/sprites/cat/jump_r.png"),
+            jumplImage: this.loader.addImage("images/sprites/cat/jump_l.png")
         },
         oldwoman: {
             idlerImage : this.loader.addImage("images/sprites/oldwoman/idle_right.png"),
@@ -76,6 +78,11 @@ Game.load = function() {
             walkrImage: this.loader.addImage("images/sprites/oldwoman/right.png"),
             walklImage: this.loader.addImage("images/sprites/oldwoman/left.png"),
             tiles: this.loader.addImage("images/sprites/oldwoman/tiles.png")
+        },
+        woodman: {
+            idlerImage : this.loader.addImage("images/sprites/woodsman/idle_right.png"),
+            idlelImage : this.loader.addImage("images/sprites/woodsman/idle_left.png"),
+            tiles: this.loader.addImage("images/sprites/woodsman/tiles.png")
         }
     };
 

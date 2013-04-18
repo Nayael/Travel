@@ -81,7 +81,7 @@
         if (this.physics.onFloor && this.realX == realX0) {
             this.state = (this.previousState == 'WALK_R' || this.previousState == 'IDLE_RIGHT') ? 'IDLE_RIGHT' : 'IDLE_LEFT';
         }
-        
+
         if (!this.physics.onFloor && this.physics.jumpForces.length > 0) {
             this.state = 'JUMPING';
         } else if (!this.physics.onFloor) {
@@ -143,21 +143,21 @@
                 break;
 
             case 'JUMPING':
-                context.drawImage(Game.images[this.name].idlelImage, 44 * (this.frame), 0, 44, 35, this.x, this.y - 2, 44, 35);
-                if (Game.frameCount % 6  == 0) {
+                context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
+                if (Game.frameCount % 10  == 0) {
                     this.frame++;
                 }
-                if (this.frame == 5) {
+                if (this.frame >= 5) {
                     this.frame = 0;
                 }
                 break;
 
             case 'FALLING':
-                context.drawImage(Game.images[this.name].idlelImage, 44 * (this.frame), 0, 44, 35, this.x, this.y - 2, 44, 35);
-                if (Game.frameCount % 6  == 0) {
+                context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
+                if (Game.frameCount % 10  == 0) {
                     this.frame++;
                 }
-                if (this.frame == 5) {
+                if (this.frame >= 10) {
                     this.frame = 0;
                 }
                 break;

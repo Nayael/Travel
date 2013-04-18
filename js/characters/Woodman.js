@@ -1,7 +1,7 @@
-// The Oldwoman class
+// The Woodman class
 (function() {
-    var Oldwoman = function(x, y) {
-        this.name  = 'oldwoman';
+    var Woodman = function(x, y) {
+        this.name  = 'woodman';
         this.x     = x || 0;
         this.y     = y || 0;
         this.realX = this.x + Game.map.scrollX;
@@ -31,7 +31,7 @@
     /**
      * Called on each frame
      */
-    Oldwoman.prototype.update = function() {
+    Woodman.prototype.update = function() {
         // The character scroll with the map if he is not controlled by the player
         if (this == Game.player && this.controllable) {
             this.realX = this.x + Game.map.scrollX;
@@ -73,13 +73,13 @@
     };
 
     /**
-     * Renders the Oldwoman
+     * Renders the Woodman
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
-    Oldwoman.prototype.render = function(context) {
+    Woodman.prototype.render = function(context) {
         switch (this.state) {
             case 'IDLE_RIGHT':
-                context.drawImage(Game.images[this.name].idlerImage, 46 * this.frame, 0, 46, 71, this.x - 10, this.y - 35, 46, 71);
+                context.drawImage(Game.images[this.name].idlerImage, 47 * this.frame, 0, 47, 108, this.x - 10, this.y - 72, 47, 108);
                 if (Game.frameCount % 20 == 0) {
                     this.frame++;
                 }
@@ -89,7 +89,7 @@
                 break;
 
             case 'IDLE_LEFT':
-                context.drawImage(Game.images[this.name].idlelImage, 46 * this.frame, 0, 46, 71, this.x - 12, this.y - 35, 46, 71);
+                context.drawImage(Game.images[this.name].idlelImage, 47 * this.frame, 0, 47, 108, this.x - 12, this.y - 72, 47, 108);
                 if (Game.frameCount % 20 == 0) {
                     this.frame++;
                 }
@@ -99,7 +99,7 @@
                 break;
 
             case 'WALK_R':
-                context.drawImage(Game.images[this.name].walkrImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 35, 45, 72);
+                //context.drawImage(Game.images[this.name].walkrImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 35, 45, 72);
                 if (Game.frameCount % 6  == 0) {
                     this.frame++;
                 }
@@ -109,7 +109,7 @@
                 break;
 
             case 'WALK_L':
-                context.drawImage(Game.images[this.name].walklImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 35, 45, 72);
+                //context.drawImage(Game.images[this.name].walklImage, 45 * (this.frame), 0, 45, 72, this.x - 12, this.y - 35, 45, 72);
                 if (Game.frameCount % 6  == 0) {
                     this.frame++;
                 }
@@ -123,7 +123,7 @@
     /**
      * Renders the special effect on the map
      */
-    Oldwoman.prototype.renderFX = function() {
+    Woodman.prototype.renderFX = function() {
         // if (Game.player == this) {
         //     Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
         //     Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
@@ -132,9 +132,9 @@
     };
 
     /**
-     * Applies the player's controls on the Oldwoman
+     * Applies the player's controls on the Woodman
      */
-    Oldwoman.prototype.control = function() {
+    Woodman.prototype.control = function() {
         this.previousState = this.state;
         //this.frame = 0;
         if (!this.controllable) {
@@ -172,7 +172,7 @@
     /**
      * Triggered when the character is being possessed
      */
-    Oldwoman.prototype.onPossess = function() {
+    Woodman.prototype.onPossess = function() {
         var self = this;
         Game.Sound.startBGM(this.name);
         setTimeout(function() {
@@ -185,9 +185,9 @@
      * makes the character jump
      * @return {[type]} [description]
      */
-    /*Oldwoman.prototype.jump = function() {
+    /*Woodman.prototype.jump = function() {
         this.physics.addJumpForce(-this.speed.y);
     };*/
 
-    Game.Oldwoman = Oldwoman;
+    Game.Woodman = Woodman;
 })();

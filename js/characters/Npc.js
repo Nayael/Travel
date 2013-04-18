@@ -5,7 +5,8 @@
     // The list of all the NPCs available in the game, and their values in the tilemap
     Npc.list = {
         200: Game.Cat,
-        300: Game.Oldwoman
+        300: Game.Oldwoman,
+        400: Game.Woodman
     }
 
     /**
@@ -16,7 +17,7 @@
         Game.player = Game.npcs[index];
         Game.map.scrollable = true;
         delete Game.npcs[index];    // We delete the NPC from the game's NPCs
-        
+
         // We delete the NPC from it's position on the tilemap; we will re-add it when the possession stops, at the new position
         var mapI = (index / Game.map.tilemap[0].length) | 0;
         var mapJ = index - mapI * Game.map.tilemap[0].length;
@@ -33,7 +34,7 @@
         var newIndex = ( (npc.realY / Game.map.TS) * Game.map.tilemap[0].length + (npc.realX / Game.map.TS) ) | 0;
         Game.useGhost();
         Game.npcs[newIndex] = npc;
-        
+
         // We recreate the NPC inside the tilemap at his new position
         var mapI = (newIndex / Game.map.tilemap[0].length) | 0;
         var mapJ = newIndex - mapI * Game.map.tilemap[0].length;

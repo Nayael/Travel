@@ -8,7 +8,7 @@
      */
     Sound.startBGM = function(name) {
         buzz.all().stop();
-        Game.sounds[name].bgm.play();
+        //Game.sounds[name].bgm.play();
     };
 
     Game.Sound = Sound;
