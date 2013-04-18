@@ -69,23 +69,7 @@
             return;
         }
 
-        // X-axis scrolling
-        if (dX > 0 && (this.x + this.body.width) > Game.map.scrollXMax) {
-            this.x = Game.map.scrollXMax - this.body.width;
-            Game.map.scrollX += dX;
-        } else if (dX < 0 && this.x < Game.map.scrollXMin) {
-            this.x = Game.map.scrollXMin;
-            Game.map.scrollX += dX;
-        }
-
-        // Y-axis scrolling
-        if (dY > 0 && this.y + this.body.height > Game.map.scrollYMax) {
-            this.y = Game.map.scrollYMax - this.body.height;
-            Game.map.scrollY += dY;
-        } else if (dY < 0 && this.y < Game.map.scrollYMin) {
-            this.y = Game.map.scrollYMin;
-            Game.map.scrollY += dY;
-        }
+        Game.map.scroll(dX, dY);
     };
 
     /**

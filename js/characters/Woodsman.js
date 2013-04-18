@@ -52,16 +52,16 @@
             if (this.x <= 0) {
                 this.x = 1;
                 this.physics.v.x = 0;
-            } else if (this.x >= Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS) {
-                this.x = Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS - 1;
+            } else if (this.x >= Game.CANVAS_WIDTH - this.body.width) {
+                this.x = Game.CANVAS_WIDTH - this.body.width - 1;
                 this.physics.v.x = 0;
             }
 
             if (this.y <= 0) {
                 this.y = 1;
                 this.physics.v.y = 0;
-            } else if (this.y >= Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20) {
-                this.y = Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20 - 1;
+            } else if (this.y >= Game.CANVAS_HEIGHT - this.body.height + 20) {
+                this.y = Game.CANVAS_HEIGHT - this.body.height + 20 - 1;
                 this.physics.v.y = 0;
             }
         }
@@ -70,23 +70,7 @@
             return;
         }
 
-        // X-axis scrolling
-        if (dX > 0 && (this.x + this.body.width) > Game.map.scrollXMax) {
-            this.x = Game.map.scrollXMax - this.body.width;
-            Game.map.scrollX += dX;
-        } else if (dX < 0 && this.x < Game.map.scrollXMin) {
-            this.x = Game.map.scrollXMin;
-            Game.map.scrollX += dX;
-        }
-
-        // Y-axis scrolling
-        if (dY > 0 && this.y + this.body.height > Game.map.scrollYMax) {
-            this.y = Game.map.scrollYMax - this.body.height;
-            Game.map.scrollY += dY;
-        } else if (dY < 0 && this.y < Game.map.scrollYMin) {
-            this.y = Game.map.scrollYMin;
-            Game.map.scrollY += dY;
-        }
+        Game.map.scroll(dX, dY);
     };
 
     /**

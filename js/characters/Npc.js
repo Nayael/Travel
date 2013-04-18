@@ -29,7 +29,7 @@
 
         Game.player.sfxTimer = setInterval(function() {
             Game.Sound.startFx(Game.player.name);
-        }, 5000);
+        }, 15000);
     }
 
     /**

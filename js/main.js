@@ -57,79 +57,83 @@ Game.load = function() {
     this.loader = new PxLoader(),
     this.images = {
         ghost: {
-            idleImage : this.loader.addImage("images/sprites/ghost/right.png"),
-            walkrImage: this.loader.addImage("images/sprites/ghost/right.png"),
-            walklImage: this.loader.addImage("images/sprites/ghost/left.png"),
-            tiles: this.loader.addImage("images/sprites/ghost/tiles.png"),
-            // bg: this.loader.addImage("images/sprites/ghost/bg.jpg")
+            idleImage : this.loader.addImage('images/sprites/ghost/right.png'),
+            walkrImage: this.loader.addImage('images/sprites/ghost/right.png'),
+            walklImage: this.loader.addImage('images/sprites/ghost/left.png'),
+            tiles: this.loader.addImage('images/sprites/ghost/tiles.png'),
+            // bg: this.loader.addImage('images/sprites/ghost/bg.jpg')
         },
         cat: {
-            idlerImage : this.loader.addImage("images/sprites/cat/idle_right.png"),
-            idlelImage : this.loader.addImage("images/sprites/cat/idle_left.png"),
-            walkrImage: this.loader.addImage("images/sprites/cat/right.png"),
-            walklImage: this.loader.addImage("images/sprites/cat/left.png"),
-            tiles: this.loader.addImage("images/sprites/cat/tiles.png"),
-            jumprImage: this.loader.addImage("images/sprites/cat/jump_r.png"),
-            jumplImage: this.loader.addImage("images/sprites/cat/jump_l.png"),
-            // bg: this.loader.addImage("images/sprites/cat/bg.jpg")
+            idlerImage : this.loader.addImage('images/sprites/cat/idle_right.png'),
+            idlelImage : this.loader.addImage('images/sprites/cat/idle_left.png'),
+            walkrImage: this.loader.addImage('images/sprites/cat/right.png'),
+            walklImage: this.loader.addImage('images/sprites/cat/left.png'),
+            tiles: this.loader.addImage('images/sprites/cat/tiles.png'),
+            jumprImage: this.loader.addImage('images/sprites/cat/jump_r.png'),
+            jumplImage: this.loader.addImage('images/sprites/cat/jump_l.png'),
+            // bg: this.loader.addImage('images/sprites/cat/bg.jpg')
         },
         oldwoman: {
-            idlerImage : this.loader.addImage("images/sprites/oldwoman/idle_right.png"),
-            idlelImage : this.loader.addImage("images/sprites/oldwoman/idle_left.png"),
-            walkrImage: this.loader.addImage("images/sprites/oldwoman/right.png"),
-            walklImage: this.loader.addImage("images/sprites/oldwoman/left.png"),
-            tiles: this.loader.addImage("images/sprites/oldwoman/tiles.png"),
-            // bg: this.loader.addImage("images/sprites/oldwoman/bg.jpg")
+            idlerImage : this.loader.addImage('images/sprites/oldwoman/idle_right.png'),
+            idlelImage : this.loader.addImage('images/sprites/oldwoman/idle_left.png'),
+            walkrImage: this.loader.addImage('images/sprites/oldwoman/right.png'),
+            walklImage: this.loader.addImage('images/sprites/oldwoman/left.png'),
+            tiles: this.loader.addImage('images/sprites/oldwoman/tiles.png'),
+            // bg: this.loader.addImage('images/sprites/oldwoman/bg.jpg')
         },
         woodsman: {
-            idlerImage : this.loader.addImage("images/sprites/woodsman/idle_right.png"),
-            idlelImage : this.loader.addImage("images/sprites/woodsman/idle_left.png"),
-            tiles: this.loader.addImage("images/sprites/woodsman/tiles.png"),
-            // bg: this.loader.addImage("images/sprites/woodsman/bg.jpg")
+            idlerImage : this.loader.addImage('images/sprites/woodsman/idle_right.png'),
+            idlelImage : this.loader.addImage('images/sprites/woodsman/idle_left.png'),
+            tiles: this.loader.addImage('images/sprites/woodsman/tiles.png'),
+            // bg: this.loader.addImage('images/sprites/woodsman/bg.jpg')
         }
     };
 
     this.sounds = {
         ghost: {
-            bgm: new buzz.sound("audio/ghost/bgm", {
-                formats: ["mp3"],
+            bgm: new buzz.sound('audio/ghost/bgm', {
+                formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: true
             }),
-            take: new buzz.sound("audio/ghost/ghost_take", {
-                formats: ["mp3"],
+            take: new buzz.sound('audio/ghost/ghost_take', {
+                formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: false
             }),
-            leave: new buzz.sound("audio/ghost/ghost_leave", {
-                formats: ["mp3"],
+            leave: new buzz.sound('audio/ghost/ghost_leave', {
+                formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: false
             })
         },
         oldwoman: {
-            bgm: new buzz.sound("audio/oldwoman/bgm", {
-                formats: ["mp3"],
+            bgm: new buzz.sound('audio/oldwoman/bgm', {
+                formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: true
             })
         },
-
         woodsman: {
-            bgm: new buzz.sound("audio/woodsman/bgm", {
-                formats: ["mp3"],
-                preload: true,
-                loop: true
-            })
-        },
-        cat: {
-            bgm: new buzz.sound("audio/cat/bgm", {
-                formats: ["mp3"],
+            bgm: new buzz.sound('audio/woodsman/bgm', {
+                formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: true
             }),
-            fx: new buzz.sound("audio/cat/fx", {
-                formats: ["mp3"],
+            fx: new buzz.sound('audio/woodsman/fx', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: false
+            })
+        },
+        cat: {
+            bgm: new buzz.sound('audio/cat/bgm', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: true
+            }),
+            fx: new buzz.sound('audio/cat/fx', {
+                formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: false
             })
@@ -188,7 +192,7 @@ Game.update = function() {
     }
 
     if (Game.intensity > 0){
-        Game.context.fillStyle = "rgba(0, 0, 0, "+ Game.intensity + ")";
+        Game.context.fillStyle = 'rgba(0, 0, 0, '+ Game.intensity + ')';
         Game.context.fillRect(0, 0, Game.canvas.width, Game.canvas.height);
         Game.intensity -= 0.005;
     }
