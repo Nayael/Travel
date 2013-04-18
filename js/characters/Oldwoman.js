@@ -23,6 +23,7 @@
         this.state         = 'IDLE_RIGHT';
         this.previousState = 'IDLE_RIGHT';
         this.frame         = 0;
+        this.useTileFade   = true;
     };
 
     /**

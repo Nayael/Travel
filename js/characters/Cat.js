@@ -21,9 +21,10 @@
         this.physics = new Game.Physics(this);
         this.physics.jumpHeight = 20;
 
-        this.state          = 'IDLE_RIGHT';
-        this.previousState  = 'IDLE_RIGHT';
-        this.frame          = 0;
+        this.state         = 'IDLE_RIGHT';
+        this.previousState = 'IDLE_RIGHT';
+        this.frame         = 0;
+        this.useTileFade   = true;
     };
 
     /**

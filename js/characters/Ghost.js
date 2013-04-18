@@ -26,6 +26,7 @@
         this.state         = 'WALK_L';
         this.previousState = this.state;
         this.frame         = 0;
+        this.useTileFade   = true;
     };
 
     /**

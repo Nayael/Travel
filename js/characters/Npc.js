@@ -14,6 +14,9 @@
      * @param  {Character} index The index of the NPC to possess
      */
     Npc.possessNpc = function(index) {
+        Game.previousPlayer = Game.player;
+        Game.map.overlayAlpha = 1;
+
         Game.player = Game.npcs[index];
         Game.map.scrollable = true;
         delete Game.npcs[index];    // We delete the NPC from the game's NPCs
@@ -43,6 +46,9 @@
                 return;
             }
         }
+        Game.previousPlayer = npc;
+        Game.map.overlayAlpha = 1;
+        
         clearInterval(Game.player.sfxTimer);
         var newIndex = ( (npc.realY / Game.map.TS) * Game.map.tilemap[0].length + (npc.realX / Game.map.TS) ) | 0;
         Game.useGhost();

@@ -1,16 +1,17 @@
 // The Map class file
 (function() {
     var Map = function() {
-        this.yShiftUp = 0;      // The y position of the square tiles in the tiles spritesheet
+        this.yShiftUp   = 0;    // The y position of the square tiles in the tiles spritesheet
         this.yShiftDown = 4;    // The height of extra graphics on the bottom of the tile
-        this.TS = 32;           // The size of a tile in pixels
-        this.obstacles = [1, 2, 3, 4, 5, 6, 7, 8, 9];   // Indexes in the tilemap that correspond to physical obstacles
-        this.npcs      = [200, 300, 400];   // Indexes in the tilemap that correspond to physical obstacles
-        this.tilemap   = window.map;   // Getting the map from the global object
+        this.TS         = 32;   // The size of a tile in pixels
+        this.obstacles  = [1, 2, 3, 4, 5, 6, 7, 8, 9];   // Indexes in the tilemap that correspond to physical obstacles
+        this.npcs       = [200, 300, 400];   // Indexes in the tilemap that correspond to physical obstacles
+        this.tilemap    = window.map;        // Getting the map from the global object
+        this.overlayAlpha = 1;
 
         this.scrollable = true;
-        this.scrollX = 512;
-        this.scrollY = 1792;
+        this.scrollX    = 512;
+        this.scrollY    = 1792;
 
         this.scrollXMin = Game.CANVAS_WIDTH >> 2;
         this.scrollXMax = Game.CANVAS_WIDTH - this.scrollXMin;
@@ -34,8 +35,6 @@
                 tileY = (i * this.TS - this.scrollY) - this.yShiftUp;
                 // Drawing tiles
                 if (this.obstacles.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
-                    // context.fillStyle = 'rgb(255, 0, 0)';
-                    // context.fillRect(tileX, tileY, this.TS, this.TS);
                     context.drawImage(Game.images[Game.player.name].tiles, this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShiftUp + this.yShiftDown, tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
                 // Creating NPCs that will be drawn
                 } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
@@ -45,6 +44,23 @@
                     }
                 }
             }
+        }
+
+        if (Game.previousPlayer && Game.previousPlayer.useTileFade && Game.map.overlayAlpha > 0) {
+            context.globalAlpha = Game.map.overlayAlpha;
+            for (i = ((this.scrollY / this.TS) | 0), j = 0; i < ((this.scrollY / this.TS) | 0) + rows; i++) {
+                cols = Game.CANVAS_WIDTH / this.TS + 2;
+                for (j = ((this.scrollX / this.TS) | 0); j < cols + ((this.scrollX / this.TS) | 0); j++) {
+                    tileX = (j * this.TS - this.scrollX);
+                    tileY = (i * this.TS - this.scrollY) - this.yShiftUp;
+                    // Drawing tiles
+                    if (this.obstacles.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
+                        context.drawImage(Game.images[Game.previousPlayer.name].tiles, this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShiftUp + this.yShiftDown, tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
+                    }
+                }
+            }
+            context.globalAlpha = 1;
+            Game.map.overlayAlpha -= 0.1;
         }
     };
 
