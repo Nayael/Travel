@@ -11,7 +11,7 @@
             y: 55
         };
         this.maxSpeed = {
-            x: 30,
+            x: 20,
             y: 55
         }
         this.controllable = false;
@@ -24,7 +24,6 @@
         this.state         = 'IDLE_RIGHT';
         this.previousState = 'IDLE_RIGHT';
         this.frame         = 0;
-        this.useTileFade   = true;
     };
 
     /**
@@ -67,6 +66,36 @@
             }
         }
 
+        // Update the state
+        this.previousState = this.state;
+        if (this.realX < realX0 && this.previousState != 'JUMPING_L' && this.previousState != 'FALLING_L') {
+            this.state = 'WALK_L';
+        }
+
+        if (this.realX > realX0 && this.previousState != 'JUMPING_R' && this.previousState != 'FALLING_R' && this.previousState != 'WALK_R') {
+            this.state = 'WALK_R';
+            this.frame = 7;
+        }
+
+        if (this.physics.onFloor && this.realX == realX0) {
+            this.state = (this.previousState == 'WALK_R' || this.previousState == 'IDLE_RIGHT' || this.previousState == 'FALLING_R' || this.previousState == 'JUMPING_R') ? 'IDLE_RIGHT' : 'IDLE_LEFT';
+        }
+        if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_R' && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
+            this.state = 'JUMPING_R';
+            this.frame = 5;
+            console.log(this.state);
+        }else if (!this.physics.onFloor && this.physics.jumpForces.length <= 0 && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
+            this.state = 'FALLING_R';
+            this.frame = 5;
+        }
+
+        if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_L' && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
+            this.state = 'JUMPING_L';
+        } else if (!this.physics.onFloor && this.physics.jumpForces.length == 0 && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
+            this.state = 'FALLING_L';
+            this.frame = 6;
+        }
+
         if (this != Game.player || !this.controllable || !Game.map.scrollable) {
             return;
         }
@@ -101,23 +130,51 @@
                 break;
 
             case 'WALK_R':
-                context.drawImage(Game.images[this.name].idlerImage, 47 * this.frame, 0, 47, 108, this.x - 10, this.y - 6, 47, 108);
-                if (Game.frameCount % 6  == 0) {
-                    this.frame++;
+                context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame), 0, 59, 112, this.x - 12, this.y - 6, 59, 112);
+                if (Game.frameCount % 8  == 0) {
+                    this.frame--;
                 }
-                if (this.frame >= 6) {
-                    this.frame = 0;
+                if (this.frame <= 0) {
+                    this.frame = 7;
                 }
                 break;
 
             case 'WALK_L':
-                context.drawImage(Game.images[this.name].idlelImage, 47 * this.frame, 0, 47, 108, this.x - 12, this.y - 6, 47, 108);
-                if (Game.frameCount % 6  == 0) {
+                context.drawImage(Game.images[this.name].walklImage, 59 * (this.frame), 0, 59, 112, this.x - 12, this.y - 6, 59, 112);
+                if (Game.frameCount % 8  == 0) {
+                    this.frame++;
+                }
+                if (this.frame >= 8) {
+                    this.frame = 0;
+                }
+                break;
+
+            case 'JUMPING_R':
+                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
+                if (Game.frameCount % 5  == 0) {
+                    this.frame--;
+                }
+                if (this.frame <= 0) {
+                    this.frame = 1;
+                }
+                break;
+
+            case 'FALLING_R':
+                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
+                break;
+
+                case 'JUMPING_L':
+                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x, this.y - 2, 57, 111);
+                if (Game.frameCount % 5  == 0) {
                     this.frame++;
                 }
                 if (this.frame >= 6) {
-                    this.frame = 0;
+                    this.frame = 6;
                 }
+                break;
+
+            case 'FALLING_L':
+                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x, this.y - 2, 57, 111);
                 break;
         }
     };
@@ -137,27 +194,38 @@
      * Applies the player's controls on the Woodsman
      */
     Woodsman.prototype.control = function() {
-        this.previousState = this.state;
         if (!this.controllable) {
             return;
         }
 
-        if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
-            this.state = "WALK_L";
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) ) {
             this.physics.addForce(-this.speed.x, 0);
         }
 
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
-            this.state = "WALK_R";
             this.physics.addForce(this.speed.x, 0);
         }
 
-        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && (this.previousState == "WALK_R" || this.previousState == "IDLE_RIGHT")) {
-            this.state = "IDLE_RIGHT";
+
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && (this.previousState == 'JUMPING_R' || this.previousState == 'FALLING_R') && this.physics.onFloor) {
+            this.state = 'WALK_R';
+            this.physics.addForce(this.speed.x, 0);
         }
 
-        if (Keyboard.isUp(Keyboard.LEFT_ARROW) && Keyboard.isUp(Keyboard.RIGHT_ARROW) && this.previousState == "WALK_L") {
-            this.state = "IDLE_LEFT";
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && (this.previousState == 'JUMPING_R' || this.previousState == 'FALLING_R') && !this.physics.onFloor) {
+            //this.state = 'JUMPING_R';
+            this.physics.addForce(this.speed.x, 0);
+        }
+
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && (this.previousState == 'JUMPING_L' || this.previousState == 'FALLING_L') && this.physics.onFloor) {
+            this.state = 'WALK_L';
+            this.frame = 0;
+            this.physics.addForce(-this.speed.x, 0);
+        }
+
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && (this.previousState == 'JUMPING_L' || this.previousState == 'FALLING_L') && !this.physics.onFloor) {
+            this.state = 'JUMPING_L';
+            this.physics.addForce(-this.speed.x, 0);
         }
 
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {

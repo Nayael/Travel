@@ -24,9 +24,9 @@ Game.init = function() {
     Game.DarkMask = illuminated.DarkMask;
     Game.light1   = new Game.Lamp({
         position: new Game.Vec2(Game.player.x, Game.player.y),
-        distance: 100,
-        diffuse: 2,
-        radius: 5,
+        distance: 75,
+        diffuse: 5,
+        radius: 0,
         samples: 1,
         angle: 0,
         roughness: 0
@@ -85,7 +85,16 @@ Game.load = function() {
             idlerImage : this.loader.addImage('images/sprites/woodsman/idle_right.png'),
             idlelImage : this.loader.addImage('images/sprites/woodsman/idle_left.png'),
             tiles: this.loader.addImage('images/sprites/woodsman/tiles.png'),
+            walkrImage: this.loader.addImage("images/sprites/woodsman/right.png"),
+            walklImage: this.loader.addImage("images/sprites/woodsman/left.png"),
+            jumprImage: this.loader.addImage('images/sprites/woodsman/jump_r.png'),
+            jumplImage: this.loader.addImage('images/sprites/woodsman/jump_l.png')
             // bg: this.loader.addImage('images/sprites/woodsman/bg.jpg')
+        },
+        bat: {
+            walkrImage: this.loader.addImage('images/sprites/bat/right.png'),
+            walklImage: this.loader.addImage('images/sprites/bat/left.png'),
+            tiles: this.loader.addImage('images/sprites/bat/tiles.png'),
         }
     };
 
@@ -121,6 +130,18 @@ Game.load = function() {
                 loop: true
             }),
             fx: new buzz.sound('audio/woodsman/fx', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: false
+            })
+        },
+        bat: {
+            bgm: new buzz.sound('audio/bat/bgm', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: true
+            }),
+            fx: new buzz.sound('audio/bat/fx', {
                 formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: false
