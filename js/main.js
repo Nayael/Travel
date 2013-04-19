@@ -187,8 +187,15 @@ Game.load = function() {
                 formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: true
+            })
+        },
+        paper: {
+            bgm: new buzz.sound('audio/paper/bgm', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: true
             }),
-            collect: new buzz.sound('audio/sfx/collect', {
+            fx: new buzz.sound('audio/paper/fx', {
                 formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: false
@@ -211,10 +218,10 @@ Game.load = function() {
  */
 Game.update = function() {
     if (Game.paused) {
-        if (Keyboard.isUp()) {
+        if (Keyboard.isUp(Keyboard.SPACE)) {
             Game.canResume = true;
         }
-        if (Game.canResume && Keyboard.isDown()) {
+        if (Game.canResume && Keyboard.isDown(Keyboard.SPACE)) {
             Game.resume();
         }
         return;
@@ -278,7 +285,7 @@ Game.useGhost = function() {
  * Pauses the game
  */
 Game.pause = function() {
-    Game.canResume = false;
+    this.canResume = false;
     this.paused = true;
 }
 
@@ -287,4 +294,8 @@ Game.pause = function() {
  */
 Game.resume = function() {
     this.paused = false;
+    this.Sound.startBGM(this.player.name);
+    this.player.sfxTimer = setInterval(function() {
+        this.Sound.startFx(this.player.name);
+    }, 15000);
 }

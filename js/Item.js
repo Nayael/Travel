@@ -31,7 +31,9 @@
      * @param  {integer} index The paper to show
      */
     Item.showPaper = function(index) {
-        Game.sounds.sfx.collect.play();
+        clearInterval(Game.player.sfxTimer);
+        Game.Sound.startBGM('paper');
+        Game.Sound.startFx('paper');
         Game.context.drawImage(Game.images.papers[index], 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
     }
 
