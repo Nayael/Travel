@@ -26,7 +26,7 @@ Game.launch = function(e) {
     Game.light1   = new Game.Lamp({
         position: new Game.Vec2(Game.player.x, Game.player.y),
         distance: 75,
-        diffuse: 5,
+        diffuse: 0.5,
         radius: 0,
         samples: 1,
         angle: 0,
@@ -86,6 +86,8 @@ Game.load = function() {
             walkrImage: this.loader.addImage('images/sprites/ghost/right.png'),
             walklImage: this.loader.addImage('images/sprites/ghost/left.png'),
             tiles: this.loader.addImage('images/sprites/ghost/tiles.png'),
+            possl: this.loader.addImage('images/sprites/ghost/poss_l.png'),
+            possr: this.loader.addImage('images/sprites/ghost/poss_r.png'),
             bg: this.loader.addImage('images/sprites/ghost/bg.jpg')
         },
         cat: {
@@ -133,6 +135,13 @@ Game.load = function() {
             8: this.loader.addImage('images/papers/8.png'),
             9: this.loader.addImage('images/papers/9.png'),
             10: this.loader.addImage('images/papers/10.png')
+        },
+        colombe: {
+            walkrImage: this.loader.addImage('images/sprites/colombe/right.png'),
+            walklImage: this.loader.addImage('images/sprites/colombe/left.png'),
+            idlerImage: this.loader.addImage('images/sprites/colombe/idle_right.png'),
+            idlelImage: this.loader.addImage('images/sprites/colombe/idle_left.png'),
+            tiles: this.loader.addImage('images/sprites/colombe/tiles.png')
         }
     };
 
@@ -220,6 +229,18 @@ Game.load = function() {
                 loop: true
             }),
             fx: new buzz.sound('audio/paper/fx', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: false
+            })
+        },
+        colombe: {
+            bgm: new buzz.sound('audio/colombe/bgm', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: true
+            }),
+            fx: new buzz.sound('audio/colombe/fx', {
                 formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: false

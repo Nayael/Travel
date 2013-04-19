@@ -11,7 +11,7 @@
             y: 55
         };
         this.maxSpeed = {
-            x: 30,
+            x: 10,
             y: 55
         }
         this.controllable = false;
@@ -140,12 +140,12 @@
         if (!this.controllable) {
             return;
         }
-        
+
         if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
             this.state = "WALK_L";
             this.physics.addForce(-this.speed.x, 0);
         }
-        
+
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
             this.state = "WALK_R";
             this.physics.addForce(this.speed.x, 0);

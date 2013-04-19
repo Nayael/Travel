@@ -5,7 +5,7 @@
         this.yShiftDown = 4;    // The height of extra graphics on the bottom of the tile
         this.TS         = 32;   // The size of a tile in pixels
         this.obstacles  = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 50];   // Indexes in the tilemap that correspond to physical obstacles
-        this.npcs       = [200, 300, 400, 500];   // Indexes in the tilemap that correspond to physical obstacles
+        this.npcs       = [200, 300, 400, 500, 600];   // Indexes in the tilemap that correspond to physical obstacles
         this.items      = [21];
         this.tilemap    = window.map;        // Getting the map from the global object
         this.overlayAlpha = 1;

@@ -7,7 +7,8 @@
         200: Game.Cat,
         300: Game.Oldwoman,
         400: Game.Woodsman,
-        500: Game.Bat
+        500: Game.Bat,
+        600: Game.Colombe
     }
 
     /**
@@ -49,7 +50,7 @@
         }
         Game.previousPlayer = npc;
         Game.map.overlayAlpha = 1;
-        
+
         clearInterval(Game.player.sfxTimer);
         var newIndex = ( (npc.realY / Game.map.TS) * Game.map.tilemap[0].length + (npc.realX / Game.map.TS) ) | 0;
         Game.useGhost();

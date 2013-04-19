@@ -104,6 +104,25 @@
                     this.frame = 0;
                 }
                 break;
+            case 'POSS_R':
+                context.drawImage(Game.images.ghost.possr, 44 * (this.frame),0, 44,39,this.x,this.y,44,39);
+                if (Game.frameCount % 8  == 0) {
+                    this.frame--;
+                }
+                if (this.frame <= 0) {
+                    this.frame = 3;
+                }
+                break;
+
+            case 'POSS_L':
+                context.drawImage(Game.images.ghost.possl, 44 * (this.frame),0, 44,39,this.x,this.y,44,39);
+                if (Game.frameCount % 8  == 0) {
+                    this.frame++;
+                }
+                if (this.frame == 3) {
+                    this.frame = 0;
+                }
+                break;
         }
         context.globalAlpha = 1;
     };
@@ -128,7 +147,7 @@
             this.physics.addForce(this.speed.x, 0);
         }
 
-        if (this.controllable && Keyboard.isDown(Keyboard.CTRL)) {
+        if (this.controllable && Keyboard.isDown(Keyboard.CTRL) && this.state != 'POSS_R') {
             this.takeControl();
         }
     };
@@ -137,10 +156,13 @@
      * The ghost takes control of a NPC
      */
     Ghost.prototype.takeControl = function() {
-        // Take control of the npc he is colliding
+       // Take control of the npc he is colliding
         for (var npc in Game.npcs) {
             if (Game.npcs.hasOwnProperty(npc) && this.body.collide(Game.npcs[npc])) {
-                Game.Npc.possessNpc(npc);
+                this.state = 'POSS_R';
+                setTimeout(function() {
+                    Game.Npc.possessNpc(npc);
+                }, 250);
                 break;
             }
         }
