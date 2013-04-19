@@ -168,6 +168,7 @@
      * Triggered when the character is being possessed
      */
     Oldwoman.prototype.onPossess = function() {
+        Game.map.tilemap = window.maps.oldwoman;     // Getting the map from the global object
         var self = this;
         setTimeout(function() {
             self.controllable = true;

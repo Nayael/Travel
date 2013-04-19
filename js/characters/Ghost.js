@@ -22,7 +22,7 @@
         this.physics.useGravity    = false;
         this.physics.useCollisions = false;
 
-        this.state         = 'WALK_L';
+        this.state         = 'WALK_R';
         this.previousState = this.state;
         this.frame         = 0;
         this.useTileFade   = true;

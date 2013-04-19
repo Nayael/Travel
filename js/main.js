@@ -16,8 +16,8 @@ Game.launch = function(e) {
 
     Game.map      = new Game.Map();
     Game.useGhost();    // Playable character
-    Game.player.x = 736;
-    Game.player.y = 448;
+    Game.player.x = 20;
+    Game.player.y = 400;
 
     Game.Vec2     = illuminated.Vec2;
     Game.Lamp     = illuminated.Lamp;
@@ -340,7 +340,4 @@ Game.pause = function() {
 Game.resume = function() {
     this.paused = false;
     this.Sound.startBGM(this.player.name);
-    this.player.sfxTimer = setInterval(function() {
-        this.Sound.startFx(this.player.name);
-    }, 15000);
 }

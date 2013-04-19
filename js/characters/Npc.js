@@ -26,15 +26,14 @@
         // We delete the NPC from it's position on the tilemap; we will re-add it when the possession stops, at the new position
         var mapI = (index / Game.map.tilemap[0].length) | 0;
         var mapJ = index - mapI * Game.map.tilemap[0].length;
+        window.maps.basic[mapI][mapJ] = 0;
+        window.maps.woodsman[mapI][mapJ] = 0;
+        window.maps.oldwoman[mapI][mapJ] = 0;
         Game.map.tilemap[mapI][mapJ] = 0;
 
         Game.player.onPossess();
         Game.Sound.startBGM(Game.player.name);
         Game.Sound.startTake();
-
-        Game.player.sfxTimer = setInterval(function() {
-            Game.Sound.startFx(Game.player.name);
-        }, 15000);
     }
 
     /**
@@ -51,7 +50,6 @@
         Game.previousPlayer = npc;
         Game.map.overlayAlpha = 1;
 
-        clearInterval(Game.player.sfxTimer);
         var newIndex = ( (npc.realY / Game.map.TS) * Game.map.tilemap[0].length + (npc.realX / Game.map.TS) ) | 0;
         Game.useGhost();
         Game.npcs[newIndex] = npc;
@@ -59,7 +57,11 @@
         // We recreate the NPC inside the tilemap at his new position
         var mapI = (newIndex / Game.map.tilemap[0].length) | 0;
         var mapJ = newIndex - mapI * Game.map.tilemap[0].length;
+        Game.map.tilemap = window.maps.basic;     // Getting the map from the global object
         Game.map.tilemap[mapI][mapJ] = npc.npcValue;
+        window.maps.basic[mapI][mapJ] = npc.npcValue;
+        window.maps.woodsman[mapI][mapJ] = npc.npcValue;
+        window.maps.oldwoman[mapI][mapJ] = npc.npcValue;
 
         Game.player.x = npc.x;
         Game.player.y = npc.y - Game.map.TS;

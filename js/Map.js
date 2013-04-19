@@ -4,10 +4,10 @@
         this.yShiftUp   = 0;    // The y position of the square tiles in the tiles spritesheet
         this.yShiftDown = 4;    // The height of extra graphics on the bottom of the tile
         this.TS         = 32;   // The size of a tile in pixels
-        this.obstacles  = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 50];   // Indexes in the tilemap that correspond to physical obstacles
+        this.obstacles  = [1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 50];   // Indexes in the tilemap that correspond to physical obstacles
         this.npcs       = [200, 300, 400, 500, 600];   // Indexes in the tilemap that correspond to physical obstacles
-        this.items      = [21];
-        this.tilemap    = window.map;        // Getting the map from the global object
+        this.items      = [21, 22, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+        this.tilemap    = window.maps.basic;        // Getting the map from the global object
         this.overlayAlpha = 1;
 
         this.scrollable = true;
@@ -35,7 +35,7 @@
                 tileX = (j * this.TS - this.scrollX);
                 tileY = (i * this.TS - this.scrollY) - this.yShiftUp;
                 // Drawing tiles
-                if ((this.obstacles.indexOf(this.tilemap[i][j]) != -1 || this.items.indexOf(this.tilemap[i][j]) != -1) && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
+                if (((this.obstacles.indexOf(this.tilemap[i][j]) != -1 && this.tilemap[i][j] != 50) || this.items.indexOf(this.tilemap[i][j]) != -1) && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     context.drawImage(Game.images[Game.player.name].tiles,
                         this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShiftUp + this.yShiftDown,
                         tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
@@ -57,7 +57,7 @@
                     tileX = (j * this.TS - this.scrollX);
                     tileY = (i * this.TS - this.scrollY) - this.yShiftUp;
                     // Drawing tiles
-                    if (this.obstacles.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
+                    if ((this.obstacles.indexOf(this.tilemap[i][j]) != -1 && this.tilemap[i][j] != 50) && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                         context.drawImage(Game.images[Game.previousPlayer.name].tiles,
                             this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShiftUp + this.yShiftDown, 
                             tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
@@ -74,12 +74,20 @@
      * @param  {Canvas2DContext} context The context of the canvas to draw in
      */
     Map.prototype.drawBackground = function(context) {
+        // context.drawImage(Game.contextBuffers[Game.player.name].canvas, this.scrollX, this.scrollY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+        // if (Game.previousPlayer && Game.previousPlayer.useTileFade && Game.map.overlayAlpha > 0) {
+        //     context.globalAlpha = Game.map.overlayAlpha;
+        //     context.drawImage(Game.contextBuffers[Game.previousPlayer.name].canvas, this.scrollX, this.scrollY);
+        //     context.globalAlpha = 1;
+        // }
+
         // context.drawImage(Game.images[Game.player.name].bg, this.scrollX, this.scrollY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
         // if (Game.previousPlayer && Game.previousPlayer.useTileFade && Game.map.overlayAlpha > 0) {
         //     context.globalAlpha = Game.map.overlayAlpha;
         //     context.drawImage(Game.images[Game.previousPlayer.name].bg, this.scrollX, this.scrollY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
         //     context.globalAlpha = 1;
         // }
+
         var bgXIndex = ((this.scrollX / Game.CANVAS_WIDTH) | 0),
             bgYIndex = ((this.scrollY / Game.CANVAS_HEIGHT) | 0),
             yMin = (bgYIndex > 0 ? bgYIndex - 1 : bgYIndex),
@@ -107,7 +115,6 @@
                         realX, realY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
                 }
             }
-            // context.drawImage(contextBuffer,sourceX,sourceY,)
             context.globalAlpha = 1;
         }
     };

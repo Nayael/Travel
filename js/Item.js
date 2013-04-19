@@ -3,7 +3,16 @@
     var Item = {};
 
     Item.papers = [
-        [21, 55]
+        [43, 71],
+        [27, 45],
+        [63, 45],
+        [92, 43],
+        [105, 68],
+        [119, 77],
+        [160, 56],
+        [174, 58],
+        [199, 58],
+        [187, 12]
     ];
 
     /**
@@ -31,7 +40,7 @@
      * @param  {integer} index The paper to show
      */
     Item.showPaper = function(index) {
-        clearInterval(Game.player.sfxTimer);
+        // clearInterval(Game.player.sfxTimer);
         Game.Sound.startBGM('paper');
         Game.Sound.startFx('paper');
         Game.context.drawImage(Game.images.papers[index], 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT, 0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
