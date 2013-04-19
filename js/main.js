@@ -3,7 +3,7 @@ var Game = {};  // The game main namespace
 /**
  * Initializes the game
  */
-Game.init = function() {
+Game.launch = function(e) {
     Game.canvas        = document.createElement('canvas');
     Game.canvas.id     = 'main';
     Game.canvas.width  = Game.CANVAS_WIDTH;
@@ -50,19 +50,43 @@ Game.init = function() {
     onEachFrame(Game.update);
 };
 
+Game.init = function() {
+    var canvas = document.createElement('canvas'),
+        context = canvas.getContext('2d');
+    canvas.id     = 'main';
+    canvas.width  = Game.CANVAS_WIDTH;
+    canvas.height = Game.CANVAS_HEIGHT;
+    context.drawImage(Game.splashscreen,
+        0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT,
+        0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+
+    // Adding the canvas to the stage
+    document.body.appendChild(canvas);
+    addEventListener('keydown', Game.onKeyDown);
+}
+
+Game.onKeyDown = function(e) {
+    if (e.keyCode == Keyboard.SPACE) {
+        document.body.removeChild(document.getElementById('main'));
+        removeEventListener('keydown', Game.onKeyDown);
+        Game.launch();
+    }
+}
+
 /**
  * Preloads the assets
  */
 Game.load = function() {
     // Declaring all the assets in PxLoader
     this.loader = new PxLoader(),
+    this.splashscreen = this.loader.addImage('images/splashscreen.png');
     this.images = {
         ghost: {
             idleImage : this.loader.addImage('images/sprites/ghost/right.png'),
             walkrImage: this.loader.addImage('images/sprites/ghost/right.png'),
             walklImage: this.loader.addImage('images/sprites/ghost/left.png'),
-            tiles: this.loader.addImage('images/sprites/ghost/tiles.png')/*,
-            bg: this.loader.addImage('images/sprites/ghost/bg.jpg')*/
+            tiles: this.loader.addImage('images/sprites/ghost/tiles.png'),
+            bg: this.loader.addImage('images/sprites/ghost/bg.jpg')
         },
         cat: {
             idlerImage : this.loader.addImage('images/sprites/cat/idle_right.png'),
@@ -71,16 +95,16 @@ Game.load = function() {
             walklImage: this.loader.addImage('images/sprites/cat/left.png'),
             tiles: this.loader.addImage('images/sprites/cat/tiles.png'),
             jumprImage: this.loader.addImage('images/sprites/cat/jump_r.png'),
-            jumplImage: this.loader.addImage('images/sprites/cat/jump_l.png')/*,
-            bg: this.loader.addImage('images/sprites/cat/bg.jpg')*/
+            jumplImage: this.loader.addImage('images/sprites/cat/jump_l.png'),
+            bg: this.loader.addImage('images/sprites/cat/bg.jpg')
         },
         oldwoman: {
             idlerImage : this.loader.addImage('images/sprites/oldwoman/idle_right.png'),
             idlelImage : this.loader.addImage('images/sprites/oldwoman/idle_left.png'),
             walkrImage: this.loader.addImage('images/sprites/oldwoman/right.png'),
             walklImage: this.loader.addImage('images/sprites/oldwoman/left.png'),
-            tiles: this.loader.addImage('images/sprites/oldwoman/tiles.png')/*,
-            bg: this.loader.addImage('images/sprites/oldwoman/bg.jpg')*/
+            tiles: this.loader.addImage('images/sprites/oldwoman/tiles.png'),
+            bg: this.loader.addImage('images/sprites/oldwoman/bg.jpg')
         },
         woodsman: {
             idlerImage : this.loader.addImage('images/sprites/woodsman/idle_right.png'),
@@ -89,14 +113,14 @@ Game.load = function() {
             walklImage: this.loader.addImage("images/sprites/woodsman/left.png"),
             jumprImage: this.loader.addImage('images/sprites/woodsman/jump_r.png'),
             jumplImage: this.loader.addImage('images/sprites/woodsman/jump_l.png'),
-            tiles: this.loader.addImage('images/sprites/woodsman/tiles.png')/*,
-            bg: this.loader.addImage('images/sprites/woodsman/bg.jpg')*/
+            tiles: this.loader.addImage('images/sprites/woodsman/tiles.png'),
+            bg: this.loader.addImage('images/sprites/woodsman/bg.jpg')
         },
         bat: {
             walkrImage: this.loader.addImage('images/sprites/bat/right.png'),
             walklImage: this.loader.addImage('images/sprites/bat/left.png'),
-            tiles: this.loader.addImage('images/sprites/bat/tiles.png')/*,
-            bg: this.loader.addImage('images/sprites/bat/bg.jpg')*/
+            tiles: this.loader.addImage('images/sprites/bat/tiles.png'),
+            bg: this.loader.addImage('images/sprites/bat/bg.jpg')
         },
         papers: {
             1: this.loader.addImage('images/papers/1.png'),

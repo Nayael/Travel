@@ -19,7 +19,7 @@
         this.limitX     = 6400 - Game.CANVAS_WIDTH;
         this.scrollYMin = Game.CANVAS_HEIGHT >> 2;
         this.scrollYMax = Game.CANVAS_HEIGHT - this.scrollYMin;
-        this.limitY     = 2400 - Game.CANVAS_HEIGHT;
+        this.limitY     = 3456 - Game.CANVAS_HEIGHT;
     };
 
     /**
