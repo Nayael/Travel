@@ -51,17 +51,15 @@ Game.launch = function(e) {
 };
 
 Game.init = function() {
-    var canvas = document.createElement('canvas'),
-        context = canvas.getContext('2d');
-    canvas.id     = 'main';
-    canvas.width  = Game.CANVAS_WIDTH;
-    canvas.height = Game.CANVAS_HEIGHT;
-    context.drawImage(Game.splashscreen,
+    // var canvas = document.createElement('canvas'),
+    //     context = canvas.getContext('2d');
+    // canvas.id     = 'main';
+    // canvas.width  = Game.CANVAS_WIDTH;
+    // canvas.height = Game.CANVAS_HEIGHT;
+    Game.context.drawImage(Game.splashscreen,
         0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT,
         0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
 
-    // Adding the canvas to the stage
-    document.body.appendChild(canvas);
     addEventListener('keydown', Game.onKeyDown);
 }
 

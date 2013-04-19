@@ -89,10 +89,10 @@
      */
     Bat.prototype.renderFX = function() {
         if (Game.player == this) {
-             Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
-             Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
-             Game.darkmask.render(Game.context);
-         }
+            Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
+            Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
+            Game.darkmask.render(Game.context);
+        }
     };
 
     /**

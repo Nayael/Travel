@@ -160,9 +160,7 @@
         for (var npc in Game.npcs) {
             if (Game.npcs.hasOwnProperty(npc) && this.body.collide(Game.npcs[npc])) {
                 this.state = 'POSS_R';
-                // setTimeout(function() {
-                    Game.Npc.possessNpc(npc);
-                // }, 250);
+                Game.Npc.possessNpc(npc);
                 break;
             }
         }

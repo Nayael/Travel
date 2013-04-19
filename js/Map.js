@@ -11,6 +11,8 @@
         this.overlayAlpha = 1;
 
         this.scrollable = true;
+        // this.scrollX    = 4320;
+        // this.scrollY    = 1664;
         this.scrollX    = 512;
         this.scrollY    = 1792;
 
@@ -105,10 +107,10 @@
         }
         if (Game.previousPlayer && Game.previousPlayer.useTileFade && Game.map.overlayAlpha > 0) {
             context.globalAlpha = Game.map.overlayAlpha;
-            for (var i = yMin; i <= yMax; i++) {
-                for (var j = xMin; j <= xMax; j++) {
-                    var realX = (j * Game.CANVAS_WIDTH - this.scrollX) | 0;
-                    var realY = (i * Game.CANVAS_HEIGHT - this.scrollY) | 0;
+            for (i = yMin; i <= yMax; i++) {
+                for (j = xMin; j <= xMax; j++) {
+                    realX = (j * Game.CANVAS_WIDTH - this.scrollX) | 0;
+                    realY = (i * Game.CANVAS_HEIGHT - this.scrollY) | 0;
                     context.drawImage(Game.images[Game.previousPlayer.name]['bg_' + (i * (6400 / Game.CANVAS_WIDTH) + j + 1)],
                         0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT,
                         realX, realY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
@@ -179,13 +181,13 @@
 
         if (dY != 0) {
             yInterval = (Game.Npc.STUN_TIME / Math.abs(dY)) | 0;
-            self.scrollY += dY < 0 ? 2 : -2;
+            self.scrollY += dY < 0 ? 3 : -3;
             var yTimer = setInterval(function() {
                 if (!self.scrollable || self.scrollY == self.limitY || self.scrollY == 0 || (Game.player.y >= self.scrollYMin && Game.player.y + Game.player.body.height <= self.scrollYMax)) {
                     clearInterval(yTimer);
                     return;
                 }
-                self.scrollY += dY < 0 ? 2 : -2;
+                self.scrollY += dY < 0 ? 3 : -3;
             }, yInterval);
         }
 

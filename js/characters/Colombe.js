@@ -109,7 +109,6 @@
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Colombe.prototype.render = function(context) {
-        console.log(this.frame);
         switch (this.state){
             case 'IDLE_R':
                 context.drawImage(Game.images[this.name].idlerImage, 30 * (this.frame),0, 30,30,this.x,this.y,30,30);
@@ -145,7 +144,7 @@
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
-                if (this.frame > 4) {
+                if (this.frame >= 4) {
                     this.frame = 0;
                 }
                 break;
