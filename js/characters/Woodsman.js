@@ -93,7 +93,7 @@
             this.state = 'JUMPING_L';
         } else if (!this.physics.onFloor && this.physics.jumpForces.length == 0 && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
             this.state = 'FALLING_L';
-            this.frame = 6;
+            this.frame = 5;
         }
 
         if (this != Game.player || !this.controllable || !Game.map.scrollable) {
@@ -150,31 +150,31 @@
                 break;
 
             case 'JUMPING_R':
-                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
+                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 15, this.y - 2, 57, 111);
                 if (Game.frameCount % 5  == 0) {
                     this.frame--;
                 }
-                if (this.frame <= 0) {
-                    this.frame = 1;
+                if (this.frame <= 1) {
+                    this.frame = 2;
                 }
                 break;
 
             case 'FALLING_R':
-                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
+                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 15, this.y - 2, 57, 111);
                 break;
 
                 case 'JUMPING_L':
-                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x, this.y - 2, 57, 111);
+                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
                 if (Game.frameCount % 5  == 0) {
                     this.frame++;
                 }
-                if (this.frame >= 6) {
-                    this.frame = 6;
+                if (this.frame >= 5) {
+                    this.frame = 5;
                 }
                 break;
 
             case 'FALLING_L':
-                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x, this.y - 2, 57, 111);
+                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
                 break;
         }
     };
