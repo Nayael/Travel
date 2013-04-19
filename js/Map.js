@@ -32,8 +32,8 @@
         for (var i = ((this.scrollY / this.TS) | 0), j = 0; i < ((this.scrollY / this.TS) | 0) + rows; i++) {
             cols = Game.CANVAS_WIDTH / this.TS + 2;
             for (j = ((this.scrollX / this.TS) | 0); j < cols + ((this.scrollX / this.TS) | 0); j++) {
-                tileX = (j * this.TS - this.scrollX);
-                tileY = (i * this.TS - this.scrollY) - this.yShiftUp;
+                tileX = ((j * this.TS - this.scrollX)) | 0;
+                tileY = ((i * this.TS - this.scrollY) - this.yShiftUp) | 0;
                 // Drawing tiles
                 if (((this.obstacles.indexOf(this.tilemap[i][j]) != -1 && this.tilemap[i][j] != 50) || this.items.indexOf(this.tilemap[i][j]) != -1) && tileX > -this.TS && tileX < Game.CANVAS_WIDTH && tileY > -this.TS && tileY < Game.CANVAS_HEIGHT) {
                     context.drawImage(Game.images[Game.player.name].tiles,
@@ -96,8 +96,8 @@
             xMax = (this.scrollX < this.limitX ? bgXIndex + 1 : (bgXIndex));
         for (var i = yMin; i <= yMax; i++) {
             for (var j = xMin; j <= xMax; j++) {
-                var realX = j * Game.CANVAS_WIDTH - this.scrollX;
-                var realY = i * Game.CANVAS_HEIGHT - this.scrollY;
+                var realX = (j * Game.CANVAS_WIDTH - this.scrollX) | 0;
+                var realY = (i * Game.CANVAS_HEIGHT - this.scrollY) | 0;
                 context.drawImage(Game.images[Game.player.name]['bg_' + (i * (6400 / Game.CANVAS_WIDTH) + j + 1)],
                     0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT,
                     realX, realY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
@@ -107,8 +107,8 @@
             context.globalAlpha = Game.map.overlayAlpha;
             for (var i = yMin; i <= yMax; i++) {
                 for (var j = xMin; j <= xMax; j++) {
-                    var realX = j * Game.CANVAS_WIDTH - this.scrollX;
-                    var realY = i * Game.CANVAS_HEIGHT - this.scrollY;
+                    var realX = (j * Game.CANVAS_WIDTH - this.scrollX) | 0;
+                    var realY = (i * Game.CANVAS_HEIGHT - this.scrollY) | 0;
                     context.drawImage(Game.images[Game.previousPlayer.name]['bg_' + (i * (6400 / Game.CANVAS_WIDTH) + j + 1)],
                         0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT,
                         realX, realY, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);

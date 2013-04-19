@@ -102,7 +102,11 @@
     Bat.prototype.render = function(context) {
         switch (this.state){
             case 'WALK_R':
+                context.drawImage(Game.images[Game.player.name].tiles,
+                    9 * Game.map.TS, 0, Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown,
+                    (this.x | 0), (this.y | 0), Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown);
                 context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame),0, 59,46,this.x - 30,this.y,59,46);
+                // context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame),0, 59,46,this.x - 30,this.y,59,46);
                 if (Game.frameCount % 8  == 0) {
                     this.frame--;
                 }
@@ -112,6 +116,9 @@
                 break;
 
             case 'WALK_L':
+                context.drawImage(Game.images[Game.player.name].tiles,
+                    9 * Game.map.TS, 0, Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown,
+                    (this.x | 0), (this.y | 0), Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown);
                 context.drawImage(Game.images[this.name].walklImage, 59 * (this.frame),0, 59,46,this.x + 4,this.y,59,46);
                 if (Game.frameCount % 8  == 0) {
                     this.frame++;
