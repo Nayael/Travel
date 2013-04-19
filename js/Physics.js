@@ -190,6 +190,10 @@
                 return newY;
             }
             if (Game.map.items.indexOf(Game.map.tilemap[futureY][j]) != -1) {
+                if (Game.map.tilemap[futureY][j] == 1000 && Game.player instanceof Game.Colombe) {
+                    Game.isOver = true;
+                    Game.context.globalAlpha = 0.1;
+                }
                 Game.Item.pickUp(j, futureY);
                 break;
             }

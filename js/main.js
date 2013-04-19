@@ -78,6 +78,7 @@ Game.load = function() {
     // Declaring all the assets in PxLoader
     this.loader = new PxLoader(),
     this.splashscreen = this.loader.addImage('images/splashscreen.png');
+    this.ending = this.loader.addImage('images/ending.png');
     this.images = {
         ghost: {
             idleImage : this.loader.addImage('images/sprites/ghost/right.png'),
@@ -255,6 +256,15 @@ Game.load = function() {
  * The main game loop
  */
 Game.update = function() {
+    if (Game.isOver) {
+        if (Game.context.globalAlpha < 1) {
+            Game.context.globalAlpha += 0.005;
+        }
+        Game.context.drawImage(Game.ending,
+            0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT,
+            0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+        return;
+    }
     if (Game.paused) {
         if (Keyboard.isUp(Keyboard.SPACE)) {
             Game.canResume = true;

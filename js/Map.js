@@ -6,13 +6,11 @@
         this.TS         = 32;   // The size of a tile in pixels
         this.obstacles  = [1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 50];   // Indexes in the tilemap that correspond to physical obstacles
         this.npcs       = [200, 300, 400, 500, 600];   // Indexes in the tilemap that correspond to physical obstacles
-        this.items      = [21, 22, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+        this.items      = [21, 22, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1000];
         this.tilemap    = window.maps.basic;        // Getting the map from the global object
         this.overlayAlpha = 1;
 
         this.scrollable = true;
-        // this.scrollX    = 4320;
-        // this.scrollY    = 1664;
         this.scrollX    = 512;
         this.scrollY    = 1792;
 
