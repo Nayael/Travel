@@ -105,10 +105,18 @@
         BACK_SLASH: 220,
         CLOSE_BRAKET: 221,
         SINGLE_QUOTE: 222
-
     };
 
     Keyboard.isDown = function(key) {
+        if (key == undefined) {
+            var i = 0;
+            for (var obj in keysPressed) {
+                if (keysPressed.hasOwnProperty(obj) && keysPressed[obj] == true) {
+                    return true;
+                }
+            }
+            return false;
+        }
         if (keysPressed[key]) {
             return true;
         }
@@ -116,6 +124,9 @@
     };
 
     Keyboard.isUp = function(key) {
+        if (key == undefined) {
+            return !Keyboard.isDown();
+        }
         if (!keysPressed[key]) {
             return true;
         }

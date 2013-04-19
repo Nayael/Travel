@@ -10,6 +10,7 @@ Game.init = function() {
     Game.canvas.height = Game.CANVAS_HEIGHT;
     Game.context       = Game.canvas.getContext('2d');
     Game.frameCount    = 0;
+    Game.paused        = false;
 
     Game.intensity = 1;
 
@@ -96,12 +97,24 @@ Game.load = function() {
             walklImage: this.loader.addImage('images/sprites/bat/left.png'),
             tiles: this.loader.addImage('images/sprites/bat/tiles.png')/*,
             bg: this.loader.addImage('images/sprites/bat/bg.jpg')*/
+        },
+        papers: {
+            1: this.loader.addImage('images/papers/1.png'),
+            2: this.loader.addImage('images/papers/2.png'),
+            3: this.loader.addImage('images/papers/3.png'),
+            4: this.loader.addImage('images/papers/4.png'),
+            5: this.loader.addImage('images/papers/5.png'),
+            6: this.loader.addImage('images/papers/6.png'),
+            7: this.loader.addImage('images/papers/7.png'),
+            8: this.loader.addImage('images/papers/8.png'),
+            9: this.loader.addImage('images/papers/9.png'),
+            10: this.loader.addImage('images/papers/10.png')
         }
     };
 
     // Loading all the background images for all the characters
     for (var npc in this.images) {
-        if (this.images.hasOwnProperty(npc)) {
+        if (this.images.hasOwnProperty(npc) && npc != 'papers') {
             for (var i = 0; i < 40; i++) {
                 this.images[npc]['bg_' + (i + 1)] = this.loader.addImage('images/sprites/' + npc + '/bg/bg_' + (i + 1) + '.jpg');
             }
@@ -174,6 +187,11 @@ Game.load = function() {
                 formats: ['mp3', 'ogg'],
                 preload: true,
                 loop: true
+            }),
+            collect: new buzz.sound('audio/sfx/collect', {
+                formats: ['mp3', 'ogg'],
+                preload: true,
+                loop: false
             })
         }
     };
@@ -192,6 +210,15 @@ Game.load = function() {
  * The main game loop
  */
 Game.update = function() {
+    if (Game.paused) {
+        if (Keyboard.isUp()) {
+            Game.canResume = true;
+        }
+        if (Game.canResume && Keyboard.isDown()) {
+            Game.resume();
+        }
+        return;
+    }
     var canvas  = Game.canvas,
         context = Game.context;
 
@@ -223,10 +250,12 @@ Game.update = function() {
 
     // Updating and rendering the player's character
     Game.player.update();
-    Game.player.render(context);
-    Game.player.control();
-    if (Game.player.renderFX) {
-        Game.player.renderFX();
+    if (!Game.paused) {
+        Game.player.render(context);
+        Game.player.control();
+        if (Game.player.renderFX) {
+            Game.player.renderFX();
+        }
     }
 
     if (Game.intensity > 0){
@@ -244,3 +273,18 @@ Game.useGhost = function() {
     this.player.onPossess();
     this.Sound.startBGM(this.player.name);
 };
+
+/**
+ * Pauses the game
+ */
+Game.pause = function() {
+    Game.canResume = false;
+    this.paused = true;
+}
+
+/**
+ * Resumes the game
+ */
+Game.resume = function() {
+    this.paused = false;
+}

@@ -155,6 +155,10 @@
                 newX = futureX * Game.map.TS + Game.map.TS * (this.v.x < 0 ? 1 : -this.entity.body.t_width);
                 return newX;
             }
+            if (Game.map.items.indexOf(Game.map.tilemap[i][futureX]) != -1) {
+                Game.Item.pickUp(futureX, i);
+                break;
+            }
         }
         return false;
     };
@@ -184,6 +188,11 @@
                 this.jumpForces = [];
                 newY = futureY * Game.map.TS + Game.map.TS * (this.v.y < 0 ? 1 : -this.entity.body.t_height) - (this.v.y < 0 ? 0 : 0);
                 return newY;
+            }
+            
+            if (Game.map.items.indexOf(Game.map.tilemap[futureY][j]) != -1) {
+                Game.Item.pickUp(j, futureY);
+                break;
             }
         }
         return false;

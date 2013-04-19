@@ -17,7 +17,6 @@
         this.controllable = true;
 
         this.body = new Game.Body(this, 1, 2);
-
         this.physics               = new Game.Physics(this);
         this.physics.jumpHeight    = 90;
         this.physics.useGravity    = false;
