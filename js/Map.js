@@ -19,7 +19,7 @@
         this.limitX     = 6400 - Game.CANVAS_WIDTH;
         this.scrollYMin = Game.CANVAS_HEIGHT >> 2;
         this.scrollYMax = Game.CANVAS_HEIGHT - this.scrollYMin;
-        this.limitY     = 3456 - Game.CANVAS_HEIGHT;
+        this.limitY     = 4032 - Game.CANVAS_HEIGHT;
     };
 
     /**
@@ -94,7 +94,6 @@
             yMax = (this.scrollY < this.limitY ? bgYIndex + 1 : (bgYIndex)),
             xMin = (bgXIndex > 0 ? bgXIndex - 1 : bgXIndex),
             xMax = (this.scrollX < this.limitX ? bgXIndex + 1 : (bgXIndex));
-
         for (var i = yMin; i <= yMax; i++) {
             for (var j = xMin; j <= xMax; j++) {
                 var realX = j * Game.CANVAS_WIDTH - this.scrollX;
@@ -142,6 +141,7 @@
             Game.player.y = this.scrollYMin;
             this.scrollY += dY;
         }
+        console.log(this.scrollY);
 
         if (this.scrollX < 0) {
             this.scrollX = 0;
@@ -168,26 +168,7 @@
         var dX = 0, dY = 0;
         var self = this;
 
-        // X-axis scrolling
-        if (Game.player.x < this.scrollXMin) {
-            dX = this.scrollXMin - Game.player.x;
-        } else if(Game.player.x + Game.player.body.width > this.scrollXMax) {
-            dX = this.scrollXMax - (Game.player.x + Game.player.body.width);
-        }
-
         var xInterval = 0, yInterval = 0;
-
-        if (dX != 0) {
-            xInterval = (Game.Npc.STUN_TIME / Math.abs(dX)) | 0;
-            self.scrollX += dX < 0 ? 2 : -2;
-            var xTimer = setInterval(function() {
-                if (!self.scrollable || self.scrollX == self.limitX || self.scrollX == 0 || (Game.player.x >= self.scrollXMin && Game.player.x + Game.player.body.width <= self.scrollXMax)) {
-                    clearInterval(xTimer);
-                    return;
-                }
-                self.scrollX += dX < 0 ? 2 : -2;
-            }, xInterval);
-        }
 
         // Y-axis scrolling
         if (Game.player.y < this.scrollYMin) {
@@ -198,14 +179,33 @@
 
         if (dY != 0) {
             yInterval = (Game.Npc.STUN_TIME / Math.abs(dY)) | 0;
-            self.scrollY += dY < 0 ? 1 : -1;
+            self.scrollY += dY < 0 ? 2 : -2;
             var yTimer = setInterval(function() {
                 if (!self.scrollable || self.scrollY == self.limitY || self.scrollY == 0 || (Game.player.y >= self.scrollYMin && Game.player.y + Game.player.body.height <= self.scrollYMax)) {
                     clearInterval(yTimer);
                     return;
                 }
-                self.scrollY += dY < 0 ? 1 : -1;
+                self.scrollY += dY < 0 ? 2 : -2;
             }, yInterval);
+        }
+
+        // X-axis scrolling
+        if (Game.player.x < this.scrollXMin) {
+            dX = this.scrollXMin - Game.player.x;
+        } else if(Game.player.x + Game.player.body.width > this.scrollXMax) {
+            dX = this.scrollXMax - (Game.player.x + Game.player.body.width);
+        }
+
+        if (dX != 0) {
+            xInterval = (Game.Npc.STUN_TIME / Math.abs(dX)) | 0;
+            self.scrollX += dX < 0 ? 3 : -3;
+            var xTimer = setInterval(function() {
+                if (!self.scrollable || self.scrollX == self.limitX || self.scrollX == 0 || (Game.player.x >= self.scrollXMin && Game.player.x + Game.player.body.width <= self.scrollXMax)) {
+                    clearInterval(xTimer);
+                    return;
+                }
+                self.scrollX += dX < 0 ? 3 : -3;
+            }, xInterval);
         }
     };
 

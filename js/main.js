@@ -87,8 +87,7 @@ Game.load = function() {
             walklImage: this.loader.addImage('images/sprites/ghost/left.png'),
             tiles: this.loader.addImage('images/sprites/ghost/tiles.png'),
             possl: this.loader.addImage('images/sprites/ghost/poss_l.png'),
-            possr: this.loader.addImage('images/sprites/ghost/poss_r.png'),
-            bg: this.loader.addImage('images/sprites/ghost/bg.jpg')
+            possr: this.loader.addImage('images/sprites/ghost/poss_r.png')
         },
         cat: {
             idlerImage : this.loader.addImage('images/sprites/cat/idle_right.png'),
@@ -97,16 +96,14 @@ Game.load = function() {
             walklImage: this.loader.addImage('images/sprites/cat/left.png'),
             tiles: this.loader.addImage('images/sprites/cat/tiles.png'),
             jumprImage: this.loader.addImage('images/sprites/cat/jump_r.png'),
-            jumplImage: this.loader.addImage('images/sprites/cat/jump_l.png'),
-            bg: this.loader.addImage('images/sprites/cat/bg.jpg')
+            jumplImage: this.loader.addImage('images/sprites/cat/jump_l.png')
         },
         oldwoman: {
             idlerImage : this.loader.addImage('images/sprites/oldwoman/idle_right.png'),
             idlelImage : this.loader.addImage('images/sprites/oldwoman/idle_left.png'),
             walkrImage: this.loader.addImage('images/sprites/oldwoman/right.png'),
             walklImage: this.loader.addImage('images/sprites/oldwoman/left.png'),
-            tiles: this.loader.addImage('images/sprites/oldwoman/tiles.png'),
-            bg: this.loader.addImage('images/sprites/oldwoman/bg.jpg')
+            tiles: this.loader.addImage('images/sprites/oldwoman/tiles.png')
         },
         woodsman: {
             idlerImage : this.loader.addImage('images/sprites/woodsman/idle_right.png'),
@@ -115,14 +112,12 @@ Game.load = function() {
             walklImage: this.loader.addImage("images/sprites/woodsman/left.png"),
             jumprImage: this.loader.addImage('images/sprites/woodsman/jump_r.png'),
             jumplImage: this.loader.addImage('images/sprites/woodsman/jump_l.png'),
-            tiles: this.loader.addImage('images/sprites/woodsman/tiles.png'),
-            bg: this.loader.addImage('images/sprites/woodsman/bg.jpg')
+            tiles: this.loader.addImage('images/sprites/woodsman/tiles.png')
         },
         bat: {
             walkrImage: this.loader.addImage('images/sprites/bat/right.png'),
             walklImage: this.loader.addImage('images/sprites/bat/left.png'),
-            tiles: this.loader.addImage('images/sprites/bat/tiles.png'),
-            bg: this.loader.addImage('images/sprites/bat/bg.jpg')
+            tiles: this.loader.addImage('images/sprites/bat/tiles.png')
         },
         papers: {
             1: this.loader.addImage('images/papers/1.png'),
@@ -148,7 +143,7 @@ Game.load = function() {
     // Loading all the background images for all the characters
     for (var npc in this.images) {
         if (this.images.hasOwnProperty(npc) && npc != 'papers') {
-            for (var i = 0; i < 40; i++) {
+            for (var i = 0; i < 56; i++) {
                 this.images[npc]['bg_' + (i + 1)] = this.loader.addImage('images/sprites/' + npc + '/bg/bg_' + (i + 1) + '.jpg');
             }
         }
