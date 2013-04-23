@@ -4,15 +4,23 @@ var requestAnimationFrame = window.requestAnimationFrame
     || window.oRequestAnimationFrame
     || window.msRequestAnimationFrame
     || function(callback) {
-        window.setTimeout(callback, 1000 / 60);
+        return window.setInterval(callback, 1000 / 60);
     };
+
+window.cancelAnimationFrame = window.cancelAnimationFrame
+    || window.mozCancelAnimationFrame
+    || function(index) {
+        window.clearInterval(index);
+};
 
 var Time = {
     time: null,
     deltaTime: null
 };
 
-function onEachFrame(cb) {
+var requestAnimationFrameCallbacks = {};
+
+function onEachFrame(cb, label) {
     var _cb = function() {
         cb();
 
@@ -21,7 +29,27 @@ function onEachFrame(cb) {
         Time.deltaTime = (t - Time.time) / 100;
         Time.time = t;
         
-        requestAnimationFrame(_cb);
+        var anim = requestAnimationFrame(_cb);
+        if (label) {
+            requestAnimationFrameCallbacks[label] = anim;
+        }
     };
-    _cb();
+    return _cb();
 };
+
+function cancelOnEachFrame(index) {
+    if (typeof index == 'string') { // If the given index is a label, cancel the callback with the given label
+        var label = index;
+        index = requestAnimationFrameCallbacks[label];
+        delete requestAnimationFrameCallbacks[label];
+    }
+    if (window.cancelAnimationFrame) {
+        window.cancelAnimationFrame(index);
+        return;
+    }
+    if (window.mozCancelAnimationFrame) {   
+        window.mozCancelAnimationFrame(index);
+        return;
+    }
+    window.clearInterval(index);
+}
