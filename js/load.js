@@ -23,6 +23,7 @@
 
         // Declaring all the assets in PxLoader
         this.Assets.images = {
+            loading : new PxLoaderImage(this.Assets.IMAGE_PATH + '/menu/loading.png', 'loading'),
             menus: {
                 splashscreen: new PxLoaderImage(this.Assets.IMAGE_PATH + '/menu/splashscreen.png', 'menu')
             },
@@ -34,6 +35,10 @@
             }
         };
 
+        /**
+         * Adding menus images
+         */
+        this.loader.add(this.Assets.images.loading);
         this.loader.add(this.Assets.images.menus.splashscreen);
 
         /**
@@ -184,20 +189,45 @@
 
         this.loader.addProgressListener(function(e) {
             // document.getElementById('loaded').innerHTML = (e.completedCount * 100 / e.totalCount);
-            console.log((e.completedCount * 100 / e.totalCount) + '%');
+            // console.log((e.completedCount * 100 / e.totalCount) + '%');
         });
 
         // Listeners
-        this.loader.addCompletionListener(function(e) {
-            Game.context.drawImage(Game.Assets.images.menus.splashscreen.img, 0, 0);
-            console.log('Menu OK');
-        }, 'menu');
 
-        this.loader.addCompletionListener(function(e) {
-            console.log('Game OK');
-        }, 'game');
+        // We show the loader animation
+        this.loader.addCompletionListener(Game.showLoader, 'loading');
+
+        // this.loader.addCompletionListener(function(e) {
+        //     Game.context.drawImage(Game.Assets.images.menus.splashscreen.img, 0, 0);
+        //     console.log('Menu OK');
+        // }, 'menu');
+
+        // this.loader.addCompletionListener(function(e) {
+        //     console.log('Game OK');
+        // }, 'game');
 
         // Starting the loading
-        this.loader.start(['menu', 'game']);
+        this.loader.start(['loading', 'menu', 'game']);
+    };
+
+    /**
+     * Shows the loader animation
+     * @param  {event} e The loader completion event
+     */
+    Game.showLoader = function(e) {
+        var loader = new Game.View(null, {
+            sprite: Game.Assets.images.loading.img,
+            x: (Game.CANVAS_WIDTH >> 1) - (71 >> 1),
+            y: (Game.CANVAS_HEIGHT >> 2) - (72 >> 1),
+            width: 71,
+            height: 72,
+            totalFrames: 8,
+            frameRate: 150
+        })
+        var updateLoader = function() {
+            Game.context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+            loader.draw(Game.context);
+        }
+        onEachFrame(updateLoader);
     };
 })();
