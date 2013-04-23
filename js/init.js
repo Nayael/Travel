@@ -22,7 +22,7 @@ Game.init = function() {
     
     // Initializing assets managers
     Game.loader = new PxLoader();
-    Game.load();
+    Game.load(Game.context);
 };
 
 /**

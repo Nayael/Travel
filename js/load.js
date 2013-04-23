@@ -1,5 +1,6 @@
 (function() {
-    
+    var context;
+
     /**
      * Loads the images for the game
      */
@@ -25,7 +26,15 @@
         this.Assets.images = {
             loading : new PxLoaderImage(this.Assets.IMAGE_PATH + '/menu/loading.png', 'loading'),
             menus: {
-                splashscreen: new PxLoaderImage(this.Assets.IMAGE_PATH + '/menu/splashscreen.png', 'menu')
+                splashscreen: new PxLoaderImage(this.Assets.IMAGE_PATH + '/menu/splashscreen.png', 'menu'),
+                bg1: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu1.png', 'menu'),
+                bg2: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu2.png', 'menu'),
+                bg3: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu3.png', 'menu'),
+                bg4: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu4.png', 'menu'),
+                bg5: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu5.png', 'menu'),
+                bg6: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu6.png', 'menu'),
+                bg7: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu7.png', 'menu'),
+                bg8: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu8.png', 'menu')
             },
             backgrounds: {
                 bg1: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bg1.png', 'game'),
@@ -49,6 +58,15 @@
                 this.loader.add(this.Assets.images.backgrounds[prop]);
             }
         }
+
+/** DEBUG
+ * Adding all the backgrounds to the loader
+ */
+for (var prop in this.Assets.images.menus) {
+    if (this.Assets.images.menus.hasOwnProperty(prop)) {
+        this.loader.add(this.Assets.images.menus[prop]);
+    }
+}
     };    
 
     /**
@@ -171,36 +189,49 @@
     /**
      * Preloads the assets
      */
-    Game.load = function() {
+    Game.load = function(gameContext) {
+        var updateLoader;
+
+        context = gameContext;
         this.addImages();
         this.addSounds();
 
-        // Progression bar
-        // var loadText = document.createElement('div');
-        // loadText.style.position = 'absolute';
-        // loadText.style.left = window.innerWidth / 2 + 'px';
-        // loadText.style.top = '0px';
-        // loadText.style.zIndex = '100';
-        // loadText.style.color = '#FFFFFF';
-        // loadText.style.fontWeight = 'bold';
-        // loadText.style.fontSize = '24px';
-        // loadText.innerHTML = 'Loading <span id="loaded">0</span>%';
-        // document.body.appendChild(loadText);
+        var menuLoaded = false;
 
         this.loader.addProgressListener(function(e) {
-            // document.getElementById('loaded').innerHTML = (e.completedCount * 100 / e.totalCount);
             // console.log((e.completedCount * 100 / e.totalCount) + '%');
+
+            // If the menu is completely loaded, we stop displaying the loader, and display the menu
+            if (menuLoaded) {
+                cancelOnEachFrame('loading');
+                return;
+            }
+
+            var loadingText = 'Loading ' + ( (e.completedCount * 100 / e.totalCount) | 0 ) + '%',
+                metrics = context.measureText(loadingText),
+                textWidth = metrics.width,
+                textHeight = metrics.height;
+            
+            context.fillStyle = 'rgb(0, 0, 0)';
+            context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+
+            context.fillStyle = '#89BC94';
+            context.font = 'bold 30px sans-serif';
+            context.fillText(loadingText, (Game.CANVAS_WIDTH >> 1) - (textWidth >> 1), (Game.CANVAS_HEIGHT >> 1) - (textHeight >> 1));
         });
 
         // Listeners
 
         // We show the loader animation
-        this.loader.addCompletionListener(Game.showLoader, 'loading');
+        this.loader.addCompletionListener(function(e) {
+            updateLoader = Game.showLoader(e);
+        }, 'loading');
 
-        // this.loader.addCompletionListener(function(e) {
-        //     Game.context.drawImage(Game.Assets.images.menus.splashscreen.img, 0, 0);
-        //     console.log('Menu OK');
-        // }, 'menu');
+        this.loader.addCompletionListener(function(e) {
+            menuLoaded = true;
+            context.drawImage(Game.Assets.images.menus.splashscreen.img, 0, 0);
+            // console.log('Menu OK');
+        }, 'menu');
 
         // this.loader.addCompletionListener(function(e) {
         //     console.log('Game OK');
@@ -223,11 +254,12 @@
             height: 72,
             totalFrames: 8,
             frameRate: 150
-        })
-        var updateLoader = function() {
-            Game.context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
-            loader.draw(Game.context);
-        }
-        onEachFrame(updateLoader);
+        });
+
+        return onEachFrame(function() {
+            context.fillStyle = 'rgb(0, 0, 0)';
+            context.fillRect(loader.localX, loader.localY, loader.width, loader.height);
+            loader.draw(context);
+        }, 'loading');
     };
 })();
