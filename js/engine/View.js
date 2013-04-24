@@ -5,8 +5,8 @@
         this.sprite      = data.sprite;
 
         // The local position of the sprite in the entity
-        this.localX      = data.x || 0;
-        this.localY      = data.y || 0;
+        this.localX      = data.localX || 0;
+        this.localY      = data.localY || 0;
         
         this.width       = data.width;
         this.height      = data.height;

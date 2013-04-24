@@ -43,6 +43,9 @@ function cancelOnEachFrame(index) {
         index = requestAnimationFrameCallbacks[label];
         delete requestAnimationFrameCallbacks[label];
     }
+    if (index == undefined) {
+        return;
+    }
     if (window.cancelAnimationFrame) {
         window.cancelAnimationFrame(index);
         return;

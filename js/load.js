@@ -41,6 +41,75 @@
                 bg2: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bg2.png', 'game'),
                 bg3: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bg3.png', 'game'),
                 bg4: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bg4.png', 'game')
+            },
+            tiles: {
+                ghost: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/ghost.png', 'game'),
+                cat: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/cat.png', 'game'),
+                bat: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/bat.png', 'game'),
+                woodsman: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/woodsman.png', 'game'),
+                oldwoman: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/oldwoman.png', 'game'),
+                dove: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/dove.png', 'game')
+            },
+            characters: {
+                ghost: {
+                    idleImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/right.png'),
+                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/right.png'),
+                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/left.png'),
+                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/tiles.png'),
+                    possL: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_l.png'),
+                    possR: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_r.png')
+                },
+                cat: {
+                    idleRImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/idle_right.png'),
+                    idleLImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/idle_left.png'),
+                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/right.png'),
+                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/left.png'),
+                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/tiles.png'),
+                    jumpRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_r.png'),
+                    jumpLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_l.png')
+                },
+                oldwoman: {
+                    idleRImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/idle_right.png'),
+                    idleLImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/idle_left.png'),
+                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/right.png'),
+                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/left.png'),
+                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/tiles.png')
+                },
+                woodsman: {
+                    idleRImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/idle_right.png'),
+                    idleLImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/idle_left.png'),
+                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/right.png'),
+                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/left.png'),
+                    jumpRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_r.png'),
+                    jumpLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_l.png'),
+                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/tiles.png')
+                },
+                bat: {
+                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/bat/right.png'),
+                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/bat/left.png'),
+                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/bat/tiles.png')
+                },
+                dove: {
+                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/right.png'),
+                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/left.png'),
+                    idleRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_right.png'),
+                    idleLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_left.png'),
+                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/tiles.png')
+                },
+            },
+            items: {
+                papers: {
+                    1: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/1.png'),
+                    2: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/2.png'),
+                    3: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/3.png'),
+                    4: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/4.png'),
+                    5: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/5.png'),
+                    6: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/6.png'),
+                    7: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/7.png'),
+                    8: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/8.png'),
+                    9: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/9.png'),
+                    10: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/10.png')
+                }
             }
         };
 
@@ -186,80 +255,58 @@ for (var prop in this.Assets.images.menus) {
         };
     };
 
+    Game.addAssets = function() {
+        this.addImages();
+        this.addSounds();
+    }
+
+    /**
+     * Shows the text "Loading" with the loaded percent
+     * @param  {event} e The PxLoader event
+     */
+    Game.showLoadingText = function(e) {
+        context.font = 'bold 30px sans-serif';
+
+        var loadingText = 'Loading ' + ( (e.completedCount * 100 / e.totalCount) | 0 ) + '%',
+            metrics     = context.measureText(loadingText),
+            textWidth   = metrics.width,
+            textHeight  = 30;
+
+        // Clearing the canvas
+        context.fillStyle = 'rgb(0, 0, 0)';
+        context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+        
+        // Writing the loading text
+        context.fillStyle = '#89BC94';
+        context.fillText(loadingText, (Game.CANVAS_WIDTH >> 1) - (textWidth >> 1), (Game.CANVAS_HEIGHT >> 1) - (textHeight >> 1));
+    }
+
     /**
      * Preloads the assets
      */
-    Game.load = function(gameContext) {
-        var updateLoader;
-
+    Game.loadMenu = function(gameContext, fsm) {
+        Game.addAssets();
         context = gameContext;
-        this.addImages();
-        this.addSounds();
 
-        var menuLoaded = false;
-
+        // Loader progression
         this.loader.addProgressListener(function(e) {
-            // console.log((e.completedCount * 100 / e.totalCount) + '%');
-
-            // If the menu is completely loaded, we stop displaying the loader, and display the menu
-            if (menuLoaded) {
-                cancelOnEachFrame('loading');
+            if (!fsm.is('loading')) {
                 return;
             }
+            Game.showLoadingText(e);
+        }, ['loading', 'menu']);
 
-            var loadingText = 'Loading ' + ( (e.completedCount * 100 / e.totalCount) | 0 ) + '%',
-                metrics = context.measureText(loadingText),
-                textWidth = metrics.width,
-                textHeight = metrics.height;
-            
-            context.fillStyle = 'rgb(0, 0, 0)';
-            context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
-
-            context.fillStyle = '#89BC94';
-            context.font = 'bold 30px sans-serif';
-            context.fillText(loadingText, (Game.CANVAS_WIDTH >> 1) - (textWidth >> 1), (Game.CANVAS_HEIGHT >> 1) - (textHeight >> 1));
-        });
-
-        // Listeners
-
-        // We show the loader animation
+        // Once the loading of the loader assets is done, go to the Loading state
         this.loader.addCompletionListener(function(e) {
-            updateLoader = Game.showLoader(e);
+            fsm.load();
         }, 'loading');
 
+        // Once the loading of the menu assets is done, go to the Menu state
         this.loader.addCompletionListener(function(e) {
-            menuLoaded = true;
-            context.drawImage(Game.Assets.images.menus.splashscreen.img, 0, 0);
-            // console.log('Menu OK');
+            fsm.showMenu();
         }, 'menu');
 
-        // this.loader.addCompletionListener(function(e) {
-        //     console.log('Game OK');
-        // }, 'game');
-
         // Starting the loading
-        this.loader.start(['loading', 'menu', 'game']);
-    };
-
-    /**
-     * Shows the loader animation
-     * @param  {event} e The loader completion event
-     */
-    Game.showLoader = function(e) {
-        var loader = new Game.View(null, {
-            sprite: Game.Assets.images.loading.img,
-            x: (Game.CANVAS_WIDTH >> 1) - (71 >> 1),
-            y: (Game.CANVAS_HEIGHT >> 2) - (72 >> 1),
-            width: 71,
-            height: 72,
-            totalFrames: 8,
-            frameRate: 150
-        });
-
-        return onEachFrame(function() {
-            context.fillStyle = 'rgb(0, 0, 0)';
-            context.fillRect(loader.localX, loader.localY, loader.width, loader.height);
-            loader.draw(context);
-        }, 'loading');
+        this.loader.start(['loading', 'menu']);
     };
 })();
