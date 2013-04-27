@@ -24,118 +24,86 @@
 
         // Declaring all the assets in PxLoader
         this.Assets.images = {
-            loading : new PxLoaderImage(this.Assets.IMAGE_PATH + '/menu/loading.png', 'loading'),
+            loading : this.loader.addImage(this.Assets.IMAGE_PATH + '/menu/loading.png', 'loading'),
             menus: {
-                splashscreen: new PxLoaderImage(this.Assets.IMAGE_PATH + '/menu/splashscreen.png', 'menu'),
-                bg1: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu1.png', 'menu'),
-                bg2: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu2.png', 'menu'),
-                bg3: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu3.png', 'menu'),
-                bg4: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu4.png', 'menu'),
-                bg5: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu5.png', 'menu'),
-                bg6: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu6.png', 'menu'),
-                bg7: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu7.png', 'menu'),
-                bg8: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bgMenu8.png', 'menu')
+                splashscreen: this.loader.addImage(this.Assets.IMAGE_PATH + '/menu/splashscreen.png', 'menu')
             },
             backgrounds: {
-                bg1: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bg1.png', 'game'),
-                bg2: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bg2.png', 'game'),
-                bg3: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bg3.png', 'game'),
-                bg4: new PxLoaderImage(this.Assets.IMAGE_PATH + '/bg/bg4.png', 'game')
+                bg1: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg1.jpg', 'game'),
+                bg2: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg2.jpg', 'game'),
+                bg3: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg3.jpg', 'game'),
+                bg4: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg4.jpg', 'game')
             },
             tiles: {
-                ghost: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/ghost.png', 'game'),
-                cat: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/cat.png', 'game'),
-                bat: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/bat.png', 'game'),
-                woodsman: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/woodsman.png', 'game'),
-                oldwoman: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/oldwoman.png', 'game'),
-                dove: new PxLoaderImage(this.Assets.IMAGE_PATH + '/tiles/dove.png', 'game')
+                ghost: this.loader.addImage(this.Assets.IMAGE_PATH + '/tiles/ghost.png', 'game'),
+                cat: this.loader.addImage(this.Assets.IMAGE_PATH + '/tiles/cat.png', 'game'),
+                bat: this.loader.addImage(this.Assets.IMAGE_PATH + '/tiles/bat.png', 'game'),
+                woodsman: this.loader.addImage(this.Assets.IMAGE_PATH + '/tiles/woodsman.png', 'game'),
+                oldwoman: this.loader.addImage(this.Assets.IMAGE_PATH + '/tiles/oldwoman.png', 'game'),
+                dove: this.loader.addImage(this.Assets.IMAGE_PATH + '/tiles/dove.png', 'game')
             },
             characters: {
                 ghost: {
-                    idleImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/right.png'),
-                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/right.png'),
-                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/left.png'),
-                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/tiles.png'),
-                    possL: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_l.png'),
-                    possR: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_r.png')
+                    idleSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/right.png', 'game'),
+                    walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/right.png', 'game'),
+                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/left.png', 'game'),
+                    possLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_l.png', 'game'),
+                    possRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_r.png', 'game'),
+                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/tiles.png', 'game')
                 },
                 cat: {
-                    idleRImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/idle_right.png'),
-                    idleLImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/idle_left.png'),
-                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/right.png'),
-                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/left.png'),
-                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/tiles.png'),
-                    jumpRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_r.png'),
-                    jumpLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_l.png')
+                    idleRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/idle_right.png', 'game'),
+                    idleLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/idle_left.png', 'game'),
+                    walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/right.png', 'game'),
+                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/left.png', 'game'),
+                    jumpRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_r.png', 'game'),
+                    jumpLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_l.png', 'game'),
+                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/tiles.png', 'game')
                 },
                 oldwoman: {
-                    idleRImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/idle_right.png'),
-                    idleLImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/idle_left.png'),
-                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/right.png'),
-                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/left.png'),
-                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/tiles.png')
+                    idleRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/idle_right.png', 'game'),
+                    idleLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/idle_left.png', 'game'),
+                    walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/right.png', 'game'),
+                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/left.png', 'game'),
+                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/tiles.png', 'game')
                 },
                 woodsman: {
-                    idleRImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/idle_right.png'),
-                    idleLImage : new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/idle_left.png'),
-                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/right.png'),
-                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/left.png'),
-                    jumpRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_r.png'),
-                    jumpLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_l.png'),
-                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/tiles.png')
+                    idleRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/idle_right.png', 'game'),
+                    idleLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/idle_left.png', 'game'),
+                    walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/right.png', 'game'),
+                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/left.png', 'game'),
+                    jumpRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_r.png', 'game'),
+                    jumpLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_l.png', 'game'),
+                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/tiles.png', 'game')
                 },
                 bat: {
-                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/bat/right.png'),
-                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/bat/left.png'),
-                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/bat/tiles.png')
+                    walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/bat/right.png', 'game'),
+                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/bat/left.png', 'game'),
+                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/bat/tiles.png', 'game')
                 },
                 dove: {
-                    walkRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/right.png'),
-                    walkLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/left.png'),
-                    idleRImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_right.png'),
-                    idleLImage: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_left.png'),
-                    tiles: new PxLoaderImage(this.Assets.IMAGE_PATH + '/sprites/dove/tiles.png')
+                    walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/right.png', 'game'),
+                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/left.png', 'game'),
+                    idleRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_right.png', 'game'),
+                    idleLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_left.png', 'game'),
+                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/tiles.png', 'game')
                 },
             },
             items: {
                 papers: {
-                    1: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/1.png'),
-                    2: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/2.png'),
-                    3: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/3.png'),
-                    4: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/4.png'),
-                    5: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/5.png'),
-                    6: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/6.png'),
-                    7: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/7.png'),
-                    8: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/8.png'),
-                    9: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/9.png'),
-                    10: new PxLoaderImage(this.Assets.IMAGE_PATH + '/papers/10.png')
+                    1: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/1.png', 'game'),
+                    2: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/2.png', 'game'),
+                    3: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/3.png', 'game'),
+                    4: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/4.png', 'game'),
+                    5: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/5.png', 'game'),
+                    6: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/6.png', 'game'),
+                    7: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/7.png', 'game'),
+                    8: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/8.png', 'game'),
+                    9: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/9.png', 'game'),
+                    10: this.loader.addImage(this.Assets.IMAGE_PATH + '/papers/10.png', 'game')
                 }
             }
         };
-
-        /**
-         * Adding menus images
-         */
-        this.loader.add(this.Assets.images.loading);
-        this.loader.add(this.Assets.images.menus.splashscreen);
-
-        /**
-         * Adding all the backgrounds to the loader
-         */
-        for (var prop in this.Assets.images.backgrounds) {
-            if (this.Assets.images.backgrounds.hasOwnProperty(prop)) {
-                this.loader.add(this.Assets.images.backgrounds[prop]);
-            }
-        }
-
-/** DEBUG
- * Adding all the backgrounds to the loader
- */
-for (var prop in this.Assets.images.menus) {
-    if (this.Assets.images.menus.hasOwnProperty(prop)) {
-        this.loader.add(this.Assets.images.menus[prop]);
-    }
-}
     };    
 
     /**
@@ -275,7 +243,7 @@ for (var prop in this.Assets.images.menus) {
         // Clearing the canvas
         context.fillStyle = 'rgb(0, 0, 0)';
         context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
-        
+
         // Writing the loading text
         context.fillStyle = '#89BC94';
         context.fillText(loadingText, (Game.CANVAS_WIDTH >> 1) - (textWidth >> 1), (Game.CANVAS_HEIGHT >> 1) - (textHeight >> 1));

@@ -45,7 +45,7 @@ Game.initFsm = function() {
 
     this.fsm.onloading = function(e) {
         var loader = new Game.View(null, {
-            sprite: Game.Assets.images.loading.img,
+            sprite: Game.Assets.images.loading,
             localX: (Game.CANVAS_WIDTH >> 1) - (71 >> 1),
             localY: (Game.CANVAS_HEIGHT >> 2) - (72 >> 1),
             width: 71,
@@ -69,7 +69,7 @@ Game.initFsm = function() {
     };
 
     this.fsm.onshowMenu = function(e) {
-        Game.context.drawImage(Game.Assets.images.menus.splashscreen.img, 0, 0);
+        Game.context.drawImage(Game.Assets.images.menus.splashscreen, 0, 0);
     };
 }
 
