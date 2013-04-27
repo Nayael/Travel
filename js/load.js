@@ -1,4 +1,4 @@
-(function() {
+(function(Game) {
     var context;
 
     /**
@@ -29,10 +29,10 @@
                 splashscreen: this.loader.addImage(this.Assets.IMAGE_PATH + '/menu/splashscreen.png', 'menu')
             },
             backgrounds: {
-                bg1: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg1.jpg', 'game'),
-                bg2: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg2.jpg', 'game'),
-                bg3: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg3.jpg', 'game'),
-                bg4: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg4.jpg', 'game')
+                normal: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg1.jpg', 'game'),
+                ghost: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg2.jpg', 'game'),
+                cat: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg3.jpg', 'game'),
+                oldwoman: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg4.jpg', 'game')
             },
             tiles: {
                 ghost: this.loader.addImage(this.Assets.IMAGE_PATH + '/tiles/ghost.png', 'game'),
@@ -48,8 +48,7 @@
                     walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/right.png', 'game'),
                     walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/left.png', 'game'),
                     possLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_l.png', 'game'),
-                    possRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_r.png', 'game'),
-                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/tiles.png', 'game')
+                    possRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/ghost/poss_r.png', 'game')
                 },
                 cat: {
                     idleRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/idle_right.png', 'game'),
@@ -57,15 +56,13 @@
                     walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/right.png', 'game'),
                     walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/left.png', 'game'),
                     jumpRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_r.png', 'game'),
-                    jumpLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_l.png', 'game'),
-                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/tiles.png', 'game')
+                    jumpLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/cat/jump_l.png', 'game')
                 },
                 oldwoman: {
                     idleRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/idle_right.png', 'game'),
                     idleLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/idle_left.png', 'game'),
                     walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/right.png', 'game'),
-                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/left.png', 'game'),
-                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/tiles.png', 'game')
+                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/oldwoman/left.png', 'game')
                 },
                 woodsman: {
                     idleRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/idle_right.png', 'game'),
@@ -73,20 +70,17 @@
                     walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/right.png', 'game'),
                     walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/left.png', 'game'),
                     jumpRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_r.png', 'game'),
-                    jumpLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_l.png', 'game'),
-                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/tiles.png', 'game')
+                    jumpLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/woodsman/jump_l.png', 'game')
                 },
                 bat: {
                     walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/bat/right.png', 'game'),
-                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/bat/left.png', 'game'),
-                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/bat/tiles.png', 'game')
+                    walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/bat/left.png', 'game')
                 },
                 dove: {
                     walkRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/right.png', 'game'),
                     walkLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/left.png', 'game'),
                     idleRSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_right.png', 'game'),
-                    idleLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_left.png', 'game'),
-                    tiles: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/tiles.png', 'game')
+                    idleLSprite: this.loader.addImage(this.Assets.IMAGE_PATH + '/sprites/dove/idle_left.png', 'game')
                 },
             },
             items: {
@@ -104,6 +98,13 @@
                 }
             }
         };
+///////////////////////////////
+//           DEBUG           //
+// Test for more slow images //
+///////////////////////////////
+// for (var i = 0; i < 40; i++) {
+//     Game.Assets[i] = this.loader.addImage('http://thinkpixellab.com/pxloader' + '/slowImage.php?delay=1&time=' + new Date + '&i=' + i, 'game');
+// }
     };    
 
     /**
@@ -223,6 +224,9 @@
         };
     };
 
+    /**
+     * Adds all the assets list to the loader
+     */
     Game.addAssets = function() {
         this.addImages();
         this.addSounds();
@@ -247,13 +251,14 @@
         // Writing the loading text
         context.fillStyle = '#89BC94';
         context.fillText(loadingText, (Game.CANVAS_WIDTH >> 1) - (textWidth >> 1), (Game.CANVAS_HEIGHT >> 1) - (textHeight >> 1));
-    }
+    };
 
     /**
-     * Preloads the assets
+     * Loads the first menu data
+     * @param  {Canvas2DContext} gameContext The game's main canvas' context
+     * @param  {StateMachine}    fsm         The game's FSM
      */
-    Game.loadMenu = function(gameContext, fsm) {
-        Game.addAssets();
+    Game.loadInit = function(gameContext, fsm) {
         context = gameContext;
 
         // Loader progression
@@ -275,6 +280,37 @@
         }, 'menu');
 
         // Starting the loading
-        this.loader.start(['loading', 'menu']);
+        this.loader.start(['loading', 'menu'], true);
     };
-})();
+
+    /**
+     * Loads the game data
+     */
+    Game.loadGame = function() {
+        var self = this;
+
+        // Loader progression
+        this.loader.addProgressListener(function(e) {
+            if (!self.fsm.is('loading')) {
+                return;
+            }
+            self.showLoadingText(e);
+        }, 'game');
+
+        // Once the loading of the game assets is done, draw the canvas buffers go to the Game state
+        this.loader.addCompletionListener(function(e) {
+            self.canvasBuffers = {};
+            var canvas, context;
+            for (var bgName in self.Assets.images.backgrounds) {
+                canvas = self.canvasBuffers[bgName] = document.createElement('canvas');
+                context = canvas.getContext('2d');
+                context.drawImage(self.Assets.images.backgrounds[bgName], 0, 0);
+            }
+            self.fsm.play();
+        }, 'game');
+
+        // Starting the loading
+        this.fsm.load();
+        this.loader.start('game', true);
+    };
+})(Game);
