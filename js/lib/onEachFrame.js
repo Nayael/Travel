@@ -1,17 +1,26 @@
-var requestAnimationFrame = window.requestAnimationFrame
-    || window.webkitRequestAnimationFrame
-    || window.mozRequestAnimationFrame
-    || window.oRequestAnimationFrame
-    || window.msRequestAnimationFrame
-    || function(callback) {
-        return window.setInterval(callback, 1000 / 60);
-    };
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
 
-window.cancelAnimationFrame = window.cancelAnimationFrame
-    || window.mozCancelAnimationFrame
-    || function(index) {
-        window.clearInterval(index);
-};
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+              timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
 
 var Time = {
     time: null,
@@ -46,13 +55,5 @@ function cancelOnEachFrame(index) {
     if (index == undefined) {
         return;
     }
-    if (window.cancelAnimationFrame) {
-        window.cancelAnimationFrame(index);
-        return;
-    }
-    if (window.mozCancelAnimationFrame) {   
-        window.mozCancelAnimationFrame(index);
-        return;
-    }
-    window.clearInterval(index);
+    window.cancelAnimationFrame(index);
 }
