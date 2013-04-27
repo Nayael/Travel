@@ -1,5 +1,7 @@
 // The Physics class for an entity
 (function() {
+    var map = [];
+
     var Physics = function(entity) {
         Physics.G = 10;   // The gravity constant
 
@@ -25,9 +27,12 @@
     };
 
     /**
-     * Called on each frame
+     * Calle on each frame
+     * @param  {Map} gameMap The map to interact with for collisions
      */
-    Physics.prototype.update = function() {
+    Physics.prototype.update = function(gameMap) {
+        map = gameMap;
+
         var v0 = this.v;
 
         // Calculating acceleration
@@ -142,23 +147,23 @@
     Physics.prototype.hCollisions = function(v0) {
         var futureX = this.entity.realX + (this.v.x + v0.x) / 2 * Time.deltaTime;
         var hittingEdge = futureX + (this.v.x < 0 ? 0 : this.entity.body.width),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
-            yMin = ( ((this.entity.realY + 1) / Game.map.TS) ) | 0,
-            yMax = ( ((this.entity.realY - 1) / Game.map.TS) + this.entity.body.t_height ) | 0,
+            yMin = ( ((this.entity.realY + 1) / map.TS) ) | 0,
+            yMax = ( ((this.entity.realY - 1) / map.TS) + this.entity.body.t_height ) | 0,
             newX = 0;
 
-        futureX = (hittingEdge / Game.map.TS) | 0;
+        futureX = (hittingEdge / map.TS) | 0;
         // Parsing the rows containing the entity
         for (var i = yMin; i <= yMax; i++) {
             // If the entity collides with an obstacle
-            if (Game.map.obstacles.indexOf(Game.map.tilemap[i][futureX]) != -1) {
+            if (map.obstacles.indexOf(map.tilemap[i][futureX]) != -1) {
                 // We replace the entity right on the edge of the obstacle, to end the movement
-                newX = futureX * Game.map.TS + Game.map.TS * (this.v.x < 0 ? 1 : -this.entity.body.t_width);
+                newX = futureX * map.TS + map.TS * (this.v.x < 0 ? 1 : -this.entity.body.t_width);
                 return newX;
             }
-            if (Game.map.items.indexOf(Game.map.tilemap[i][futureX]) != -1) {
-                Game.Item.pickUp(futureX, i);
-                break;
-            }
+            // if (map.items.indexOf(map.tilemap[i][futureX]) != -1) {
+            //     Game.Item.pickUp(futureX, i);
+            //     break;
+            // }
         }
         return false;
     };
@@ -171,35 +176,35 @@
     Physics.prototype.vCollisions = function(v0) {
         var futureY = this.entity.realY + (this.v.y + v0.y) / 2 * Time.deltaTime;
         var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.height)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
-            xMin = ( ((this.entity.realX + 5) / Game.map.TS) ) | 0,
-            xMax = ( ((this.entity.realX - 5) / Game.map.TS) + this.entity.body.t_width ) | 0,
+            xMin = ( ((this.entity.realX + 5) / map.TS) ) | 0,
+            xMax = ( ((this.entity.realX - 5) / map.TS) + this.entity.body.t_width ) | 0,
             newY = 0,
             head = (hittingEdge <= futureY);
 
-        futureY = (hittingEdge / Game.map.TS) | 0;
+        futureY = (hittingEdge / map.TS) | 0;
         // Parsing the columns containing the entity
         for (var j = xMin; j <= xMax; j++) {
             // If the entity collides with an obstacle
-            if (Game.map.obstacles.indexOf(Game.map.tilemap[futureY][j]) != -1) {
+            if (map.obstacles.indexOf(map.tilemap[futureY][j]) != -1) {
                 // We replace the entity right on the edge of the obstacle, to end the movement
                 if (((this.v.y + v0.y) / 2 * Time.deltaTime) >= 0 && !head) {
                     this.onFloor = true;
                 }
                 this.jumpForces = [];
-                newY = futureY * Game.map.TS + Game.map.TS * (this.v.y < 0 ? 1 : -this.entity.body.t_height) - (this.v.y < 0 ? 0 : 0);
+                newY = futureY * map.TS + map.TS * (this.v.y < 0 ? 1 : -this.entity.body.t_height) - (this.v.y < 0 ? 0 : 0);
                 return newY;
             }
-            if (Game.map.items.indexOf(Game.map.tilemap[futureY][j]) != -1) {
-                if (Game.map.tilemap[futureY][j] == 1000 && Game.player instanceof Game.Colombe) {
-                    Game.isOver = true;
-                    Game.context.globalAlpha = 0.1;
-                }
-                Game.Item.pickUp(j, futureY);
-                break;
-            }
+            // if (map.items.indexOf(map.tilemap[futureY][j]) != -1) {
+            //     if (map.tilemap[futureY][j] == 1000 && Game.player instanceof Game.Colombe) {
+            //         Game.isOver = true;
+            //         Game.context.globalAlpha = 0.1;
+            //     }
+            //     Game.Item.pickUp(j, futureY);
+            //     break;
+            // }
         }
         return false;
     };
 
-    Game.Physics = Physics;
+    this.Physics = Physics;
 })();

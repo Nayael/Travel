@@ -37,5 +37,5 @@
         }
     };
 
-    Game.View = View;
+    window.View = View;
 })();

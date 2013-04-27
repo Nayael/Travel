@@ -33,5 +33,5 @@
         return !(leftThis > rightTile || leftTile > rightThis || topThis > bottomTile || topTile > bottomThis);
     };
 
-    Game.Body = Body;
+    window.Body = Body;
 })();
