@@ -1,0 +1,115 @@
+{
+    "audio": {
+        "bgm": {
+            "ghost": {
+                "path": "/bgm/ghost/main",
+                "formats": ["mp3", "ogg"],
+                "preload": true,
+                "loop": true
+            },
+            "oldwoman": {
+                "path": "/bgm/oldwoman/main",
+                "formats": ["mp3", "ogg"],
+                "preload": true,
+                "loop": true
+            },
+            "woodsman": {
+                "path": "/bgm/woodsman/main",
+                "formats": ["mp3", "ogg"],
+                "preload": true,
+                "loop": true
+            },
+            "bat": {
+                "path": "/bgm/bat/main",
+                "formats": ["mp3", "ogg"],
+                "preload": true,
+                "loop": true
+            },
+            "cat": {
+                "path": "/bgm/cat/main",
+                "formats": ["mp3", "ogg"],
+                "preload": true,
+                "loop": true
+            },
+            "dove": {
+                "path": "/bgm/dove/main",
+                "formats": ["mp3", "ogg"],
+                "preload": true,
+                "loop": true
+            },
+            "paper": {
+                "path": "/bgm/paper/main",
+                "formats": ["mp3", "ogg"],
+                "preload": true,
+                "loop": true
+            }
+        },
+        "sfx": {
+            "ghost": {
+                "take": {
+                    "path": "/sfx/ghost/take",
+                    "formats": ["mp3", "ogg"],
+                    "preload": true,
+                    "loop": false
+                },
+                "leave": {
+                    "path": "/sfx/ghost/leave",
+                    "formats": ["mp3", "ogg"],
+                    "preload": true,
+                    "loop": false
+                }
+            },
+            "woodsman": {
+                "talk": {
+                    "path": "/sfx/woodsman/talk",
+                    "formats": ["mp3", "ogg"],
+                    "preload": true,
+                    "loop": false
+                }
+            },
+            "bat": {
+                "talk": {
+                    "path": "/sfx/bat/talk",
+                    "formats": ["mp3", "ogg"],
+                    "preload": true,
+                    "loop": false
+                }
+            },
+            "cat": {
+                "talk": {
+                    "path": "/sfx/cat/talk",
+                    "formats": ["mp3", "ogg"],
+                    "preload": true,
+                    "loop": false
+                }
+            },
+            "dove": {
+                "talk": {
+                    "path": "/sfx/dove/talk",
+                    "formats": ["mp3", "ogg"],
+                    "preload": true,
+                    "loop": false
+                }
+            },
+            "paper": {
+                "fx": {
+                    "path": "/sfx/paper/fx",
+                    "formats": ["mp3", "ogg"],
+                    "preload": true,
+                    "loop": false
+                }
+            },
+            "world": {
+                "wind": {
+                    "path": "/sfx/world/wind",
+                    "formats": ["mp3", "ogg"],
+                    "preload": true,
+                    "loop": true
+                }
+            }
+        }
+    },
+    "images": {
+        
+    }
+}
