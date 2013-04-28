@@ -1,64 +1,20 @@
 // Main game file
 (function(Game) {
     /**
-     * Initializes the game
+     * Starts a new game
      */
-    // Game.launch = function(e) {
-    //     Game.canvas        = document.createElement('canvas');
-    //     Game.canvas.id     = 'main';
-    //     Game.canvas.width  = Game.CANVAS_WIDTH;
-    //     Game.canvas.height = Game.CANVAS_HEIGHT;
-    //     Game.context       = Game.canvas.getContext('2d');
-    //     Game.frameCount    = 0;
-    //     Game.paused        = false;
-
-    //     Game.intensity = 1;
-
-    //     Game.map      = new Game.Map();
-    //     Game.useGhost();    // Playable character
-    //     Game.player.x = 20;
-    //     Game.player.y = 400;
-
-    //     Game.Vec2     = illuminated.Vec2;
-    //     Game.Lamp     = illuminated.Lamp;
-    //     Game.Lighting = illuminated.Lighting;
-    //     Game.DarkMask = illuminated.DarkMask;
-    //     Game.light1   = new Game.Lamp({
-    //         position: new Game.Vec2(Game.player.x, Game.player.y),
-    //         distance: 75,
-    //         diffuse: 0.5,
-    //         radius: 0,
-    //         samples: 1,
-    //         angle: 0,
-    //         roughness: 0
-    //     });
-
-    //     Game.lighting1 = new Game.Lighting({
-    //         light: Game.light1
-    //     });
-    //     Game.darkmask = new Game.DarkMask({
-    //         lights: [Game.light1],
-    //         color: 'rgba(0,0,0,1)'
-    //     });
-
-    //     Game.npcs = {};     // The non-playable characters displayed on the stage
-
-    //     // Adding the canvas to the stage
-    //     document.body.appendChild(Game.canvas);
-
-    //     // Launching the main loop
-    //     onEachFrame(Game.update);
-    // };
-
     Game.startGame = function() {
+        this.context.drawImage(this.canvasBuffers.normal, 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT, 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+
         // Launching the main loop
-        onEachFrame(Game.update);
+        // onEachFrame(Game.update);
     };
 
     /**
      * The main game loop
      */
     Game.update = function() {
+
         // var canvas  = Game.canvas,
         //     context = Game.context;
 
@@ -107,7 +63,6 @@
      * Pauses the game
      */
     Game.pause = function() {
-        this.canResume = false;
         this.paused = true;
     }
 
@@ -116,6 +71,5 @@
      */
     Game.resume = function() {
         this.paused = false;
-        this.Sound.startBGM(this.player.name);
     }
 })(Game);

@@ -77,7 +77,9 @@
         /**
          * On Play state (starts the game)
          */
-        this.fsm.onplay = this.startGame;
+        this.fsm.onplay = function(e) {
+            this.subject.startGame();
+        };
     }
 
     Game.init = function() {
@@ -98,6 +100,31 @@
         Game.canvas.height     = Game.CANVAS_HEIGHT;
         Game.context.fillStyle = 'rgb(0, 0, 0)';
         Game.context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
+
+        // Game.Vec2     = illuminated.Vec2;
+        // Game.Lamp     = illuminated.Lamp;
+        // Game.Lighting = illuminated.Lighting;
+        // Game.DarkMask = illuminated.DarkMask;
+        // Game.light1   = new Game.Lamp({
+        //     position: new Game.Vec2(Game.player.x, Game.player.y),
+        //     distance: 75,
+        //     diffuse: 0.5,
+        //     radius: 0,
+        //     samples: 1,
+        //     angle: 0,
+        //     roughness: 0
+        // });
+
+        // Game.lighting1 = new Game.Lighting({
+        //     light: Game.light1
+        // });
+        // Game.darkmask = new Game.DarkMask({
+        //     lights: [Game.light1],
+        //     color: 'rgba(0,0,0,1)'
+        // });
+        // Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
+        // Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
+        // Game.darkmask.render(Game.context);
         
         // Adding the canvas to the stage
         document.body.appendChild(Game.canvas);

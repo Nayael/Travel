@@ -5,7 +5,7 @@
      * Loads the images for the game
      */
     Game.addImages = function() {
-        // var xhr = new AjaxRequest();
+        // var xhr = AjaxRequest();
 
         // xhr.onreadystatechange = function() {
         //     if (xhr.readyState != 4) {
@@ -29,10 +29,7 @@
                 splashscreen: this.loader.addImage(this.Assets.IMAGE_PATH + '/menu/splashscreen.png', 'menu')
             },
             backgrounds: {
-                normal: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg1.jpg', 'game'),
-                ghost: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg2.jpg', 'game'),
-                cat: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg3.jpg', 'game'),
-                oldwoman: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/bg4.jpg', 'game')
+                normal: this.loader.addImage(this.Assets.IMAGE_PATH + '/bg/normal.jpg', 'game')
             },
             tiles: {
                 ghost: this.loader.addImage(this.Assets.IMAGE_PATH + '/tiles/ghost.png', 'game'),
@@ -102,16 +99,16 @@
 //           DEBUG           //
 // Test for more slow images //
 ///////////////////////////////
-// for (var i = 0; i < 40; i++) {
-//     Game.Assets[i] = this.loader.addImage('http://thinkpixellab.com/pxloader' + '/slowImage.php?delay=1&time=' + new Date + '&i=' + i, 'game');
-// }
+for (var i = 0; i < 40; i++) {
+    Game.Assets[i] = this.loader.addImage('http://thinkpixellab.com/pxloader' + '/slowImage.php?delay=1&time=' + new Date + '&i=' + i, 'game');
+}
     };    
 
     /**
      * Loads the sounds for the game
      */
     Game.addSounds = function() {
-        // var xhr = new AjaxRequest();
+        // var xhr = AjaxRequest();
 
         // xhr.onreadystatechange = function() {
         //     if (xhr.readyState != 4) {
@@ -303,8 +300,12 @@
             var canvas, context;
             for (var bgName in self.Assets.images.backgrounds) {
                 canvas = self.canvasBuffers[bgName] = document.createElement('canvas');
+                canvas.width = 800;
+                canvas.height = 600;
                 context = canvas.getContext('2d');
-                context.drawImage(self.Assets.images.backgrounds[bgName], 0, 0);
+                context.drawImage(self.Assets.images.backgrounds[bgName],
+                    0, 0, canvas.width, canvas.height,
+                    0, 0, canvas.width, canvas.height);
             }
             self.fsm.play();
         }, 'game');
