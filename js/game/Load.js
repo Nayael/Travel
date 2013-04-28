@@ -1,4 +1,4 @@
-define(['PxLoader', 'PxLoaderImage', 'buzz'], function(PxLoader, PxLoaderImage, buzz) {
+define(['json!../../data/assets/assets.json', 'PxLoader', 'PxLoaderImage', 'buzz'], function(assets, PxLoader, PxLoaderImage, buzz) {
     var Loader = {};
 
     /**
@@ -90,101 +90,22 @@ define(['PxLoader', 'PxLoaderImage', 'buzz'], function(PxLoader, PxLoaderImage, 
      * Loads the sounds for the game
      */
     Loader.addSounds = function(game) {
-        game.Assets.sounds = {
-            bgm: {
-                ghost: new buzz.sound(game.Assets.AUDIO_PATH + '/bgm/ghost/main', {
-                    formats: ['mp3', 'ogg'],
-                    preload: true,
-                    loop: true
-                }),
-                oldwoman: new buzz.sound(game.Assets.AUDIO_PATH + '/bgm/oldwoman/main', {
-                    formats: ['mp3', 'ogg'],
-                    preload: true,
-                    loop: true
-                }),
-                woodsman: new buzz.sound(game.Assets.AUDIO_PATH + '/bgm/woodsman/main', {
-                    formats: ['mp3', 'ogg'],
-                    preload: true,
-                    loop: true
-                }),
-                bat: new buzz.sound(game.Assets.AUDIO_PATH + '/bgm/bat/main', {
-                    formats: ['mp3', 'ogg'],
-                    preload: true,
-                    loop: true
-                }),
-                cat: new buzz.sound(game.Assets.AUDIO_PATH + '/bgm/cat/main', {
-                    formats: ['mp3', 'ogg'],
-                    preload: true,
-                    loop: true
-                }),
-                dove: new buzz.sound(game.Assets.AUDIO_PATH + '/bgm/dove/main', {
-                    formats: ['mp3', 'ogg'],
-                    preload: true,
-                    loop: true
-                }),
-                paper: new buzz.sound(game.Assets.AUDIO_PATH + '/bgm/paper/main', {
-                    formats: ['mp3', 'ogg'],
-                    preload: true,
-                    loop: true
-                }),
-            },
-            sfx: {
-                ghost: {
-                    take: new buzz.sound(game.Assets.AUDIO_PATH + '/sfx/ghost/take', {
-                        formats: ['mp3', 'ogg'],
-                        preload: true,
-                        loop: false
-                    }),
-                    leave: new buzz.sound(game.Assets.AUDIO_PATH + '/sfx/ghost/leave', {
-                        formats: ['mp3', 'ogg'],
-                        preload: true,
-                        loop: false
-                    })
-                },
-                woodsman: {
-                    talk: new buzz.sound(game.Assets.AUDIO_PATH + '/sfx/woodsman/talk', {
-                        formats: ['mp3', 'ogg'],
-                        preload: true,
-                        loop: false
-                    })
-                },
-                bat: {
-                    talk: new buzz.sound(game.Assets.AUDIO_PATH + '/sfx/bat/talk', {
-                        formats: ['mp3', 'ogg'],
-                        preload: true,
-                        loop: false
-                    })
-                },
-                cat: {
-                    talk: new buzz.sound(game.Assets.AUDIO_PATH + '/sfx/cat/talk', {
-                        formats: ['mp3', 'ogg'],
-                        preload: true,
-                        loop: false
-                    })
-                },
-                dove: {
-                    talk: new buzz.sound(game.Assets.AUDIO_PATH + '/sfx/dove/talk', {
-                        formats: ['mp3', 'ogg'],
-                        preload: true,
-                        loop: false
-                    })
-                },
-                paper: {
-                    fx: new buzz.sound(game.Assets.AUDIO_PATH + '/sfx/paper/fx', {
-                        formats: ['mp3', 'ogg'],
-                        preload: true,
-                        loop: false
-                    })
-                },
-                world: {
-                    wind: new buzz.sound(game.Assets.AUDIO_PATH + '/sfx/world/wind', {
-                        formats: ['mp3', 'ogg'],
-                        preload: true,
-                        loop: true
-                    })
+        game.Assets.sounds = {};
+
+        var sound, propChild;
+        for (var prop in assets.audio) {
+            for (propChild in assets.audio[prop]) {
+                if (game.Assets.sounds[prop] == undefined) {
+                    game.Assets.sounds[prop] = {}
                 }
+                sound = assets.audio[prop];
+                game.Assets.sounds[prop][propChild] = new buzz.sound(game.Assets.AUDIO_PATH + sound.path, {
+                    formats: sound.formats,
+                    preload: sound.preload,
+                    loop: sound.loop,
+                });
             }
-        };
+        }
     };
 
     /**

@@ -1,16 +1,18 @@
 require.config({
     baseUrl: 'js',
     paths: {
-        'Keyboard': 'lib/Keyboard',
-        'StateMachine': 'lib/state-machine.min',
-        'PxLoader': 'lib/PxLoader/PxLoader',
-        'PxLoaderImage': 'lib/PxLoader/PxLoaderImage',
-        'buzz': 'lib/buzz',
-        'onEachFrame': 'lib/onEachFrame',
-        'pixastic': 'lib/pixastic/pixastic.core',
-        'invert': 'lib/pixastic/actions/invert',
+        text: 'lib/require/text',
+        json: 'lib/require/json',
 
-        'Load': 'game/Load'
+        Keyboard: 'lib/Keyboard',
+        StateMachine: 'lib/state-machine.min',
+        PxLoader: 'lib/PxLoader/PxLoader',
+        PxLoaderImage: 'lib/PxLoader/PxLoaderImage',
+        buzz: 'lib/buzz',
+        onEachFrame: 'lib/onEachFrame',
+        pixastic: 'lib/pixastic/pixastic.core',
+        invert: 'lib/pixastic/actions/invert'
+
     },
     packages: [{
         name: 'Engine',

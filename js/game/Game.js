@@ -1,12 +1,12 @@
-define(['Engine', 'StateMachine', 'Keyboard', 'Load', 'onEachFrame', 'invert', 'pixastic'],
-function (Engine, StateMachine, Keyboard, Loader, onEachFrame, invert, Pixastic) {
+define(['Engine', 'StateMachine', 'Keyboard', 'game/Load', 'game/World', 'onEachFrame'],
+function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
     var Game = function() {
         this.CANVAS_WIDTH  = 800;
         this.CANVAS_HEIGHT = 576;
 
         this.Assets = {};
-        this.Assets.IMAGE_PATH = 'data/images';
-        this.Assets.AUDIO_PATH = 'data/audio';
+        this.Assets.IMAGE_PATH = 'data/assets/images';
+        this.Assets.AUDIO_PATH = 'data/assets/audio';
 
         // State machine
         this.initFsm();
@@ -114,8 +114,10 @@ function (Engine, StateMachine, Keyboard, Loader, onEachFrame, invert, Pixastic)
      * Starts a new game
      */
     Game.prototype.startGame = function() {
+        this.world = new World();
         this.map = new Engine.Map(this.canvas);
         this.map.setBackground(this.canvasBuffers.normal);
+        this.map.tilemap = this.world.tilemaps.common;
         this.map.tilesheet = this.Assets.images.tiles.ghost;
 
         // Launching the main loop
@@ -132,7 +134,7 @@ function (Engine, StateMachine, Keyboard, Loader, onEachFrame, invert, Pixastic)
 
         // We draw the map
         this.map.drawBackground();
-        // this.map.draw();
+        this.map.draw();
 
         // // Updating all the entities
         // // The index of a NPC corresponds to the position of it in the tilemap
