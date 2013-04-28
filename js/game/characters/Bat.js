@@ -1,5 +1,5 @@
 // The Bat character class file
-(function() {
+define(function() {
     var Bat = function(x, y) {
         this.name  = 'bat';
         this.x     = x || 0;
@@ -177,5 +177,5 @@
         }
     };
 
-    Game.Bat = Bat;
-})();
+    return Bat;
+});

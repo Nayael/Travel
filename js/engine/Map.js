@@ -5,8 +5,9 @@ define(function() {
      * @param {Canvas2D} canvas The map's canvas
      */
     var Map = function(canvas) {
-        this.CANVAS_WIDTH  = canvas.width;
-        this.CANVAS_HEIGHT = canvas.height;
+        this.canvas = canvas;
+        this.CANVAS_WIDTH  = this.canvas.width;
+        this.CANVAS_HEIGHT = this.canvas.height;
         this.background    = null;
         this.overlayAlpha  = 1;
         
@@ -224,6 +225,12 @@ define(function() {
                 self.scrollX += dX < 0 ? 3 : -3;
             }, xInterval);
         }
+    };
+
+    Map.prototype.setBackground = function(background) {
+        this.background = background;
+        this.limitX     = this.background.width - this.CANVAS_WIDTH;
+        this.limitY     = this.background.height - this.CANVAS_HEIGHT;
     };
 
     return Map;

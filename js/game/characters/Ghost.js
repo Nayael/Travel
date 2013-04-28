@@ -1,5 +1,5 @@
 // The Ghost character class file
-(function() {
+define(['Engine'], function(Engine) {
     var Ghost = function(x, y) {
         this.name  = 'ghost';
         this.x     = x || 0;
@@ -16,8 +16,8 @@
         }
         this.controllable = true;
 
-        this.body = new Game.Body(this, 1, 2);
-        this.physics               = new Game.Physics(this);
+        this.body = new Engine.Body(this, 1, 2);
+        this.physics               = new Engine.Physics(this);
         this.physics.jumpHeight    = 90;
         this.physics.useGravity    = false;
         this.physics.useCollisions = false;
@@ -177,5 +177,5 @@
         Game.map.scrollable = false;
     };
 
-    Game.Ghost = Ghost;
-})();
+    return Ghost;
+});

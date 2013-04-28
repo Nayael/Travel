@@ -15,12 +15,11 @@ define(['PxLoader', 'PxLoaderImage', 'buzz'], function(PxLoader, PxLoaderImage, 
                 normal: game.loader.addImage(game.Assets.IMAGE_PATH + '/bg/normal.jpg', 'game')
             },
             tiles: {
+                normal: game.loader.addImage(game.Assets.IMAGE_PATH + '/tiles/normal.png', 'game'),
                 ghost: game.loader.addImage(game.Assets.IMAGE_PATH + '/tiles/ghost.png', 'game'),
                 cat: game.loader.addImage(game.Assets.IMAGE_PATH + '/tiles/cat.png', 'game'),
                 bat: game.loader.addImage(game.Assets.IMAGE_PATH + '/tiles/bat.png', 'game'),
-                woodsman: game.loader.addImage(game.Assets.IMAGE_PATH + '/tiles/woodsman.png', 'game'),
-                oldwoman: game.loader.addImage(game.Assets.IMAGE_PATH + '/tiles/oldwoman.png', 'game'),
-                dove: game.loader.addImage(game.Assets.IMAGE_PATH + '/tiles/dove.png', 'game')
+                oldwoman: game.loader.addImage(game.Assets.IMAGE_PATH + '/tiles/oldwoman.png', 'game')
             },
             characters: {
                 ghost: {

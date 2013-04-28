@@ -1,4 +1,4 @@
-define(['Engine', 'StateMachine', 'Keyboard', 'load', 'onEachFrame', 'invert', 'pixastic'],
+define(['Engine', 'StateMachine', 'Keyboard', 'Load', 'onEachFrame', 'invert', 'pixastic'],
 function (Engine, StateMachine, Keyboard, Loader, onEachFrame, invert, Pixastic) {
     var Game = function() {
         this.CANVAS_WIDTH  = 800;
@@ -115,37 +115,34 @@ function (Engine, StateMachine, Keyboard, Loader, onEachFrame, invert, Pixastic)
      */
     Game.prototype.startGame = function() {
         this.map = new Engine.Map(this.canvas);
-        this.context.drawImage(this.canvasBuffers.normal, 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT, 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+        this.map.setBackground(this.canvasBuffers.normal);
+        this.map.tilesheet = this.Assets.images.tiles.ghost;
 
         // Launching the main loop
-        onEachFrame(this.update);
+        onEachFrame(this.update, 'game', this);
     };
 
     /**
      * The main game loop
      */
     Game.prototype.update = function() {
+        // Clearing the canvas
+        this.context.fillStyle = 'rgb(0, 0, 0)';
+        this.context.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 
-        // var canvas  = Game.canvas,
-        //     context = Game.context;
-
-        // // Clearing the canvas
-        // context.fillStyle = 'rgb(127, 127, 127)';
-        // context.fillRect(0, 0, Game.CANVAS_WIDTH, Game.CANVAS_HEIGHT);
-        // Game.map.drawBackground(context);
-
-        // // We draw the map after the character
-        // Game.map.draw(context);
+        // We draw the map
+        this.map.drawBackground();
+        // this.map.draw();
 
         // // Updating all the entities
         // // The index of a NPC corresponds to the position of it in the tilemap
-        // for (entity in Game.npcs) {
-        //     if (Game.npcs.hasOwnProperty(entity)) {
-        //         npc = Game.npcs[entity];
+        // for (entity in this.npcs) {
+        //     if (this.npcs.hasOwnProperty(entity)) {
+        //         npc = this.npcs[entity];
         //         npc.update();
         //         // If the character steps out of the view, we destroy it
-        //         if (npc.x < -npc.body.width || npc.x > Game.CANVAS_WIDTH || npc.y < -npc.body.height || npc.y > Game.CANVAS_HEIGHT) {
-        //             delete Game.npcs[entity];
+        //         if (npc.x < -npc.body.width || npc.x > this.CANVAS_WIDTH || npc.y < -npc.body.height || npc.y > this.CANVAS_HEIGHT) {
+        //             delete this.npcs[entity];
         //             continue;
         //         }
         //         npc.render(context);
@@ -154,19 +151,19 @@ function (Engine, StateMachine, Keyboard, Loader, onEachFrame, invert, Pixastic)
 
 
         // // Updating and rendering the player's character
-        // Game.player.update();
-        // if (!Game.paused) {
-        //     Game.player.render(context);
-        //     Game.player.control();
-        //     if (Game.player.renderFX) {
-        //         Game.player.renderFX();
+        // this.player.update();
+        // if (!this.paused) {
+        //     this.player.render(context);
+        //     this.player.control();
+        //     if (this.player.renderFX) {
+        //         this.player.renderFX();
         //     }
         // }
 
-        // if (Game.intensity > 0){
-        //     Game.context.fillStyle = 'rgba(0, 0, 0, '+ Game.intensity + ')';
-        //     Game.context.fillRect(0, 0, Game.canvas.width, Game.canvas.height);
-        //     Game.intensity -= 0.005;
+        // if (this.intensity > 0){
+        //     this.context.fillStyle = 'rgba(0, 0, 0, '+ this.intensity + ')';
+        //     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        //     this.intensity -= 0.005;
         // }
     };
 
@@ -184,5 +181,6 @@ function (Engine, StateMachine, Keyboard, Loader, onEachFrame, invert, Pixastic)
         this.paused = false;
     }
 
-    return new Game();
+    var game = new Game();
+    return game;
 });

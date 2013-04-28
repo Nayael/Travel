@@ -28,9 +28,15 @@
 
     var requestAnimationFrameCallbacks = {};
 
-    window.onEachFrame = function(cb, label) {
+    window.onEachFrame = function(cb, label, target) {
+        callback = cb;
+        if (target != undefined) {
+            callback = function() {
+                cb.apply(target);
+            }
+        }
         var _cb = function() {
-            cb();
+            callback();
 
             Time.time = Time.time || Date.now();
             var t = Date.now();

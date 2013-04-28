@@ -1,7 +1,7 @@
-// The Cat class
-(function() {
-    var Cat = function(x, y) {
-        this.name  = 'cat';
+// The Woodsman class
+define(function() {
+    var Woodsman = function(x, y) {
+        this.name  = 'woodsman';
         this.x     = x || 0;
         this.y     = y || 0;
         this.realX = this.x + Game.map.scrollX;
@@ -16,7 +16,7 @@
         }
         this.controllable = false;
 
-        this.body = new Game.Body(this, 1, 1);
+        this.body = new Game.Body(this, 1, 3);
 
         this.physics = new Game.Physics(this);
         this.physics.jumpHeight = 20;
@@ -30,7 +30,7 @@
     /**
      * Called on each frame
      */
-    Cat.prototype.update = function() {
+    Woodsman.prototype.update = function() {
         // The character scroll with the map if he is not controlled by the player
         if (this == Game.player && this.controllable) {
             this.realX = this.x + Game.map.scrollX;
@@ -53,16 +53,16 @@
             if (this.x <= 0) {
                 this.x = 1;
                 this.physics.v.x = 0;
-            } else if (this.x >= Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS) {
-                this.x = Game.CANVAS_WIDTH - this.body.t_width * Game.map.TS - 1;
+            } else if (this.x >= Game.CANVAS_WIDTH - this.body.width) {
+                this.x = Game.CANVAS_WIDTH - this.body.width - 1;
                 this.physics.v.x = 0;
             }
 
             if (this.y <= 0) {
                 this.y = 1;
                 this.physics.v.y = 0;
-            } else if (this.y >= Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20) {
-                this.y = Game.CANVAS_HEIGHT - this.body.t_height * Game.map.TS + 20 - 1;
+            } else if (this.y >= Game.CANVAS_HEIGHT - this.body.height + 20) {
+                this.y = Game.CANVAS_HEIGHT - this.body.height + 20 - 1;
                 this.physics.v.y = 0;
             }
         }
@@ -73,29 +73,29 @@
             this.state = 'WALK_L';
         }
 
-        if (this.realX > realX0 && this.previousState != 'JUMPING_R' && this.previousState != 'FALLING_R') {
+        if (this.realX > realX0 && this.previousState != 'JUMPING_R' && this.previousState != 'FALLING_R' && this.previousState != 'WALK_R') {
             this.state = 'WALK_R';
+            this.frame = 7;
         }
 
         if (this.physics.onFloor && this.realX == realX0) {
             this.state = (this.previousState == 'WALK_R' || this.previousState == 'IDLE_RIGHT' || this.previousState == 'FALLING_R' || this.previousState == 'JUMPING_R') ? 'IDLE_RIGHT' : 'IDLE_LEFT';
         }
-
         if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_R' && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
             this.state = 'JUMPING_R';
-            this.frame = 7;
-        } else if (!this.physics.onFloor && this.physics.jumpForces.length == 0 && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
+            this.frame = 5;
+        }else if (!this.physics.onFloor && this.physics.jumpForces.length <= 0 && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
             this.state = 'FALLING_R';
-            //this.frame = 3;
+            this.frame = 5;
         }
 
         if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_L' && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
             this.state = 'JUMPING_L';
         } else if (!this.physics.onFloor && this.physics.jumpForces.length == 0 && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
             this.state = 'FALLING_L';
-            this.frame = 6;
+            this.frame = 5;
         }
-        // Update the scrolling if the character is controlled by the player
+
         if (this != Game.player || !this.controllable || !Game.map.scrollable) {
             return;
         }
@@ -104,77 +104,77 @@
     };
 
     /**
-     * Renders the cat
+     * Renders the Woodsman
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
-    Cat.prototype.render = function(context) {
+    Woodsman.prototype.render = function(context) {
         switch (this.state) {
             case 'IDLE_RIGHT':
-                context.drawImage(Game.images[this.name].idlerImage, 35 * this.frame, 0, 35, 34, this.x - 3, this.y - 2, 35, 34);
-                if (Game.frameCount % 15 == 0) {
+                context.drawImage(Game.images[this.name].idlerImage, 47 * this.frame, 0, 47, 108, this.x - 10, this.y - 6, 47, 108);
+                if (Game.frameCount % 20 == 0) {
                     this.frame++;
                 }
-                if (this.frame >= 4) {
+                if (this.frame >= 2) {
                     this.frame = 0;
                 }
                 break;
 
             case 'IDLE_LEFT':
-                context.drawImage(Game.images[this.name].idlelImage, 35 * this.frame, 0, 35, 34, this.x, this.y - 2, 35, 34);
-                if (Game.frameCount % 15 == 0) {
+                context.drawImage(Game.images[this.name].idlelImage, 47 * this.frame, 0, 47, 108, this.x - 12, this.y - 6, 47, 108);
+                if (Game.frameCount % 20 == 0) {
                     this.frame++;
                 }
-                if (this.frame >= 4) {
+                if (this.frame >= 2) {
                     this.frame = 0;
                 }
                 break;
 
             case 'WALK_R':
-                context.drawImage(Game.images[this.name].walkrImage, 44 * (this.frame), 0, 44, 35, this.x - 12, this.y - 2, 44, 35);
-                if (Game.frameCount % 6  == 0) {
-                    this.frame++;
+                context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame), 0, 59, 112, this.x - 12, this.y - 6, 59, 112);
+                if (Game.frameCount % 8  == 0) {
+                    this.frame--;
                 }
-                if (this.frame >= 5) {
-                    this.frame = 0;
+                if (this.frame <= 0) {
+                    this.frame = 7;
                 }
                 break;
 
             case 'WALK_L':
-                context.drawImage(Game.images[this.name].walklImage, 44 * (this.frame), 0, 44, 35, this.x, this.y - 2, 44, 35);
-                if (Game.frameCount % 6  == 0) {
+                context.drawImage(Game.images[this.name].walklImage, 59 * (this.frame), 0, 59, 112, this.x - 12, this.y - 6, 59, 112);
+                if (Game.frameCount % 8  == 0) {
                     this.frame++;
                 }
-                if (this.frame >= 5) {
+                if (this.frame >= 8) {
                     this.frame = 0;
                 }
                 break;
 
             case 'JUMPING_R':
-                context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x - 30, this.y - 2, 61, 42);
+                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 15, this.y - 2, 57, 111);
                 if (Game.frameCount % 5  == 0) {
                     this.frame--;
                 }
-                if (this.frame <= 3) {
-                    this.frame = 3;
+                if (this.frame <= 1) {
+                    this.frame = 2;
                 }
                 break;
 
             case 'FALLING_R':
-                context.drawImage(Game.images[this.name].jumprImage, 61 * (this.frame), 0, 61, 42, this.x - 30, this.y - 2, 61, 42);
+                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 15, this.y - 2, 57, 111);
                 break;
 
                 case 'JUMPING_L':
-                context.drawImage(Game.images[this.name].jumplImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
+                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
                 if (Game.frameCount % 5  == 0) {
                     this.frame++;
                 }
-                if (this.frame >= 6) {
-                    this.frame = 6;
+                if (this.frame >= 5) {
+                    this.frame = 5;
                 }
                 break;
 
             case 'FALLING_L':
-                context.drawImage(Game.images[this.name].jumplImage, 61 * (this.frame), 0, 61, 42, this.x, this.y - 2, 61, 42);
+                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
                 break;
         }
     };
@@ -182,18 +182,13 @@
     /**
      * Renders the special effect on the map
      */
-    Cat.prototype.renderFX = function() {
-        // if (Game.player == this) {
-        //     Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
-        //     Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
-        //     Game.darkmask.render(Game.context);
-        // }
+    Woodsman.prototype.renderFX = function() {
     };
 
     /**
-     * Applies the player's controls on the cat
+     * Applies the player's controls on the Woodsman
      */
-    Cat.prototype.control = function() {
+    Woodsman.prototype.control = function() {
         if (!this.controllable) {
             return;
         }
@@ -213,7 +208,7 @@
         }
 
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && (this.previousState == 'JUMPING_R' || this.previousState == 'FALLING_R') && !this.physics.onFloor) {
-            this.state = 'JUMPING_R';
+            //this.state = 'JUMPING_R';
             this.physics.addForce(this.speed.x, 0);
         }
 
@@ -240,7 +235,8 @@
     /**
      * Triggered when the character is being possessed
      */
-    Cat.prototype.onPossess = function() {
+    Woodsman.prototype.onPossess = function() {
+        Game.map.tilemap = window.maps.woodsman;     // Getting the map from the global object
         var self = this;
         setTimeout(function() {
             self.controllable = true;
@@ -251,7 +247,7 @@
     /**
      * Triggered when the character is being left
      */
-    Cat.prototype.onLeave = function() {
+    Woodsman.prototype.onLeave = function() {
         if (this.state == 'IDLE_LEFT' || this.state == 'WALK_L') {
             this.state = 'IDLE_LEFT';
         } else{
@@ -260,12 +256,12 @@
     };
 
     /**
-     * makes the character jump
+     * Makes the character jump
      * @return {[type]} [description]
      */
-    Cat.prototype.jump = function() {
+    Woodsman.prototype.jump = function() {
         this.physics.addJumpForce(-this.speed.y);
     };
 
-    Game.Cat = Cat;
-})();
+    return Woodsman;
+});

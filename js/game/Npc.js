@@ -1,5 +1,4 @@
-// The Npc class
-(function() {
+define(function() {
     var Npc = {};
 
     // The list of all the NPCs available in the game, and their values in the tilemap
@@ -90,5 +89,5 @@
 
     Npc.STUN_TIME = 800;    // The time during which a character is not controllable after the possession
 
-    Game.Npc = Npc;
-})();
+    return Npc;
+});

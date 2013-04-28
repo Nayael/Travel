@@ -1,5 +1,5 @@
 // The Oldwoman class
-(function() {
+define(function() {
     var Oldwoman = function(x, y) {
         this.name  = 'oldwoman';
         this.x     = x || 0;
@@ -187,5 +187,5 @@
         }
     };
 
-    Game.Oldwoman = Oldwoman;
-})();
+    return Oldwoman;
+});

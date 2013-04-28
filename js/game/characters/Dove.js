@@ -1,7 +1,7 @@
-// The Colombe character class file
-(function() {
-    var Colombe = function(x, y) {
-        this.name  = 'colombe';
+// The Dove character class file
+define(function() {
+    var Dove = function(x, y) {
+        this.name  = 'dove';
         this.x     = x || 0;
         this.y     = y || 0;
         this.realX = this.x + Game.map.scrollX;
@@ -30,7 +30,7 @@
     /**
      * Called on each frame
      */
-    Colombe.prototype.update = function() {
+    Dove.prototype.update = function() {
         if (this == Game.player && this.controllable) {
             this.realX = this.x + Game.map.scrollX;
             this.realY = this.y + Game.map.scrollY;
@@ -96,7 +96,7 @@
     /**
      * Renders the special effect on the map
      */
-    /*Colombe.prototype.renderFX = function() {
+    /*Dove.prototype.renderFX = function() {
         if (Game.player == this) {
              Game.lighting1.light.position = new Game.Vec2(Game.player.x + Game.player.body.width / 2, Game.player.y + Game.player.body.height / 2);
              Game.darkmask.compute(Game.canvas.width, Game.canvas.height);
@@ -108,7 +108,7 @@
      * Renders the character
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
-    Colombe.prototype.render = function(context) {
+    Dove.prototype.render = function(context) {
         switch (this.state){
             case 'IDLE_R':
                 context.drawImage(Game.images[this.name].idlerImage, 30 * (this.frame),0, 30,30,this.x,this.y,30,30);
@@ -154,7 +154,7 @@
     /**
      * Applies the player's controls on the character
      */
-    Colombe.prototype.control = function() {
+    Dove.prototype.control = function() {
         if (this.controllable && Keyboard.isDown(Keyboard.SPACE) && this.doesJump == true) {
             this.doesJump = false;
             this.physics.addJumpForce(-this.speed.y)
@@ -197,7 +197,7 @@
     /**
      * Triggered when the character is being possessed
      */
-    Colombe.prototype.onPossess = function() {
+    Dove.prototype.onPossess = function() {
         var self = this;
         setTimeout(function() {
             self.controllable = true;
@@ -208,7 +208,7 @@
     /**
      * Triggered when the character is being left
      */
-    Colombe.prototype.onLeave = function() {
+    Dove.prototype.onLeave = function() {
         if (this.state == 'WALK_L' || this.state == 'WALK_L') {
             this.state = 'WALK_L';
         } else{
@@ -216,5 +216,5 @@
         }
     };
 
-    Game.Colombe = Colombe;
-})();
+    return Dove;
+});

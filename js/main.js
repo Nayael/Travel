@@ -8,7 +8,9 @@ require.config({
         'buzz': 'lib/buzz',
         'onEachFrame': 'lib/onEachFrame',
         'pixastic': 'lib/pixastic/pixastic.core',
-        'invert': 'lib/pixastic/actions/invert'
+        'invert': 'lib/pixastic/actions/invert',
+
+        'Load': 'game/Load'
     },
     packages: [{
         name: 'Engine',
@@ -37,6 +39,6 @@ require.config({
     }
 });
 
-require(['game'], function(game) {
+require(['game/Game'], function(game) {
     game.init();    // We launch the game' initialisation
 });
