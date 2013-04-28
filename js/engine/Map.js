@@ -1,39 +1,41 @@
 // The Map class file
-(function() {
+define(function() {
     /**
      * @constructor
-     * @param {integer} width  The canvas' width
-     * @param {integer} height The canvas' height
+     * @param {Canvas2D} canvas The map's canvas
      */
-    var Map = function(width, height) {
-        this.CANVAS_WIDTH = width;
-        this.CANVAS_HEIGHT = height;
+    var Map = function(canvas) {
+        this.CANVAS_WIDTH  = canvas.width;
+        this.CANVAS_HEIGHT = canvas.height;
+        this.background    = null;
+        this.overlayAlpha  = 1;
+        
         this.yShiftUp   = 0;    // The y position of the square tiles in the tiles spritesheet
         this.yShiftDown = 4;    // The height of extra graphics on the bottom of the tile
         this.TS         = 32;   // The size of a tile in pixels
         this.obstacles  = [1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 50];   // Indexes in the tilemap that correspond to physical obstacles
-        this.npcs       = [200, 300, 400, 500, 600];   // Indexes in the tilemap that correspond to physical obstacles
+        this.npcs       = [200, 300, 400, 500, 600];
         this.items      = [21, 22, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1000];
-        this.tilemap    = window.maps.basic;        // Getting the map from the global object
-        this.overlayAlpha = 1;
+        this.tilemap    = [];        // Getting the map from the global object
+        this.tilesheet  = null;
 
         this.scrollable = true;
         this.scrollX    = 512;
         this.scrollY    = 1792;
-
         this.scrollXMin = this.CANVAS_WIDTH >> 2;
         this.scrollXMax = this.CANVAS_WIDTH - this.scrollXMin;
-        this.limitX     = 6400 - this.CANVAS_WIDTH;
         this.scrollYMin = this.CANVAS_HEIGHT >> 2;
         this.scrollYMax = this.CANVAS_HEIGHT - this.scrollYMin;
-        this.limitY     = 4032 - this.CANVAS_HEIGHT;
+        
+        this.limitX     = 6400 - this.CANVAS_WIDTH;
+        this.limitY     = 2400 - this.CANVAS_HEIGHT;
     };
 
     /**
      * Draws the map
-     * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
-    Map.prototype.draw = function(context) {
+    Map.prototype.draw = function() {
+        var context = this.canvas.getContext('2d');
         var rows = this.CANVAS_HEIGHT / this.TS + 2,
             cols, tileX, tileY;
         for (var i = ((this.scrollY / this.TS) | 0), j = 0; i < ((this.scrollY / this.TS) | 0) + rows; i++) {
@@ -41,17 +43,19 @@
             for (j = ((this.scrollX / this.TS) | 0); j < cols + ((this.scrollX / this.TS) | 0); j++) {
                 tileX = ((j * this.TS - this.scrollX)) | 0;
                 tileY = ((i * this.TS - this.scrollY) - this.yShiftUp) | 0;
+
                 // Drawing tiles
                 if (((this.obstacles.indexOf(this.tilemap[i][j]) != -1 && this.tilemap[i][j] != 50) || this.items.indexOf(this.tilemap[i][j]) != -1) && tileX > -this.TS && tileX < this.CANVAS_WIDTH && tileY > -this.TS && tileY < this.CANVAS_HEIGHT) {
-                    // context.drawImage(Game.images[entity.name].tiles,
-                        // this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShiftUp + this.yShiftDown,
-                        // tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
+                    context.drawImage(this.tilesheet,
+                        this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShiftUp + this.yShiftDown,
+                        tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
+
                 // Creating NPCs that will be drawn
                 } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < this.CANVAS_WIDTH && tileY > -this.TS && tileY < this.CANVAS_HEIGHT) {
                     // If the NPC ins't already on the stage
-                    if (Game.npcs[i * this.tilemap[i].length + j] == undefined && entity.npcMapIndex != (i * this.tilemap[i].length + j)) {
-                        // Game.Npc.pop(this.tilemap[i][j], j, i);
-                    }
+                    // if (Game.npcs[i * this.tilemap[i].length + j] == undefined && entity.npcMapIndex != (i * this.tilemap[i].length + j)) {
+                    //     Game.Npc.pop(this.tilemap[i][j], j, i);
+                    // }
                 }
             }
         }
@@ -78,11 +82,13 @@
 
     /**
      * Draws the background
-     * @param  {Entity} entity The entity that triggered the scrolling
-     * @param  {Canvas2DContext} context The context of the canvas to draw in
      */
-    Map.prototype.drawBackground = function(entity, context) {
-        // context.drawImage(Game.contextBuffers[entity.name].canvas, this.scrollX, this.scrollY, this.CANVAS_WIDTH, this.CANVAS_HEIGHT, 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+    Map.prototype.drawBackground = function() {
+        var context = this.canvas.getContext('2d');
+        context.drawImage(this.background,
+            this.scrollX, this.scrollY, this.CANVAS_WIDTH, this.CANVAS_HEIGHT,
+            0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+        
         // if (Game.previousPlayer && Game.previousPlayer.useTileFade && this.overlayAlpha > 0) {
         //     context.globalAlpha = this.overlayAlpha;
         //     context.drawImage(Game.contextBuffers[Game.previousPlayer.name].canvas, this.scrollX, this.scrollY);
@@ -96,7 +102,7 @@
         //     context.globalAlpha = 1;
         // }
 
-        var bgXIndex = ((this.scrollX / this.CANVAS_WIDTH) | 0),
+        /*var bgXIndex = ((this.scrollX / this.CANVAS_WIDTH) | 0),
             bgYIndex = ((this.scrollY / this.CANVAS_HEIGHT) | 0),
             yMin = (bgYIndex > 0 ? bgYIndex - 1 : bgYIndex),
             yMax = (this.scrollY < this.limitY ? bgYIndex + 1 : (bgYIndex)),
@@ -110,7 +116,8 @@
                     // 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT,
                     // realX, realY, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
             }
-        }
+        }*/
+
         // if (Game.previousPlayer && Game.previousPlayer.useTileFade && this.overlayAlpha > 0) {
         //     context.globalAlpha = this.overlayAlpha;
         //     for (i = yMin; i <= yMax; i++) {
@@ -219,5 +226,5 @@
         }
     };
 
-    window.Map = Map;
-})();
+    return Map;
+});

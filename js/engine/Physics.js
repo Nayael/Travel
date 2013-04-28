@@ -1,5 +1,5 @@
 // The Physics class for an entity
-(function() {
+define(function() {
     var map = [];
 
     var Physics = function(entity) {
@@ -206,5 +206,5 @@
         return false;
     };
 
-    this.Physics = Physics;
-})();
+    return Physics;
+});

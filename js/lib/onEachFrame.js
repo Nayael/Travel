@@ -20,40 +20,40 @@
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
-}());
 
-var Time = {
-    time: null,
-    deltaTime: null
-};
-
-var requestAnimationFrameCallbacks = {};
-
-function onEachFrame(cb, label) {
-    var _cb = function() {
-        cb();
-
-        Time.time = Time.time || Date.now();
-        var t = Date.now();
-        Time.deltaTime = (t - Time.time) / 100;
-        Time.time = t;
-        
-        var anim = requestAnimationFrame(_cb);
-        if (label) {
-            requestAnimationFrameCallbacks[label] = anim;
-        }
+    window.Time = {
+        time: null,
+        deltaTime: null
     };
-    return _cb();
-};
 
-function cancelOnEachFrame(index) {
-    if (typeof index == 'string') { // If the given index is a label, cancel the callback with the given label
-        var label = index;
-        index = requestAnimationFrameCallbacks[label];
-        delete requestAnimationFrameCallbacks[label];
+    var requestAnimationFrameCallbacks = {};
+
+    window.onEachFrame = function(cb, label) {
+        var _cb = function() {
+            cb();
+
+            Time.time = Time.time || Date.now();
+            var t = Date.now();
+            Time.deltaTime = (t - Time.time) / 100;
+            Time.time = t;
+            
+            var anim = requestAnimationFrame(_cb);
+            if (label) {
+                requestAnimationFrameCallbacks[label] = anim;
+            }
+        };
+        return _cb();
+    };
+
+    onEachFrame.cancel = function(index) {
+        if (typeof index == 'string') { // If the given index is a label, cancel the callback with the given label
+            var label = index;
+            index = requestAnimationFrameCallbacks[label];
+            delete requestAnimationFrameCallbacks[label];
+        }
+        if (index == undefined) {
+            return;
+        }
+        window.cancelAnimationFrame(index);
     }
-    if (index == undefined) {
-        return;
-    }
-    window.cancelAnimationFrame(index);
-}
+}());

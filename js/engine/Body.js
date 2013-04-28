@@ -1,5 +1,5 @@
 // The Body class for an entity
-(function() {
+define(function() {
     var Body = function(entity, t_width, t_height) {
         this.entity = entity;
 
@@ -33,5 +33,5 @@
         return !(leftThis > rightTile || leftTile > rightThis || topThis > bottomTile || topTile > bottomThis);
     };
 
-    window.Body = Body;
-})();
+    return Body;
+});

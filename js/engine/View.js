@@ -1,5 +1,5 @@
 // The View class for an entity
-(function() {
+define(function() {
     var View = function(entity, data) {
         this.entity      = entity;
         this.sprite      = data.sprite;
@@ -37,5 +37,5 @@
         }
     };
 
-    window.View = View;
-})();
+    return View;
+});
