@@ -4,9 +4,9 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
         this.CANVAS_WIDTH  = 800;
         this.CANVAS_HEIGHT = 576;
 
-        this.Assets = {};
-        this.Assets.IMAGE_PATH = 'data/assets/images';
-        this.Assets.AUDIO_PATH = 'data/assets/audio';
+        this.assets = {};
+        this.assets.IMAGE_PATH = 'data/assets/images';
+        this.assets.AUDIO_PATH = 'data/assets/audio';
 
         // State machine
         this.initFsm();
@@ -53,7 +53,7 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
         this.fsm.onload = function(e) {
             var game = this.subject,
                 loaderAnim = new Engine.View(null, {
-                    sprite: game.Assets.images.loading,
+                    sprite: game.assets.images.loading,
                     localX: (game.CANVAS_WIDTH >> 1) - (71 >> 1),
                     localY: (game.CANVAS_HEIGHT >> 2) - (72 >> 1),
                     width: 71,
@@ -90,7 +90,7 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
                         Loader.loadGame(game);    // Start the loading of the game assets
                     }
                 };
-            game.context.drawImage(game.Assets.images.menus.splashscreen, 0, 0);
+            game.context.drawImage(game.assets.images.menus.splashscreen, 0, 0);
             addEventListener('keydown', onKeyDownMenu);
         };
 
@@ -114,11 +114,12 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
      * Starts a new game
      */
     Game.prototype.startGame = function() {
-        this.world = new World();
+        this.entities = [];
+        this.player = null;
+        
         this.map = new Engine.Map(this.canvas);
-        this.map.setBackground(this.canvasBuffers.normal);
-        this.map.tilemap = this.world.tilemaps.common;
-        this.map.tilesheet = this.Assets.images.tiles.ghost;
+        this.world = new World();
+        this.world.setEnvironment('ghost', this.map, this.assets);
 
         // Launching the main loop
         onEachFrame(this.update, 'game', this);

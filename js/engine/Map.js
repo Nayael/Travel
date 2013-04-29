@@ -10,6 +10,12 @@ define(function() {
         this.CANVAS_HEIGHT = this.canvas.height;
         this.background    = null;
         this.overlayAlpha  = 1;
+
+
+        this.buffer = document.createElement('canvas');
+        this.buffer.width = this.canvas.width;
+        this.buffer.height = this.canvas.height;
+        this.bufferCtx = this.buffer.getContext('2d');
         
         this.yShiftUp   = 0;    // The y position of the square tiles in the tiles spritesheet
         this.yShiftDown = 4;    // The height of extra graphics on the bottom of the tile
@@ -39,6 +45,8 @@ define(function() {
         var context = this.canvas.getContext('2d');
         var rows = this.CANVAS_HEIGHT / this.TS + 2,
             cols, tileX, tileY;
+
+        this.bufferCtx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         for (var i = ((this.scrollY / this.TS) | 0), j = 0; i < ((this.scrollY / this.TS) | 0) + rows; i++) {
             cols = this.CANVAS_WIDTH / this.TS + 2;
             for (j = ((this.scrollX / this.TS) | 0); j < cols + ((this.scrollX / this.TS) | 0); j++) {
@@ -47,7 +55,7 @@ define(function() {
 
                 // Drawing tiles
                 if (((this.obstacles.indexOf(this.tilemap[i][j]) != -1 && this.tilemap[i][j] != 50) || this.items.indexOf(this.tilemap[i][j]) != -1) && tileX > -this.TS && tileX < this.CANVAS_WIDTH && tileY > -this.TS && tileY < this.CANVAS_HEIGHT) {
-                    context.drawImage(this.tilesheet,
+                    this.bufferCtx.drawImage(this.tilesheet,
                         this.tilemap[i][j] * this.TS, 0, this.TS, this.TS + this.yShiftUp + this.yShiftDown,
                         tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
 
@@ -60,6 +68,7 @@ define(function() {
                 }
             }
         }
+        context.drawImage(this.buffer, 0, 0);
 
         // if (Game.previousPlayer && Game.previousPlayer.useTileFade && this.overlayAlpha > 0) {
         //     context.globalAlpha = this.overlayAlpha;
