@@ -2,43 +2,43 @@
     "audio": {
         "bgm": {
             "ghost": {
-                "path": "/bgm/ghost/main",
+                "path": "bgm/ghost/main",
                 "formats": ["mp3", "ogg"],
                 "preload": true,
                 "loop": true
             },
             "oldwoman": {
-                "path": "/bgm/oldwoman/main",
+                "path": "bgm/oldwoman/main",
                 "formats": ["mp3", "ogg"],
                 "preload": true,
                 "loop": true
             },
             "woodsman": {
-                "path": "/bgm/woodsman/main",
+                "path": "bgm/woodsman/main",
                 "formats": ["mp3", "ogg"],
                 "preload": true,
                 "loop": true
             },
             "bat": {
-                "path": "/bgm/bat/main",
+                "path": "bgm/bat/main",
                 "formats": ["mp3", "ogg"],
                 "preload": true,
                 "loop": true
             },
             "cat": {
-                "path": "/bgm/cat/main",
+                "path": "bgm/cat/main",
                 "formats": ["mp3", "ogg"],
                 "preload": true,
                 "loop": true
             },
             "dove": {
-                "path": "/bgm/dove/main",
+                "path": "bgm/dove/main",
                 "formats": ["mp3", "ogg"],
                 "preload": true,
                 "loop": true
             },
             "paper": {
-                "path": "/bgm/paper/main",
+                "path": "bgm/paper/main",
                 "formats": ["mp3", "ogg"],
                 "preload": true,
                 "loop": true
@@ -47,13 +47,13 @@
         "sfx": {
             "ghost": {
                 "take": {
-                    "path": "/sfx/ghost/take",
+                    "path": "sfx/ghost/take",
                     "formats": ["mp3", "ogg"],
                     "preload": true,
                     "loop": false
                 },
                 "leave": {
-                    "path": "/sfx/ghost/leave",
+                    "path": "sfx/ghost/leave",
                     "formats": ["mp3", "ogg"],
                     "preload": true,
                     "loop": false
@@ -61,7 +61,7 @@
             },
             "woodsman": {
                 "talk": {
-                    "path": "/sfx/woodsman/talk",
+                    "path": "sfx/woodsman/talk",
                     "formats": ["mp3", "ogg"],
                     "preload": true,
                     "loop": false
@@ -69,7 +69,7 @@
             },
             "bat": {
                 "talk": {
-                    "path": "/sfx/bat/talk",
+                    "path": "sfx/bat/talk",
                     "formats": ["mp3", "ogg"],
                     "preload": true,
                     "loop": false
@@ -77,7 +77,7 @@
             },
             "cat": {
                 "talk": {
-                    "path": "/sfx/cat/talk",
+                    "path": "sfx/cat/talk",
                     "formats": ["mp3", "ogg"],
                     "preload": true,
                     "loop": false
@@ -85,7 +85,7 @@
             },
             "dove": {
                 "talk": {
-                    "path": "/sfx/dove/talk",
+                    "path": "sfx/dove/talk",
                     "formats": ["mp3", "ogg"],
                     "preload": true,
                     "loop": false
@@ -93,7 +93,7 @@
             },
             "paper": {
                 "fx": {
-                    "path": "/sfx/paper/fx",
+                    "path": "sfx/paper/fx",
                     "formats": ["mp3", "ogg"],
                     "preload": true,
                     "loop": false
@@ -101,7 +101,7 @@
             },
             "world": {
                 "wind": {
-                    "path": "/sfx/world/wind",
+                    "path": "sfx/world/wind",
                     "formats": ["mp3", "ogg"],
                     "preload": true,
                     "loop": true
@@ -110,6 +110,74 @@
         }
     },
     "images": {
-        
+        "loading": ["menu/loading.png", "loading"],
+        "menus": {
+            "splashscreen": ["menu/splashscreen.png", "menu"]
+        },
+        "backgrounds": {
+            "common": ["bg/common.jpg", "game"]
+        },
+        "tiles": {
+            "common": ["tiles/common.png", "game"],
+            "ghost": ["tiles/ghost.png", "game"],
+            "cat": ["tiles/cat.png", "game"],
+            "bat": ["tiles/bat.png", "game"],
+            "oldwoman": ["tiles/oldwoman.png", "game"]
+        },
+        "characters": {
+            "ghost": {
+                "idleSprite": ["sprites/ghost/right.png", "game"],
+                "walkRSprite": ["sprites/ghost/right.png", "game"],
+                "walkLSprite": ["sprites/ghost/left.png", "game"],
+                "possLSprite": ["sprites/ghost/poss_l.png", "game"],
+                "possRSprite": ["sprites/ghost/poss_r.png", "game"]
+            },
+            "cat": {
+                "idleRSprite": ["sprites/cat/idle_right.png", "game"],
+                "idleLSprite": ["sprites/cat/idle_left.png", "game"],
+                "walkRSprite": ["sprites/cat/right.png", "game"],
+                "walkLSprite": ["sprites/cat/left.png", "game"],
+                "jumpRSprite": ["sprites/cat/jump_r.png", "game"],
+                "jumpLSprite": ["sprites/cat/jump_l.png", "game"]
+            },
+            "oldwoman": {
+                "idleRSprite": ["sprites/oldwoman/idle_right.png", "game"],
+                "idleLSprite": ["sprites/oldwoman/idle_left.png", "game"],
+                "walkRSprite": ["sprites/oldwoman/right.png", "game"],
+                "walkLSprite": ["sprites/oldwoman/left.png", "game"]
+            },
+            "woodsman": {
+                "idleRSprite": ["sprites/woodsman/idle_right.png", "game"],
+                "idleLSprite": ["sprites/woodsman/idle_left.png", "game"],
+                "walkRSprite": ["sprites/woodsman/right.png", "game"],
+                "walkLSprite": ["sprites/woodsman/left.png", "game"],
+                "jumpRSprite": ["sprites/woodsman/jump_r.png", "game"],
+                "jumpLSprite": ["sprites/woodsman/jump_l.png", "game"]
+            },
+            "bat": {
+                "walkRSprite": ["sprites/bat/right.png", "game"],
+                "walkLSprite": ["sprites/bat/left.png", "game"]
+            },
+            "dove": {
+                "walkRSprite": ["sprites/dove/right.png", "game"],
+                "walkLSprite": ["sprites/dove/left.png", "game"],
+                "idleRSprite": ["sprites/dove/idle_right.png", "game"],
+                "idleLSprite": ["sprites/dove/idle_left.png", "game"]
+            }
+        },
+        "items": {
+            "papers": {
+                "1": ["papers/1.png", "game"],
+                "2": ["papers/2.png", "game"],
+                "3": ["papers/3.png", "game"],
+                "4": ["papers/4.png", "game"],
+                "5": ["papers/5.png", "game"],
+                "6": ["papers/6.png", "game"],
+                "7": ["papers/7.png", "game"],
+                "8": ["papers/8.png", "game"],
+                "9": ["papers/9.png", "game"],
+                "10": ["papers/10.png", "game"]
+            }
+        }
     }
 }

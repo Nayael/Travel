@@ -2,110 +2,74 @@ define(['json!../../data/assets/assets.json', 'PxLoader', 'PxLoaderImage', 'buzz
     var Loader = {};
 
     /**
+     * Parses the images data from the json file and add the images to PxLoader
+     * @param  {Game} game The game instance
+     * @param  {object} data The file data
+     * @return {object}      The new object with assets added to PxLoader
+     */
+    var parseImageData = function(game, data) {
+        var obj = data, prop, current;
+        for (prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                current = obj[prop];
+                if (typeof current === 'object' && current.length == undefined) {
+                    parseImageData(game, current)
+                } else {
+                    obj[prop] = game.loader.addImage(game.assets.IMAGE_PATH + current[0], current[1]);
+                }
+            }
+        }
+        return obj;
+    };
+
+
+    /**
+     * Parses the sounds data from the json file and add the sounds to Buzz
+     * @param  {Game} game The game instance
+     * @param  {object} data The file data
+     * @return {object}      The new object with assets added to Buzz
+     */
+    var parseSoundData = function(game, data) {
+        var obj = data, prop, current;
+        for (prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                current = obj[prop];
+                if (typeof current === 'object' && current.length == undefined) {
+                    if (current.path && current.formats && current.preload && current.loop) {
+                        obj[prop] = new buzz.sound(game.assets.AUDIO_PATH + current.path, {
+                            formats: current.formats,
+                            preload: current.preload,
+                            loop: current.loop,
+                        });
+                    } else {
+                        parseSoundData(game, current);
+                    }
+                }
+            }
+        }
+        return obj;
+    };
+
+    /**
      * Loads the images for the game
      */
     Loader.addImages = function(game) {
         // Declaring all the assets in PxLoader
-        game.assets.images = {
-            loading : game.loader.addImage(game.assets.IMAGE_PATH + '/menu/loading.png', 'loading'),
-            menus: {
-                splashscreen: game.loader.addImage(game.assets.IMAGE_PATH + '/menu/splashscreen.png', 'menu')
-            },
-            backgrounds: {
-                common: game.loader.addImage(game.assets.IMAGE_PATH + '/bg/common.jpg', 'game')
-            },
-            tiles: {
-                common: game.loader.addImage(game.assets.IMAGE_PATH + '/tiles/common.png', 'game'),
-                ghost: game.loader.addImage(game.assets.IMAGE_PATH + '/tiles/ghost.png', 'game'),
-                cat: game.loader.addImage(game.assets.IMAGE_PATH + '/tiles/cat.png', 'game'),
-                bat: game.loader.addImage(game.assets.IMAGE_PATH + '/tiles/bat.png', 'game'),
-                oldwoman: game.loader.addImage(game.assets.IMAGE_PATH + '/tiles/oldwoman.png', 'game')
-            },
-            characters: {
-                ghost: {
-                    idleSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/ghost/right.png', 'game'),
-                    walkRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/ghost/right.png', 'game'),
-                    walkLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/ghost/left.png', 'game'),
-                    possLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/ghost/poss_l.png', 'game'),
-                    possRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/ghost/poss_r.png', 'game')
-                },
-                cat: {
-                    idleRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/cat/idle_right.png', 'game'),
-                    idleLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/cat/idle_left.png', 'game'),
-                    walkRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/cat/right.png', 'game'),
-                    walkLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/cat/left.png', 'game'),
-                    jumpRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/cat/jump_r.png', 'game'),
-                    jumpLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/cat/jump_l.png', 'game')
-                },
-                oldwoman: {
-                    idleRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/oldwoman/idle_right.png', 'game'),
-                    idleLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/oldwoman/idle_left.png', 'game'),
-                    walkRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/oldwoman/right.png', 'game'),
-                    walkLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/oldwoman/left.png', 'game')
-                },
-                woodsman: {
-                    idleRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/woodsman/idle_right.png', 'game'),
-                    idleLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/woodsman/idle_left.png', 'game'),
-                    walkRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/woodsman/right.png', 'game'),
-                    walkLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/woodsman/left.png', 'game'),
-                    jumpRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/woodsman/jump_r.png', 'game'),
-                    jumpLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/woodsman/jump_l.png', 'game')
-                },
-                bat: {
-                    walkRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/bat/right.png', 'game'),
-                    walkLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/bat/left.png', 'game')
-                },
-                dove: {
-                    walkRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/dove/right.png', 'game'),
-                    walkLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/dove/left.png', 'game'),
-                    idleRSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/dove/idle_right.png', 'game'),
-                    idleLSprite: game.loader.addImage(game.assets.IMAGE_PATH + '/sprites/dove/idle_left.png', 'game')
-                },
-            },
-            items: {
-                papers: {
-                    1: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/1.png', 'game'),
-                    2: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/2.png', 'game'),
-                    3: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/3.png', 'game'),
-                    4: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/4.png', 'game'),
-                    5: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/5.png', 'game'),
-                    6: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/6.png', 'game'),
-                    7: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/7.png', 'game'),
-                    8: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/8.png', 'game'),
-                    9: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/9.png', 'game'),
-                    10: game.loader.addImage(game.assets.IMAGE_PATH + '/papers/10.png', 'game')
-                }
-            }
-        };
-///////////////////////////////
-//           DEBUG           //
-// Test for more slow images //
-///////////////////////////////
-// for (var i = 0; i < 40; i++) {
-//     game.assets[i] = game.loader.addImage('http://thinkpixellab.com/pxloader' + '/slowImage.php?delay=1&i=' + i, 'menu');
-// }
+        game.assets.images = parseImageData(game, assets.images);
+        ///////////////////////////////
+        //           DEBUG           //
+        // Test for more slow images //
+        ///////////////////////////////
+        // for (var i = 0; i < 40; i++) {
+        //     game.assets[i] = game.loader.addImage('http://thinkpixellab.com/pxloader' + '/slowImage.php?delay=1&i=' + i, 'menu');
+        // }
     };
 
     /**
      * Loads the sounds for the game
      */
     Loader.addSounds = function(game) {
-        game.assets.sounds = {};
-
-        var sound, propChild;
-        for (var prop in assets.audio) {
-            for (propChild in assets.audio[prop]) {
-                if (game.assets.sounds[prop] == undefined) {
-                    game.assets.sounds[prop] = {}
-                }
-                sound = assets.audio[prop];
-                game.assets.sounds[prop][propChild] = new buzz.sound(game.assets.AUDIO_PATH + sound.path, {
-                    formats: sound.formats,
-                    preload: sound.preload,
-                    loop: sound.loop,
-                });
-            }
-        }
+        game.assets.sounds = parseSoundData(game, assets.audio);
     };
 
     /**
@@ -190,10 +154,10 @@ define(['json!../../data/assets/assets.json', 'PxLoader', 'PxLoaderImage', 'buzz
     Loader.showLoadingText = function(e, context, CANVAS_WIDTH, CANVAS_HEIGHT) {
         context.font = 'bold 30px sans-serif';
 
-        var loadingText = 'Loading ' + ( (e.completedCount * 100 / e.totalCount) | 0 ) + '%',
-            metrics     = context.measureText(loadingText),
-            textWidth   = metrics.width,
-            textHeight  = 30;
+        var loadingText = 'Loading ' + ((e.completedCount * 100 / e.totalCount) | 0) + '%',
+            metrics = context.measureText(loadingText),
+            textWidth = metrics.width,
+            textHeight = 30;
 
         // Clearing the canvas
         context.fillStyle = 'rgb(0, 0, 0)';

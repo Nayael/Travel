@@ -11,12 +11,11 @@ define(function() {
         this.background    = null;
         this.overlayAlpha  = 1;
 
-
-        this.buffer = document.createElement('canvas');
-        this.buffer.width = this.canvas.width;
+        this.buffer        = document.createElement('canvas');
+        this.buffer.width  = this.canvas.width;
         this.buffer.height = this.canvas.height;
-        this.bufferCtx = this.buffer.getContext('2d');
-        
+        this.bufferCtx     = this.buffer.getContext('2d');
+
         this.yShiftUp   = 0;    // The y position of the square tiles in the tiles spritesheet
         this.yShiftDown = 4;    // The height of extra graphics on the bottom of the tile
         this.TS         = 32;   // The size of a tile in pixels
@@ -33,7 +32,7 @@ define(function() {
         this.scrollXMax = this.CANVAS_WIDTH - this.scrollXMin;
         this.scrollYMin = this.CANVAS_HEIGHT >> 2;
         this.scrollYMax = this.CANVAS_HEIGHT - this.scrollYMin;
-        
+
         this.limitX     = 6400 - this.CANVAS_WIDTH;
         this.limitY     = 2400 - this.CANVAS_HEIGHT;
     };
@@ -44,14 +43,20 @@ define(function() {
     Map.prototype.draw = function() {
         var context = this.canvas.getContext('2d');
         var rows = this.CANVAS_HEIGHT / this.TS + 2,
-            cols, tileX, tileY;
+            cols, tileX, tileY,
+            yMin = ((this.scrollY / this.TS) | 0),
+            yMax = ((this.scrollY / this.TS) | 0) + rows,
+            xMin = ((this.scrollX / this.TS) | 0),
+            xMax;
 
         this.bufferCtx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
-        for (var i = ((this.scrollY / this.TS) | 0), j = 0; i < ((this.scrollY / this.TS) | 0) + rows; i++) {
+        for (var i = yMin, j = 0; i < yMax; i++) {
+            tileY = ((i * this.TS - this.scrollY) - this.yShiftUp) | 0;
             cols = this.CANVAS_WIDTH / this.TS + 2;
-            for (j = ((this.scrollX / this.TS) | 0); j < cols + ((this.scrollX / this.TS) | 0); j++) {
+            xMax = cols + ((this.scrollX / this.TS) | 0);
+
+            for (j = xMin; j < xMax; j++) {
                 tileX = ((j * this.TS - this.scrollX)) | 0;
-                tileY = ((i * this.TS - this.scrollY) - this.yShiftUp) | 0;
 
                 // Drawing tiles
                 if (((this.obstacles.indexOf(this.tilemap[i][j]) != -1 && this.tilemap[i][j] != 50) || this.items.indexOf(this.tilemap[i][j]) != -1) && tileX > -this.TS && tileX < this.CANVAS_WIDTH && tileY > -this.TS && tileY < this.CANVAS_HEIGHT) {

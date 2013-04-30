@@ -5,8 +5,8 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
         this.CANVAS_HEIGHT = 576;
 
         this.assets = {};
-        this.assets.IMAGE_PATH = 'data/assets/images';
-        this.assets.AUDIO_PATH = 'data/assets/audio';
+        this.assets.IMAGE_PATH = 'data/assets/images/';
+        this.assets.AUDIO_PATH = 'data/assets/audio/';
 
         // State machine
         this.initFsm();
@@ -136,6 +136,7 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
         // We draw the map
         this.map.drawBackground();
         this.map.draw();
+        this.map.scrollX++;
 
         // // Updating all the entities
         // // The index of a NPC corresponds to the position of it in the tilemap
