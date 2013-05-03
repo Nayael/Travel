@@ -2,7 +2,7 @@
 define(['Engine', 'StateMachine', 'Keyboard', 'game/Npc'],
 
 function(Engine, StateMachine, Keyboard, Npc) {
-    
+
     /**
      * @constructor
      * @param {integer} x       The x position
@@ -26,11 +26,10 @@ function(Engine, StateMachine, Keyboard, Npc) {
         }
 
         // Body
-        this.body = new Engine.Body(this, 1, 2);
+        this.body = new Engine.Body(this, 1, 1.3);
         
         // Physics
         this.physics = new Engine.Physics(this);
-        this.physics.jumpHeight = 90;
         this.physics.useGravity = false;
         this.physics.useCollisions = false;
         

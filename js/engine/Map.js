@@ -118,36 +118,6 @@ define(function() {
         //     context.drawImage(Game.images[Game.previousPlayer.name].bg, this.scrollX, this.scrollY, this.CANVAS_WIDTH, this.CANVAS_HEIGHT, 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         //     context.globalAlpha = 1;
         // }
-
-        /*var bgXIndex = ((this.scrollX / this.CANVAS_WIDTH) | 0),
-            bgYIndex = ((this.scrollY / this.CANVAS_HEIGHT) | 0),
-            yMin = (bgYIndex > 0 ? bgYIndex - 1 : bgYIndex),
-            yMax = (this.scrollY < this.limitY ? bgYIndex + 1 : (bgYIndex)),
-            xMin = (bgXIndex > 0 ? bgXIndex - 1 : bgXIndex),
-            xMax = (this.scrollX < this.limitX ? bgXIndex + 1 : (bgXIndex));
-        for (var i = yMin; i <= yMax; i++) {
-            for (var j = xMin; j <= xMax; j++) {
-                var realX = (j * this.CANVAS_WIDTH - this.scrollX) | 0;
-                var realY = (i * this.CANVAS_HEIGHT - this.scrollY) | 0;
-                // context.drawImage(Game.images[entity.name]['bg_' + (i * (6400 / this.CANVAS_WIDTH) + j + 1)],
-                    // 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT,
-                    // realX, realY, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
-            }
-        }*/
-
-        // if (Game.previousPlayer && Game.previousPlayer.useTileFade && this.overlayAlpha > 0) {
-        //     context.globalAlpha = this.overlayAlpha;
-        //     for (i = yMin; i <= yMax; i++) {
-        //         for (j = xMin; j <= xMax; j++) {
-        //             realX = (j * this.CANVAS_WIDTH - this.scrollX) | 0;
-        //             realY = (i * this.CANVAS_HEIGHT - this.scrollY) | 0;
-        //             context.drawImage(Game.images[Game.previousPlayer.name]['bg_' + (i * (6400 / this.CANVAS_WIDTH) + j + 1)],
-        //                 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT,
-        //                 realX, realY, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
-        //         }
-        //     }
-        //     context.globalAlpha = 1;
-        // }
     };
 
     /**
@@ -157,9 +127,13 @@ define(function() {
      * @param  {Number} dY The distance the player is moving on the Y-axis
      */
     Map.prototype.scroll = function(entity, dX, dY) {
+        if (!this.scrollable) {
+            return;
+        }
+
         // X-axis scrolling
-        if (this.scrollX != this.limitX && dX > 0 && (entity.x + entity.body.width) > this.scrollXMax) {
-            entity.x = this.scrollXMax - entity.body.width;
+        if (this.scrollX != this.limitX && dX > 0 && (entity.x + (entity.body.t_width * this.TS)) > this.scrollXMax) {
+            entity.x = this.scrollXMax - (entity.body.t_width * this.TS);
             this.scrollX += dX;
         } else if (this.scrollX != 0 && dX < 0 && entity.x < this.scrollXMin) {
             entity.x = this.scrollXMin;
@@ -167,8 +141,8 @@ define(function() {
         }
 
         // Y-axis scrolling
-        if (this.scrollY != this.limitY && dY > 0 && entity.y + entity.body.height > this.scrollYMax) {
-            entity.y = this.scrollYMax - entity.body.height;
+        if (this.scrollY != this.limitY && dY > 0 && entity.y + (entity.body.t_height * this.TS) > this.scrollYMax) {
+            entity.y = this.scrollYMax - (entity.body.t_height * this.TS);
             this.scrollY += dY;
         } else if (this.scrollY != 0 && dY < 0 && entity.y < this.scrollYMin) {
             entity.y = this.scrollYMin;

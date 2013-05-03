@@ -3,7 +3,7 @@ define(function() {
     var map = [];
 
     var Physics = function(entity) {
-        Physics.G = 10;   // The gravity constant
+        Physics.G = 9.81;   // The gravity constant
 
         this.entity        = entity;
         this.mass          = 15;
@@ -146,7 +146,7 @@ define(function() {
      */
     Physics.prototype.hCollisions = function(v0) {
         var futureX = this.entity.realX + (this.v.x + v0.x) / 2 * Time.deltaTime;
-        var hittingEdge = futureX + (this.v.x < 0 ? 0 : this.entity.body.width),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
+        var hittingEdge = futureX + (this.v.x < 0 ? 0 : (this.entity.body.t_width * map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
             yMin = ( ((this.entity.realY + 1) / map.TS) ) | 0,
             yMax = ( ((this.entity.realY - 1) / map.TS) + this.entity.body.t_height ) | 0,
             newX = 0;
@@ -175,7 +175,7 @@ define(function() {
      */
     Physics.prototype.vCollisions = function(v0) {
         var futureY = this.entity.realY + (this.v.y + v0.y) / 2 * Time.deltaTime;
-        var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.height)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
+        var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.t_height * map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
             xMin = ( ((this.entity.realX + 5) / map.TS) ) | 0,
             xMax = ( ((this.entity.realX - 5) / map.TS) + this.entity.body.t_width ) | 0,
             newY = 0,
