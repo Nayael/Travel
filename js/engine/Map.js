@@ -49,6 +49,7 @@ define(function() {
             xMin = ((this.scrollX / this.TS) | 0),
             xMax;
 
+        this.bufferCtx = this.buffer.getContext('2d');
         this.bufferCtx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         for (var i = yMin, j = 0; i < yMax; i++) {
             tileY = ((i * this.TS - this.scrollY) - this.yShiftUp) | 0;
@@ -74,6 +75,7 @@ define(function() {
             }
         }
         context.drawImage(this.buffer, 0, 0);
+        this.bufferCtx = null;
 
         // if (Game.previousPlayer && Game.previousPlayer.useTileFade && this.overlayAlpha > 0) {
         //     context.globalAlpha = this.overlayAlpha;
@@ -172,7 +174,6 @@ define(function() {
             entity.y = this.scrollYMin;
             this.scrollY += dY;
         }
-        console.log(this.scrollY);
 
         if (this.scrollX < 0) {
             this.scrollX = 0;
@@ -241,6 +242,10 @@ define(function() {
         }
     };
 
+    /**
+     * Changes the map's background
+     * @param {[type]} background [description]
+     */
     Map.prototype.setBackground = function(background) {
         this.background = background;
         this.limitX     = this.background.width - this.CANVAS_WIDTH;

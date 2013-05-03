@@ -1,5 +1,5 @@
-define(['Engine', 'StateMachine', 'Keyboard', 'game/Load', 'game/World', 'onEachFrame'],
-function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
+define(['onEachFrame', 'Engine', 'StateMachine', 'Keyboard', 'game/Load', 'game/World', 'game/characters/Ghost'],
+function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost) {
     var Game = function() {
         this.CANVAS_WIDTH  = 800;
         this.CANVAS_HEIGHT = 576;
@@ -121,6 +121,9 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
         this.world = new World();
         this.world.setEnvironment('ghost', this.map, this.assets);
 
+        this.player = new Ghost(100, 100, this.assets.images.characters.ghost);
+        this.player.onPossess();
+
         // Launching the main loop
         onEachFrame(this.update, 'game', this);
     };
@@ -130,13 +133,13 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
      */
     Game.prototype.update = function() {
         // Clearing the canvas
-        this.context.fillStyle = 'rgb(0, 0, 0)';
-        this.context.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+        // this.context.fillStyle = 'rgb(0, 0, 0)';
+        // this.context.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 
         // We draw the map
         this.map.drawBackground();
         this.map.draw();
-        this.map.scrollX++;
+        // this.map.scrollX++;
 
         // // Updating all the entities
         // // The index of a NPC corresponds to the position of it in the tilemap
@@ -154,21 +157,13 @@ function (Engine, StateMachine, Keyboard, Loader, World, onEachFrame) {
         // }
 
 
-        // // Updating and rendering the player's character
-        // this.player.update();
-        // if (!this.paused) {
-        //     this.player.render(context);
-        //     this.player.control();
-        //     if (this.player.renderFX) {
-        //         this.player.renderFX();
-        //     }
-        // }
-
-        // if (this.intensity > 0){
-        //     this.context.fillStyle = 'rgba(0, 0, 0, '+ this.intensity + ')';
-        //     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        //     this.intensity -= 0.005;
-        // }
+        // Updating and rendering the player's character
+        this.player.update(this.map, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+        this.player.render(this.context);
+        if (this.player.renderFX) {
+            this.player.renderFX(this.context);
+        }
+        this.player.control();
     };
 
     /**
