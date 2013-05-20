@@ -8,7 +8,7 @@ define(function() {
         this.entity        = entity;
         this.mass          = 15;
         this.jumpHeight    = 20;
-        this.drag          = 1;     // Friction
+        this.drag          = 1;
         this.useGravity    = true;
         this.useCollisions = true;
         this.onFloor       = false;
@@ -146,9 +146,9 @@ define(function() {
      */
     Physics.prototype.hCollisions = function(v0) {
         var futureX = this.entity.realX + (this.v.x + v0.x) / 2 * Time.deltaTime;
-        var hittingEdge = futureX + (this.v.x < 0 ? 0 : (this.entity.body.t_width * map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
+        var hittingEdge = futureX + (this.v.x < 0 ? 0 : (this.entity.body.getTWidth() * map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
             yMin = ( ((this.entity.realY + 1) / map.TS) ) | 0,
-            yMax = ( ((this.entity.realY - 1) / map.TS) + this.entity.body.t_height ) | 0,
+            yMax = ( ((this.entity.realY - 1) / map.TS) + this.entity.body.getTHeight() ) | 0,
             newX = 0;
 
         futureX = (hittingEdge / map.TS) | 0;
@@ -157,7 +157,7 @@ define(function() {
             // If the entity collides with an obstacle
             if (map.obstacles.indexOf(map.tilemap[i][futureX]) != -1) {
                 // We replace the entity right on the edge of the obstacle, to end the movement
-                newX = futureX * map.TS + map.TS * (this.v.x < 0 ? 1 : -this.entity.body.t_width);
+                newX = futureX * map.TS + map.TS * (this.v.x < 0 ? 1 : -this.entity.body.getTWidth());
                 return newX;
             }
             // if (map.items.indexOf(map.tilemap[i][futureX]) != -1) {
@@ -175,9 +175,9 @@ define(function() {
      */
     Physics.prototype.vCollisions = function(v0) {
         var futureY = this.entity.realY + (this.v.y + v0.y) / 2 * Time.deltaTime;
-        var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.t_height * map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
+        var hittingEdge = futureY + (this.v.y < 0 ? 0 : (this.entity.body.getTHeight() * map.TS)),   // If the velocity is positive, the edge hitting will be the right edge, otherwise, the left edge
             xMin = ( ((this.entity.realX + 5) / map.TS) ) | 0,
-            xMax = ( ((this.entity.realX - 5) / map.TS) + this.entity.body.t_width ) | 0,
+            xMax = ( ((this.entity.realX - 5) / map.TS) + this.entity.body.getTWidth() ) | 0,
             newY = 0,
             head = (hittingEdge <= futureY);
 
@@ -191,7 +191,7 @@ define(function() {
                     this.onFloor = true;
                 }
                 this.jumpForces = [];
-                newY = futureY * map.TS + map.TS * (this.v.y < 0 ? 1 : -this.entity.body.t_height) - (this.v.y < 0 ? 0 : 0);
+                newY = futureY * map.TS + map.TS * (this.v.y < 0 ? 1 : -this.entity.body.getTHeight()) - (this.v.y < 0 ? 0 : 0);
                 return newY;
             }
             // if (map.items.indexOf(map.tilemap[futureY][j]) != -1) {

@@ -1,5 +1,5 @@
-define(['onEachFrame', 'Engine', 'StateMachine', 'Keyboard', 'game/Load', 'game/World', 'game/characters/Ghost'],
-function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost) {
+define(['onEachFrame', 'Engine', 'StateMachine', 'Keyboard', 'game/Load', 'game/World', 'game/characters/Ghost', 'game/characters/Cat'],
+function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat) {
     var Game = function() {
         this.CANVAS_WIDTH  = 800;
         this.CANVAS_HEIGHT = 576;
@@ -121,8 +121,8 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost) {
         this.world = new World();
         this.world.setEnvironment('ghost', this.map, this.assets);
 
-        this.player = new Ghost(100, 100, this.assets.images.characters.ghost);
-        this.player.onPossess();
+        this.player = new Cat(100, 10, this.map.TS, this.assets.images.characters.ghost);
+        this.player.onPossess(this.map);
 
         // Launching the main loop
         onEachFrame(this.update, 'game', this);

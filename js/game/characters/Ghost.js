@@ -1,20 +1,18 @@
 // The Ghost character class file
-define(['Engine', 'StateMachine', 'Keyboard', 'game/Npc'],
+define(['Engine', 'StateMachine', 'Keyboard', 'inheritance', 'game/characters/Character'],
 
-function(Engine, StateMachine, Keyboard, Npc) {
+function(Engine, StateMachine, Keyboard, inherits, Character) {
 
     /**
      * @constructor
      * @param {integer} x       The x position
      * @param {integer} y       The y position
+     * @param {integer} ts      The map's tile size
      * @param {Object} sprites  The sprites for this character
      */
-    var Ghost = function(x, y, sprites) {
+    var Ghost = function(x, y, ts, sprites) {
+        this.parent.constructor.apply(this, arguments);
         this.name = 'ghost';
-        this.x = x || 0;
-        this.y = y || 0;
-        this.sprites = sprites;
-        this.controllable = false;
 
         this.speed = {
             x: 15,
@@ -26,12 +24,13 @@ function(Engine, StateMachine, Keyboard, Npc) {
         }
 
         // Body
-        this.body = new Engine.Body(this, 1, 1.3);
+        this.body = new Engine.Body(this, 1, 1.3, ts);
+        this.body.limitToBounds = true;
         
         // Physics
         this.physics = new Engine.Physics(this);
-        this.physics.useGravity = false;
-        this.physics.useCollisions = false;
+        // this.physics.useGravity = false;
+        // this.physics.useCollisions = false;
         
         // View
         this.view = new Engine.View(this, {
@@ -49,9 +48,9 @@ function(Engine, StateMachine, Keyboard, Npc) {
         // State Machine
         this.initFSM();
     };
+    Ghost.inheritsFrom(Character);
 
     // Constants
-    Ghost.IDLE             = 'IDLE';
     Ghost.WALKING_RIGHT    = 'WALKING_RIGHT';
     Ghost.WALKING_LEFT     = 'WALKING_LEFT';
     Ghost.POSSESSION_LEFT  = 'POSSESSION_LEFT';
@@ -62,19 +61,18 @@ function(Engine, StateMachine, Keyboard, Npc) {
      */
     Ghost.prototype.initFSM = function() {
         this.fsm = StateMachine.create({
-            initial: Ghost.IDLE,
+            initial: Ghost.WALKING_RIGHT,
             error: function(eventName, from, to, args, errorCode, errorMessage) {
                 console.log('Error on event ' + eventName + '. From [' + from + '] to [' + to + '] : ' + errorMessage);
             },
             events: [
-                { name: 'idle', from: [Ghost.WALKING_LEFT, Ghost.WALKING_RIGHT], to: Ghost.IDLE },
-                { name: 'turnLeft', from: [Ghost.IDLE, Ghost.WALKING_RIGHT], to: Ghost.WALKING_LEFT },
-                { name: 'turnRight', from: [Ghost.IDLE, Ghost.WALKING_LEFT], to: Ghost.WALKING_RIGHT }
+                { name: 'walkLeft', from: [Ghost.IDLE, Ghost.WALKING_RIGHT], to: Ghost.WALKING_LEFT },
+                { name: 'walkRight', from: [Ghost.IDLE, Ghost.WALKING_LEFT], to: Ghost.WALKING_RIGHT }
             ]
         });
         this.fsm.subject = this;
 
-        this.fsm.onturnLeft = function(e) {
+        this.fsm.onwalkLeft = function(e) {
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.walkLSprite,
                 localX: 0,
@@ -86,7 +84,7 @@ function(Engine, StateMachine, Keyboard, Npc) {
             });
         };
 
-        this.fsm.onturnRight = function(e) {
+        this.fsm.onwalkRight = function(e) {
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.walkRSprite,
                 localX: 0,
@@ -112,51 +110,20 @@ function(Engine, StateMachine, Keyboard, Npc) {
         var realX0 = this.realX,
             realY0 = this.realY;
 
-        this.physics.update(map);
-
-        var dX = this.realX - realX0,
-            dY = this.realY - realY0;
-
-        this.x = this.realX - map.scrollX;
-        this.y = this.realY - map.scrollY;
-
-        // The Ghost can't get out of the canvas bounds
-        if (this.x <= 0) {
-            this.x = 1;
-            this.physics.v.x = 0;
-        } else if (this.x >= canvasWidth - this.body.t_width * map.TS) {
-            this.x = canvasWidth - this.body.t_width * map.TS - 1;
-            this.physics.v.x = 0;
-        }
-
-        if (this.y <= 0) {
-            this.y = 1;
-            this.physics.v.y = 0;
-        } else if (this.y >= canvasHeight - this.body.t_height * map.TS + 20) {
-            this.y = canvasHeight - this.body.t_height * map.TS + 20 - 1;
-            this.physics.v.y = 0;
-        }
+        this.parent.update.call(this, map, canvasWidth, canvasHeight);
 
         // Update the state
         if (this.realX < realX0 && !this.fsm.is(Ghost.WALKING_LEFT)) {
-            this.fsm.turnLeft();
+            this.fsm.walkLeft();
         } else if (this.realX > realX0 && !this.fsm.is(Ghost.WALKING_RIGHT)) {
-            this.fsm.turnRight();
+            this.fsm.walkRight();
         }
-    };
-
-    /**
-     * Renders the character
-     * @param  {Canvas2DContext} context The 2D context of the canvas to render in
-     */
-    Ghost.prototype.render = function(context) {
-        this.view.draw(context);
     };
 
     /**
      * Applies the player's controls on the character
      */
-    Ghost.prototype.control = function() {
+    Ghost.prototype.control = function(npcs) {
         if (!this.controllable) {
             return;
         }
@@ -173,33 +140,32 @@ function(Engine, StateMachine, Keyboard, Npc) {
             this.physics.addForce(this.speed.x, 0);
         }
 
-        if (Keyboard.isDown(Keyboard.CTRL) && !this.fsm.is(Ghost.POSSESSION_RIGHT) && !this.fsm.is(Ghost.POSSESSION_LEFT)) {
-            this.takeControl();
+        if (Keyboard.isDown(Keyboard.CTRL)) {
+            this.takeControl(npcs);
         }
     };
 
     /**
      * The ghost takes control of a NPC
      */
-    Ghost.prototype.takeControl = function() {
+    Ghost.prototype.takeControl = function(map, npcs) {
         // Take control of the npc he is colliding
-        // for (var npc in Game.npcs) {
-        //     if (Game.npcs.hasOwnProperty(npc) && this.body.collide(Game.npcs[npc])) {
-        //         this.state = Ghost.POSSESSION_RIGHT;
-        //         Game.Npc.possessNpc(npc);
-        //         break;
-        //     }
-        // }
+        for (var npc in npcs) {
+            // if (Game.npcs.hasOwnProperty(npc) && this.body.collide(Game.npcs[npc])) {
+            //     this.state = Ghost.POSSESSION_RIGHT;
+            //     this.controllable = false;
+            //     Game.Npc.possessNpc(npc);
+            //     map.autoScroll();
+            //     break;
+            // }
+        }
     };
 
     /**
      * Triggered when the character is being possessed
      */
-    Ghost.prototype.onPossess = function() {
-        var self = this;
-        setTimeout(function() {
-            self.controllable = true;
-        }, Npc.STUN_TIME);
+    Ghost.prototype.onPossess = function(map) {
+        map.scrollable = false;
     };
 
     return Ghost;

@@ -135,10 +135,10 @@
             "cat": {
                 "idleRSprite": ["sprites/cat/idle_right.png", "game"],
                 "idleLSprite": ["sprites/cat/idle_left.png", "game"],
-                "walkRSprite": ["sprites/cat/right.png", "game"],
-                "walkLSprite": ["sprites/cat/left.png", "game"],
-                "jumpRSprite": ["sprites/cat/jump_r.png", "game"],
-                "jumpLSprite": ["sprites/cat/jump_l.png", "game"]
+                "walkRSprite": ["sprites/cat/walking_right.png", "game"],
+                "walkLSprite": ["sprites/cat/walking_left.png", "game"],
+                "jumpRSprite": ["sprites/cat/jumping_right.png", "game"],
+                "jumpLSprite": ["sprites/cat/jumping_left.png", "game"]
             },
             "oldwoman": {
                 "idleRSprite": ["sprites/oldwoman/idle_right.png", "game"],

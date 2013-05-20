@@ -10,6 +10,7 @@ require.config({
         PxLoaderImage: 'lib/PxLoader/PxLoaderImage',
         buzz: 'lib/buzz',
         onEachFrame: 'lib/onEachFrame',
+        inheritance: 'lib/inheritance',
         pixastic: 'lib/pixastic/pixastic.core',
         invert: 'lib/pixastic/actions/invert'
 

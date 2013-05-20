@@ -1,15 +1,18 @@
-define(function() {
+// The Npc class
+define(['Engine', 'Keyboard', 'inheritance', 'game/characters/Character'],
+
+function(Engine, Keyboard, inherits, Character) {
+
     var Npc = {};
 
-    // The list of all the NPCs available in the game, and their values in the tilemap
-    Npc.list = {
+    // Constants
+    Npc.INDEXES = {      // The list of all the NPCs available in the game, and their values in the tilemap
         200: 'Cat',
         300: 'Oldwoman',
         400: 'Woodsman',
         500: 'Bat',
         600: 'Dove'
-    }
-    Npc.STUN_TIME = 800;    // The time during which a character is not controllable after the possession
+    };
 
     /**
      * Takes possession of a NPC
@@ -87,7 +90,6 @@ define(function() {
         // Game.npcs[npcMapIndex].npcMapIndex = npcMapIndex;
         // Game.npcs[npcMapIndex].npcValue = value;
     };
-
 
     return Npc;
 });
