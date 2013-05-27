@@ -82,7 +82,7 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
                     to: Cat.JUMPING_RIGHT
                 }, {
                     name: 'fallLeft',
-                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_RIGHT],
+                    from:[Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_RIGHT],
                     to: Cat.FALLING_LEFT
                 }, {
                     name: 'fallRight',
@@ -125,10 +125,10 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
                 sprite: this.subject.sprites.walkLSprite,
                 localX: 0,
                 localY: 0,
-                width: 35,
-                height: 34,
+                width: 44,
+                height: 33,
                 totalFrames: 5,
-                frameRate: 60
+                frameRate: 80
             });
         };
 
@@ -138,10 +138,10 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
                 sprite: this.subject.sprites.walkRSprite,
                 localX: 0,
                 localY: 0,
-                width: 35,
-                height: 34,
+                width: 44,
+                height: 33,
                 totalFrames: 5,
-                frameRate: 60
+                frameRate: 80
             });
         };
 
