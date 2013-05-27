@@ -2,6 +2,7 @@
 define(function() {
     var Body = function(entity, t_width, t_height, ts) {
         this.entity = entity;
+        this.left = false;
 
         var width  = t_width * ts;  // The width in pixels
         var height = t_height * ts; // The height in pixels

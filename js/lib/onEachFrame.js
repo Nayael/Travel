@@ -1,54 +1,49 @@
 (function() {
     var lastTime = 0;
     var vendors = ['webkit', 'moz'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
     }
 
-    if (!window.requestAnimationFrame)
+    if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function(callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-              timeToCall);
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
+    }
 
-    if (!window.cancelAnimationFrame)
+    if (!window.cancelAnimationFrame) {
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
-
-    window.Time = {
-        time: null,
-        deltaTime: null
-    };
+    }
 
     var requestAnimationFrameCallbacks = {};
 
     window.onEachFrame = function(cb, label, target) {
-        callback = cb;
+        var callback = cb;
+
         if (target != undefined) {
             callback = function() {
                 cb.apply(target);
             }
         }
+
         var _cb = function() {
             callback();
 
-            Time.time = Time.time || Date.now();
-            var t = Date.now();
-            Time.deltaTime = (t - Time.time) / 100;
-            Time.time = t;
-            
             var anim = requestAnimationFrame(_cb);
             if (label) {
                 requestAnimationFrameCallbacks[label] = anim;
             }
         };
-        return _cb();
+        requestAnimationFrame(_cb);
     };
 
     onEachFrame.cancel = function(index) {
@@ -62,4 +57,20 @@
         }
         window.cancelAnimationFrame(index);
     }
+
+    // Initializing a global delta-time
+    window.Time = {
+        time: null,
+        deltaTime: null
+    };
+
+    onEachFrame(function() {
+        Time.time = Time.time || Date.now();
+        var t = Date.now();
+        Time.deltaTime = (t - Time.time) / 100;
+        if (Time.deltaTime > 0.2) {
+            Time.deltaTime = 0.2;
+        }
+        Time.time = t;
+    });
 }());
