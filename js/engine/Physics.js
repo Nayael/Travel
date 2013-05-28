@@ -12,6 +12,7 @@ define(function() {
         this.useGravity    = true;
         this.useCollisions = true;
         this.onFloor       = false;
+        this.jumping       = false;
 
         this.v = {  // Velocity
             x: 0,
@@ -70,6 +71,12 @@ define(function() {
             dForceX = (this.v.x + v0.x) / 2 * Time.deltaTime,   // The total force that will be applied on the X axis
             dForceY = (this.v.y + v0.y) / 2 * Time.deltaTime;   // The total force that will be applied on the Y axis
         this.onFloor = false;
+
+        if (dForceX < 0) {
+            this.entity.body.left = true;
+        } else if (dForceX > 0) {
+            this.entity.body.left = false;
+        }
 
         // If there is a collision with an obstacle, we don't apply the velocity on the entity
         if (this.useCollisions) {
@@ -203,6 +210,7 @@ define(function() {
                 if (dForceY >= 0 && !head) {
                     this.onFloor = true;
                 }
+                this.jumping = false;
                 this.jumpForces = [];
                 newY = futureY * map.TS + map.TS * (this.v.y < 0 ? 1 : -this.entity.body.getTHeight());
                 return newY;
@@ -215,6 +223,12 @@ define(function() {
             //     Game.Item.pickUp(j, futureY);
             //     break;
             // }
+        }
+
+        if (head) {
+            this.jumping = true;
+        } else {
+            this.jumping = false;
         }
         return false;
     };

@@ -132,8 +132,8 @@ define(function() {
         }
 
         // X-axis scrolling
-        if (this.scrollX != this.limitX && dX > 0 && (entity.x + (entity.body.t_width * this.TS)) > this.scrollXMax) {
-            entity.x = this.scrollXMax - (entity.body.t_width * this.TS);
+        if (this.scrollX != this.limitX && dX > 0 && (entity.x + entity.body.getWidth()) > this.scrollXMax) {
+            entity.x = this.scrollXMax - entity.body.getWidth();
             this.scrollX += dX;
         } else if (this.scrollX != 0 && dX < 0 && entity.x < this.scrollXMin) {
             entity.x = this.scrollXMin;
@@ -141,8 +141,8 @@ define(function() {
         }
 
         // Y-axis scrolling
-        if (this.scrollY != this.limitY && dY > 0 && entity.y + (entity.body.t_height * this.TS) > this.scrollYMax) {
-            entity.y = this.scrollYMax - (entity.body.t_height * this.TS);
+        if (this.scrollY != this.limitY && dY > 0 && entity.y + entity.body.getHeight() > this.scrollYMax) {
+            entity.y = this.scrollYMax - entity.body.getHeight();
             this.scrollY += dY;
         } else if (this.scrollY != 0 && dY < 0 && entity.y < this.scrollYMin) {
             entity.y = this.scrollYMin;

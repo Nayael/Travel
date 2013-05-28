@@ -29,7 +29,6 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
         // Physics
         this.physics = new Engine.Physics(this);
         this.physics.jumpHeight = 20;
-        // this.physics.useGravity = false;
 
         // View
         this.initFSM();
@@ -94,7 +93,6 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
         this.fsm.subject = this;
 
         this.fsm.onturnLeft = function(e) {
-            this.subject.body.left = true;
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.idleLSprite,
                 localX: 0,
@@ -107,10 +105,9 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
         };
 
         this.fsm.onturnRight = function(e) {
-            this.subject.body.left = false;
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.idleRSprite,
-                localX: 0,
+                localX: this.subject.body.getWidth() - 35,
                 localY: 0,
                 width: 35,
                 height: 34,
@@ -120,7 +117,6 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
         };
 
         this.fsm.onwalkLeft = function(e) {
-            this.subject.body.left = true;
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.walkLSprite,
                 localX: 0,
@@ -128,25 +124,23 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
                 width: 44,
                 height: 33,
                 totalFrames: 5,
-                frameRate: 80
+                frameRate: 120
             });
         };
 
         this.fsm.onwalkRight = function(e) {
-            this.subject.body.left = false;
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.walkRSprite,
-                localX: 0,
+                localX: this.subject.body.getWidth() - 44,
                 localY: 0,
                 width: 44,
                 height: 33,
                 totalFrames: 5,
-                frameRate: 80
+                frameRate: 120
             });
         };
 
         this.fsm.onjumpLeft = function(e) {
-            this.subject.body.left = true;
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.jumpLSprite,
                 localX: 0,
@@ -154,46 +148,41 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
                 width: 61,
                 height: 42,
                 totalFrames: 8,
-                frameRate: 100
+                frameRate: 120
             });
         };
 
         this.fsm.onjumpRight = function(e) {
-            this.subject.body.left = false;
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.jumpRSprite,
-                localX: 0,
+                localX: this.subject.body.getWidth() - 61,
                 localY: 0,
                 width: 61,
                 height: 42,
                 totalFrames: 8,
-                frameRate: 100
+                frameRate: 120
             });
         };
 
         this.fsm.onfallLeft = function(e) {
-            this.subject.body.left = true;
             this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.jumpLSprite,
+                sprite: this.subject.sprites.fallLSprite,
                 localX: 0,
                 localY: 0,
-                width: 35,
-                height: 34,
-                totalFrames: 5,
-                frameRate: 100
+                width: 58,
+                height: 36,
+                totalFrames: 1
             });
         };
 
         this.fsm.onfallRight = function(e) {
-            this.subject.body.left = false;
             this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.jumpRSprite,
-                localX: 0,
+                sprite: this.subject.sprites.fallRSprite,
+                localX: this.subject.body.getWidth() - 58,
                 localY: 0,
-                width: 35,
-                height: 34,
-                totalFrames: 5,
-                frameRate: 100
+                width: 58,
+                height: 36,
+                totalFrames: 1
             });
         };
     };
@@ -202,7 +191,6 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
      * Called on each frame
      */
     Cat.prototype.update = function(map, canvasWidth, canvasHeight) {
-        // console.log('this.x, this.y: ', this.x, this.y);
         // The character scroll with the map if he is not controlled by the player
         if (this.isPlayer && this.controllable) {
             this.realX = this.x + map.scrollX;
@@ -223,13 +211,6 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
     };
 
     /**
-     * Renders the special effect on the map
-     */
-    Cat.prototype.renderFX = function() {
-
-    };
-
-    /**
      * Applies the player's controls on the cat
      */
     Cat.prototype.control = function() {
@@ -239,34 +220,50 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
 
         // Walk left
         if (Keyboard.isDown(Keyboard.LEFT_ARROW) && this.physics.onFloor) {
-            if (!this.fsm.is(Cat.WALKING_LEFT)) {
-                this.fsm.walkLeft();
-            }
             this.physics.addForce(-this.speed.x, 0);
+        }
+        if (this.body.left && !this.fsm.is(Cat.WALKING_LEFT) && this.physics.onFloor) {
+            this.fsm.walkLeft();
         }
 
         // Walk right
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && this.physics.onFloor) {
-            if (!this.fsm.is(Cat.WALKING_RIGHT)) {
-                this.fsm.walkRight();
-            }
             this.physics.addForce(this.speed.x, 0);
+        }
+        if (!this.body.left && !this.fsm.is(Cat.WALKING_RIGHT) && this.physics.onFloor) {
+            this.fsm.walkRight();
         }
 
         // Left while jumping
         if (Keyboard.isDown(Keyboard.LEFT_ARROW) && !this.physics.onFloor) {
-            if (!this.fsm.is(Cat.JUMPING_LEFT)) {
-                this.fsm.jumpLeft();
-            }
             this.physics.addForce(-this.speed.x, 0);
+        }
+        if (this.body.left && !this.fsm.is(Cat.JUMPING_LEFT) && !this.physics.onFloor && this.physics.jumping) {
+            this.fsm.jumpLeft();
         }
 
         // Right while jumping
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && !this.physics.onFloor) {
-            if (!this.fsm.is(Cat.JUMPING_RIGHT)) {
-                this.fsm.jumpRight();
-            }
             this.physics.addForce(this.speed.x, 0);
+        }
+        if (!this.body.left && !this.fsm.is(Cat.JUMPING_RIGHT) && !this.physics.onFloor && this.physics.jumping) {
+            this.fsm.jumpRight();
+        }
+
+        // Left while falling
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && !this.physics.onFloor && !this.physics.jumping) {
+            this.physics.addForce(-this.speed.x, 0);
+        }
+        if (this.body.left && !this.fsm.is(Cat.FALLING_LEFT) && !this.physics.onFloor && !this.physics.jumping) {
+            this.fsm.fallLeft();
+        }
+
+        // Right while falling
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && !this.physics.onFloor && !this.physics.jumping) {
+            this.physics.addForce(this.speed.x, 0);
+        }
+        if (!this.body.left && !this.fsm.is(Cat.FALLING_RIGHT) && !this.physics.onFloor && !this.physics.jumping) {
+            this.fsm.fallRight();
         }
 
         // Jump

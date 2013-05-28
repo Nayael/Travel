@@ -138,7 +138,9 @@
                 "walkRSprite": ["sprites/cat/walking_right.png", "game"],
                 "walkLSprite": ["sprites/cat/walking_left.png", "game"],
                 "jumpRSprite": ["sprites/cat/jumping_right.png", "game"],
-                "jumpLSprite": ["sprites/cat/jumping_left.png", "game"]
+                "jumpLSprite": ["sprites/cat/jumping_left.png", "game"],
+                "fallRSprite": ["sprites/cat/falling_right.png", "game"],
+                "fallLSprite": ["sprites/cat/falling_left.png", "game"]
             },
             "oldwoman": {
                 "idleRSprite": ["sprites/oldwoman/idle_right.png", "game"],
