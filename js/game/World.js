@@ -42,7 +42,7 @@ function(mapsFx, common, woodsman, oldwoman, invert, Pixastic) {
         
         // If there is a specific fx to apply to the map for the given environment
         if (mapsFx[env] != undefined) {
-            map.setBackground(Pixastic.process(map.background, mapsFx[env][0], mapsFx[env][1] || {}));
+            // map.setBackground(Pixastic.process(map.background, mapsFx[env][0], mapsFx[env][1] || {}));
         }
     };
 

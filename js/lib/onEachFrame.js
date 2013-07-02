@@ -46,7 +46,7 @@
         requestAnimationFrame(_cb);
     };
 
-    onEachFrame.cancel = function(index) {
+    window.onEachFrame.cancel = function(index) {
         if (typeof index == 'string') { // If the given index is a label, cancel the callback with the given label
             var label = index;
             index = requestAnimationFrameCallbacks[label];

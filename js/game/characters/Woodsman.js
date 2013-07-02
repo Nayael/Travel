@@ -1,11 +1,19 @@
 // The Woodsman class
-define(function() {
-    var Woodsman = function(x, y) {
+define(['Engine', 'StateMachine', 'Keyboard', 'inheritance', 'game/characters/Character', 'game/characters/Npc'],
+
+function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
+
+    /**
+     * @constructor
+     * @param {integer} x       The x position
+     * @param {integer} y       The y position
+     * @param {integer} ts      The map's tile size
+     * @param {Object} sprites  The sprites for this character
+     */
+    var Woodsman = function(x, y, ts, sprites) {
+        this.parent.constructor.apply(this, arguments);
         this.name  = 'woodsman';
-        this.x     = x || 0;
-        this.y     = y || 0;
-        this.realX = this.x + Game.map.scrollX;
-        this.realY = this.y + Game.map.scrollY;
+
         this.speed = {
             x: 20,
             y: 55
@@ -14,175 +22,191 @@ define(function() {
             x: 20,
             y: 55
         }
-        this.controllable = false;
 
-        this.body = new Game.Body(this, 1, 3);
+        // Body
+        this.body = new Engine.Body(this, 2, 3, ts);
 
-        this.physics = new Game.Physics(this);
+        // Physics
+        this.physics = new Engine.Physics(this);
         this.physics.jumpHeight = 20;
 
-        this.state         = 'IDLE_RIGHT';
-        this.previousState = 'IDLE_RIGHT';
-        this.frame         = 0;
-        this.useTileFade   = true;
+        // View
+        this.initFSM();
+        this.fsm.turnRight();
+    };
+    Woodsman.inheritsFrom(Character);
+
+    // Constants
+    Woodsman.IDLE_LEFT     = 'WOODSMAN_IDLE_LEFT';
+    Woodsman.IDLE_RIGHT    = 'WOODSMAN_IDLE_RIGHT';
+    Woodsman.WALKING_RIGHT = 'WOODSMAN_WALKING_RIGHT';
+    Woodsman.WALKING_LEFT  = 'WOODSMAN_WALKING_LEFT';
+    Woodsman.JUMPING_LEFT  = 'WOODSMAN_JUMPING_LEFT';
+    Woodsman.JUMPING_RIGHT = 'WOODSMAN_JUMPING_RIGHT';
+    Woodsman.FALLING_LEFT  = 'WOODSMAN_FALLING_LEFT';
+    Woodsman.FALLING_RIGHT = 'WOODSMAN_FALLING_RIGHT';
+
+    /**
+     * Creates the State Machine
+     */
+    Woodsman.prototype.initFSM = function() {
+        this.fsm = StateMachine.create({
+            error: function(eventName, from, to, args, errorCode, errorMessage) {
+                console.log('Error # ' + errorCode + ' on event ' + eventName + '. From [' + from + '] to [' + to + '] : ' + errorMessage + ' (' + args + ')');
+            },
+            events: [{
+                    name: 'turnLeft',
+                    from: [Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.JUMPING_LEFT, Woodsman.FALLING_LEFT],
+                    to: Woodsman.IDLE_LEFT
+                }, {
+                    name: 'turnRight',
+                    from: ['none', Woodsman.IDLE_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_RIGHT],
+                    to: Woodsman.IDLE_RIGHT
+                }, {
+                    name: 'walkLeft',
+                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
+                    to: Woodsman.WALKING_LEFT
+                }, {
+                    name: 'walkRight',
+                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
+                    to: Woodsman.WALKING_RIGHT
+                }, {
+                    name: 'jumpLeft',
+                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_RIGHT],
+                    to: Woodsman.JUMPING_LEFT
+                }, {
+                    name: 'jumpRight',
+                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT],
+                    to: Woodsman.JUMPING_RIGHT
+                }, {
+                    name: 'fallLeft',
+                    from:[Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_RIGHT],
+                    to: Woodsman.FALLING_LEFT
+                }, {
+                    name: 'fallRight',
+                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT],
+                    to: Woodsman.FALLING_RIGHT
+                }
+            ]
+        });
+        this.fsm.subject = this;
+
+        this.fsm.onturnLeft = function(e) {
+            this.subject.view = new Engine.View(this.subject, {
+                sprite: this.subject.sprites.idleLSprite,
+                localX: 0,
+                localY: 0,
+                width: 47,
+                height: 108,
+                totalFrames: 2,
+                frameRate: 50
+            });
+        };
+
+        this.fsm.onturnRight = function(e) {
+            this.subject.view = new Engine.View(this.subject, {
+                sprite: this.subject.sprites.idleRSprite,
+                localX: this.subject.body.getWidth() - 47,
+                localY: 0,
+                width: 47,
+                height: 108,
+                totalFrames: 2,
+                frameRate: 50
+            });
+        };
+
+        this.fsm.onwalkLeft = function(e) {
+            this.subject.view = new Engine.View(this.subject, {
+                sprite: this.subject.sprites.walkLSprite,
+                localX: 0,
+                localY: 0,
+                width: 44,
+                height: 108,
+                totalFrames: 5,
+                frameRate: 120
+            });
+        };
+
+        this.fsm.onwalkRight = function(e) {
+            this.subject.view = new Engine.View(this.subject, {
+                sprite: this.subject.sprites.walkRSprite,
+                localX: this.subject.body.getWidth() - 44,
+                localY: 0,
+                width: 44,
+                height: 108,
+                totalFrames: 5,
+                frameRate: 120
+            });
+        };
+
+        this.fsm.onjumpLeft = function(e) {
+            this.subject.view = new Engine.View(this.subject, {
+                sprite: this.subject.sprites.jumpLSprite,
+                localX: 0,
+                localY: 0,
+                width: 57,
+                height: 111,
+                totalFrames: 7,
+                frameRate: 120
+            });
+        };
+
+        this.fsm.onjumpRight = function(e) {
+            this.subject.view = new Engine.View(this.subject, {
+                sprite: this.subject.sprites.jumpRSprite,
+                localX: this.subject.body.getWidth() - 57,
+                localY: 0,
+                width: 57,
+                height: 111,
+                totalFrames: 7,
+                frameRate: 120
+            });
+        };
+
+        this.fsm.onfallLeft = function(e) {
+            this.subject.view = new Engine.View(this.subject, {
+                sprite: this.subject.sprites.fallLSprite,
+                localX: 0,
+                localY: 0,
+                width: 57,
+                height: 111,
+                totalFrames: 1
+            });
+        };
+
+        this.fsm.onfallRight = function(e) {
+            this.subject.view = new Engine.View(this.subject, {
+                sprite: this.subject.sprites.fallRSprite,
+                localX: this.subject.body.getWidth() - 57,
+                localY: 0,
+                width: 57,
+                height: 111,
+                totalFrames: 1
+            });
+        };
     };
 
     /**
      * Called on each frame
      */
-    Woodsman.prototype.update = function() {
+    Woodsman.prototype.update = function(map, canvasWidth, canvasHeight) {
         // The character scroll with the map if he is not controlled by the player
-        if (this == Game.player && this.controllable) {
-            this.realX = this.x + Game.map.scrollX;
-            this.realY = this.y + Game.map.scrollY;
+        if (this.isPlayer && this.controllable) {
+            this.realX = this.x + map.scrollX;
+            this.realY = this.y + map.scrollY;
         }
 
         var realX0 = this.realX,
             realY0 = this.realY;
 
-        this.physics.update();
-
-        var dX = this.realX - realX0,
-            dY = this.realY - realY0;
-
-        this.x = this.realX - Game.map.scrollX;
-        this.y = this.realY - Game.map.scrollY;
-
         // Preventing from getting out of the canvas
-        if (Game.player == this) {
-            if (this.x <= 0) {
-                this.x = 1;
-                this.physics.v.x = 0;
-            } else if (this.x >= Game.CANVAS_WIDTH - this.body.width) {
-                this.x = Game.CANVAS_WIDTH - this.body.width - 1;
-                this.physics.v.x = 0;
-            }
-
-            if (this.y <= 0) {
-                this.y = 1;
-                this.physics.v.y = 0;
-            } else if (this.y >= Game.CANVAS_HEIGHT - this.body.height + 20) {
-                this.y = Game.CANVAS_HEIGHT - this.body.height + 20 - 1;
-                this.physics.v.y = 0;
-            }
+        if (this.isPlayer) {
+            this.body.limitToBounds = true;
+        } else {
+            this.body.limitToBounds = false;
         }
 
-        // Update the state
-        this.previousState = this.state;
-        if (this.realX < realX0 && this.previousState != 'JUMPING_L' && this.previousState != 'FALLING_L') {
-            this.state = 'WALK_L';
-        }
-
-        if (this.realX > realX0 && this.previousState != 'JUMPING_R' && this.previousState != 'FALLING_R' && this.previousState != 'WALK_R') {
-            this.state = 'WALK_R';
-            this.frame = 7;
-        }
-
-        if (this.physics.onFloor && this.realX == realX0) {
-            this.state = (this.previousState == 'WALK_R' || this.previousState == 'IDLE_RIGHT' || this.previousState == 'FALLING_R' || this.previousState == 'JUMPING_R') ? 'IDLE_RIGHT' : 'IDLE_LEFT';
-        }
-        if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_R' && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
-            this.state = 'JUMPING_R';
-            this.frame = 5;
-        }else if (!this.physics.onFloor && this.physics.jumpForces.length <= 0 && (this.previousState == 'IDLE_RIGHT' || this.previousState == "WALK_R")) {
-            this.state = 'FALLING_R';
-            this.frame = 5;
-        }
-
-        if (!this.physics.onFloor && this.physics.jumpForces.length > 0 && this.previousState != 'JUMPING_L' && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
-            this.state = 'JUMPING_L';
-        } else if (!this.physics.onFloor && this.physics.jumpForces.length == 0 && (this.previousState == 'IDLE_LEFT' || this.previousState == "WALK_L")) {
-            this.state = 'FALLING_L';
-            this.frame = 5;
-        }
-
-        if (this != Game.player || !this.controllable || !Game.map.scrollable) {
-            return;
-        }
-
-        Game.map.scroll(dX, dY);
-    };
-
-    /**
-     * Renders the Woodsman
-     * @param  {Canvas2DContext} context The 2D context of the canvas to render in
-     */
-    Woodsman.prototype.render = function(context) {
-        switch (this.state) {
-            case 'IDLE_RIGHT':
-                context.drawImage(Game.images[this.name].idlerImage, 47 * this.frame, 0, 47, 108, this.x - 10, this.y - 6, 47, 108);
-                if (Game.frameCount % 20 == 0) {
-                    this.frame++;
-                }
-                if (this.frame >= 2) {
-                    this.frame = 0;
-                }
-                break;
-
-            case 'IDLE_LEFT':
-                context.drawImage(Game.images[this.name].idlelImage, 47 * this.frame, 0, 47, 108, this.x - 12, this.y - 6, 47, 108);
-                if (Game.frameCount % 20 == 0) {
-                    this.frame++;
-                }
-                if (this.frame >= 2) {
-                    this.frame = 0;
-                }
-                break;
-
-            case 'WALK_R':
-                context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame), 0, 59, 112, this.x - 12, this.y - 6, 59, 112);
-                if (Game.frameCount % 8  == 0) {
-                    this.frame--;
-                }
-                if (this.frame <= 0) {
-                    this.frame = 7;
-                }
-                break;
-
-            case 'WALK_L':
-                context.drawImage(Game.images[this.name].walklImage, 59 * (this.frame), 0, 59, 112, this.x - 12, this.y - 6, 59, 112);
-                if (Game.frameCount % 8  == 0) {
-                    this.frame++;
-                }
-                if (this.frame >= 8) {
-                    this.frame = 0;
-                }
-                break;
-
-            case 'JUMPING_R':
-                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 15, this.y - 2, 57, 111);
-                if (Game.frameCount % 5  == 0) {
-                    this.frame--;
-                }
-                if (this.frame <= 1) {
-                    this.frame = 2;
-                }
-                break;
-
-            case 'FALLING_R':
-                context.drawImage(Game.images[this.name].jumprImage, 57 * (this.frame), 0, 57, 111, this.x - 15, this.y - 2, 57, 111);
-                break;
-
-                case 'JUMPING_L':
-                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
-                if (Game.frameCount % 5  == 0) {
-                    this.frame++;
-                }
-                if (this.frame >= 5) {
-                    this.frame = 5;
-                }
-                break;
-
-            case 'FALLING_L':
-                context.drawImage(Game.images[this.name].jumplImage, 57 * (this.frame), 0, 57, 111, this.x - 30, this.y - 2, 57, 111);
-                break;
-        }
-    };
-
-    /**
-     * Renders the special effect on the map
-     */
-    Woodsman.prototype.renderFX = function() {
+        this.parent.update.apply(this, arguments);
     };
 
     /**
@@ -193,74 +217,83 @@ define(function() {
             return;
         }
 
-        if (Keyboard.isDown(Keyboard.LEFT_ARROW) ) {
+        // Walk left
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && this.physics.onFloor) {
             this.physics.addForce(-this.speed.x, 0);
         }
-
-        if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
-            this.physics.addForce(this.speed.x, 0);
+        if (this.body.left && !this.fsm.is(Woodsman.WALKING_LEFT) && this.physics.onFloor) {
+            this.fsm.walkLeft();
         }
 
-
-        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && (this.previousState == 'JUMPING_R' || this.previousState == 'FALLING_R') && this.physics.onFloor) {
-            this.state = 'WALK_R';
+        // Walk right
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && this.physics.onFloor) {
             this.physics.addForce(this.speed.x, 0);
         }
-
-        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && (this.previousState == 'JUMPING_R' || this.previousState == 'FALLING_R') && !this.physics.onFloor) {
-            //this.state = 'JUMPING_R';
-            this.physics.addForce(this.speed.x, 0);
+        if (!this.body.left && !this.fsm.is(Woodsman.WALKING_RIGHT) && this.physics.onFloor) {
+            this.fsm.walkRight();
         }
 
-        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && (this.previousState == 'JUMPING_L' || this.previousState == 'FALLING_L') && this.physics.onFloor) {
-            this.state = 'WALK_L';
-            this.frame = 0;
+        // Left while jumping
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && !this.physics.onFloor) {
             this.physics.addForce(-this.speed.x, 0);
         }
-
-        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && (this.previousState == 'JUMPING_L' || this.previousState == 'FALLING_L') && !this.physics.onFloor) {
-            this.state = 'JUMPING_L';
-            this.physics.addForce(-this.speed.x, 0);
+        if (this.body.left && !this.fsm.is(Woodsman.JUMPING_LEFT) && !this.physics.onFloor && this.physics.jumping) {
+            this.fsm.jumpLeft();
         }
 
+        // Right while jumping
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && !this.physics.onFloor) {
+            this.physics.addForce(this.speed.x, 0);
+        }
+        if (!this.body.left && !this.fsm.is(Woodsman.JUMPING_RIGHT) && !this.physics.onFloor && this.physics.jumping) {
+            this.fsm.jumpRight();
+        }
+
+        // Left while falling
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && !this.physics.onFloor && !this.physics.jumping) {
+            this.physics.addForce(-this.speed.x, 0);
+        }
+        if (this.body.left && !this.fsm.is(Woodsman.FALLING_LEFT) && !this.physics.onFloor && !this.physics.jumping) {
+            this.fsm.fallLeft();
+        }
+
+        // Right while falling
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && !this.physics.onFloor && !this.physics.jumping) {
+            this.physics.addForce(this.speed.x, 0);
+        }
+        if (!this.body.left && !this.fsm.is(Woodsman.FALLING_RIGHT) && !this.physics.onFloor && !this.physics.jumping) {
+            this.fsm.fallRight();
+        }
+
+        // Jump
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
             this.jump();
         }
 
-        if (Keyboard.isDown(Keyboard.ESCAPE)) {
-            Game.Npc.leaveNpc(this);
+        // Idle
+        if (this.physics.onFloor && this.physics.forces.length == 0 && this.physics.jumpForces.length == 0 && this.physics.v.x == 0 && this.physics.v.y == 0) {
+            if (this.body.left && !this.fsm.is(Woodsman.IDLE_LEFT)) {
+                this.fsm.turnLeft();
+            } else if (!this.body.left && !this.fsm.is(Woodsman.IDLE_RIGHT)) {
+                this.fsm.turnRight();
+            }
         }
-    };
 
-    /**
-     * Triggered when the character is being possessed
-     */
-    Woodsman.prototype.onPossess = function() {
-        Game.map.tilemap = window.maps.woodsman;     // Getting the map from the global object
-        var self = this;
-        setTimeout(function() {
-            self.controllable = true;
-        }, Game.Npc.STUN_TIME);
-        Game.map.autoScroll();
+        if (Keyboard.isDown(Keyboard.ESCAPE)) {
+            // Npc.leaveNpc(this);
+        }
     };
 
     /**
      * Triggered when the character is being left
      */
     Woodsman.prototype.onLeave = function() {
-        if (this.state == 'IDLE_LEFT' || this.state == 'WALK_L') {
-            this.state = 'IDLE_LEFT';
-        } else{
-            this.state = 'IDLE_RIGHT';
+        this.parent.onLeave.call(this);
+        if (this.fsm.is(Woodsman.IDLE_LEFT) || this.fsm.is(Woodsman.WALKING_LEFT)) {
+            this.fsm.walkLeft();
+        } else {
+            this.fsm.walkRight();
         }
-    };
-
-    /**
-     * Makes the character jump
-     * @return {[type]} [description]
-     */
-    Woodsman.prototype.jump = function() {
-        this.physics.addJumpForce(-this.speed.y);
     };
 
     return Woodsman;

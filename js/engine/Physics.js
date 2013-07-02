@@ -3,10 +3,10 @@ define(function() {
     var map = [];
 
     var Physics = function(entity) {
-        Physics.G = 9.81;   // The gravity constant
+        Physics.G = 0.981;   // The gravity constant
 
         this.entity        = entity;
-        this.mass          = 15;
+        this.mass          = 25;
         this.jumpHeight    = 20;
         this.drag          = 1;
         this.useGravity    = true;
@@ -131,7 +131,7 @@ define(function() {
      * Applies the gravity to the entity
      */
     Physics.prototype.applyGravity = function() {
-        this.v.y += this.mass * Physics.G * Time.deltaTime;
+        this.v.y += this.mass * Physics.G;
     };
 
     /**
@@ -225,7 +225,7 @@ define(function() {
             // }
         }
 
-        if (head) {
+        if (dForceY < 0) {
             this.jumping = true;
         } else {
             this.jumping = false;

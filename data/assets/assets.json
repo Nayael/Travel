@@ -151,10 +151,12 @@
             "woodsman": {
                 "idleRSprite": ["sprites/woodsman/idle_right.png", "game"],
                 "idleLSprite": ["sprites/woodsman/idle_left.png", "game"],
-                "walkRSprite": ["sprites/woodsman/right.png", "game"],
-                "walkLSprite": ["sprites/woodsman/left.png", "game"],
-                "jumpRSprite": ["sprites/woodsman/jump_r.png", "game"],
-                "jumpLSprite": ["sprites/woodsman/jump_l.png", "game"]
+                "walkRSprite": ["sprites/woodsman/walking_right.png", "game"],
+                "walkLSprite": ["sprites/woodsman/walking_left.png", "game"],
+                "jumpRSprite": ["sprites/woodsman/jumping_right.png", "game"],
+                "jumpLSprite": ["sprites/woodsman/jumping_left.png", "game"],
+                "fallRSprite": ["sprites/woodsman/jumping_right.png", "game"],
+                "fallLSprite": ["sprites/woodsman/jumping_left.png", "game"]
             },
             "bat": {
                 "walkRSprite": ["sprites/bat/right.png", "game"],

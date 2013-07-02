@@ -1,5 +1,6 @@
-define(['onEachFrame', 'Engine', 'StateMachine', 'Keyboard', 'game/Load', 'game/World', 'game/characters/Ghost', 'game/characters/Cat'],
-function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat) {
+define(['onEachFrame', 'Engine', 'StateMachine', 'Keyboard', 'game/Load', 'game/World', 'game/characters/Ghost', 'game/characters/Cat', 'game/characters/Woodsman'],
+
+function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat, Woodsman) {
     var Game = function() {
         this.CANVAS_WIDTH  = 800;
         this.CANVAS_HEIGHT = 576;
@@ -121,7 +122,7 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
         this.world = new World();
         this.world.setEnvironment('ghost', this.map, this.assets);
 
-        this.player = new Cat(100, 10, this.map.TS, this.assets.images.characters.cat);
+        this.player = new Cat(500, 10, this.map.TS, this.assets.images.characters.cat);
         this.player.onPossess(this.map);
 
         // Launching the main loop
@@ -139,7 +140,6 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
         // We draw the map
         this.map.drawBackground();
         this.map.draw();
-        // this.map.scrollX++;
 
         // // Updating all the entities
         // // The index of a NPC corresponds to the position of it in the tilemap

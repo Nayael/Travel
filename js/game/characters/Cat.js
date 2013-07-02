@@ -51,7 +51,6 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
      */
     Cat.prototype.initFSM = function() {
         this.fsm = StateMachine.create({
-            // initial: Cat.IDLE_RIGHT,
             error: function(eventName, from, to, args, errorCode, errorMessage) {
                 console.log('Error # ' + errorCode + ' on event ' + eventName + '. From [' + from + '] to [' + to + '] : ' + errorMessage + ' (' + args + ')');
             },
@@ -73,11 +72,11 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
                     to: Cat.WALKING_RIGHT
                 }, {
                     name: 'jumpLeft',
-                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_RIGHT],
+                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
                     to: Cat.JUMPING_LEFT
                 }, {
                     name: 'jumpRight',
-                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT],
+                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
                     to: Cat.JUMPING_RIGHT
                 }, {
                     name: 'fallLeft',
@@ -220,55 +219,63 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
 
         // Walk left
         if (Keyboard.isDown(Keyboard.LEFT_ARROW) && this.physics.onFloor) {
+            if (this.body.left && !this.fsm.is(Cat.WALKING_LEFT)) {
+                this.fsm.walkLeft();
+            }
             this.physics.addForce(-this.speed.x, 0);
-        }
-        if (this.body.left && !this.fsm.is(Cat.WALKING_LEFT) && this.physics.onFloor) {
-            this.fsm.walkLeft();
         }
 
         // Walk right
         if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && this.physics.onFloor) {
+            if (!this.body.left && !this.fsm.is(Cat.WALKING_RIGHT)) {
+                this.fsm.walkRight();
+            }
             this.physics.addForce(this.speed.x, 0);
-        }
-        if (!this.body.left && !this.fsm.is(Cat.WALKING_RIGHT) && this.physics.onFloor) {
-            this.fsm.walkRight();
-        }
-
-        // Left while jumping
-        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && !this.physics.onFloor) {
-            this.physics.addForce(-this.speed.x, 0);
-        }
-        if (this.body.left && !this.fsm.is(Cat.JUMPING_LEFT) && !this.physics.onFloor && this.physics.jumping) {
-            this.fsm.jumpLeft();
-        }
-
-        // Right while jumping
-        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && !this.physics.onFloor) {
-            this.physics.addForce(this.speed.x, 0);
-        }
-        if (!this.body.left && !this.fsm.is(Cat.JUMPING_RIGHT) && !this.physics.onFloor && this.physics.jumping) {
-            this.fsm.jumpRight();
-        }
-
-        // Left while falling
-        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && !this.physics.onFloor && !this.physics.jumping) {
-            this.physics.addForce(-this.speed.x, 0);
-        }
-        if (this.body.left && !this.fsm.is(Cat.FALLING_LEFT) && !this.physics.onFloor && !this.physics.jumping) {
-            this.fsm.fallLeft();
-        }
-
-        // Right while falling
-        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && !this.physics.onFloor && !this.physics.jumping) {
-            this.physics.addForce(this.speed.x, 0);
-        }
-        if (!this.body.left && !this.fsm.is(Cat.FALLING_RIGHT) && !this.physics.onFloor && !this.physics.jumping) {
-            this.fsm.fallRight();
         }
 
         // Jump
         if (Keyboard.isDown(Keyboard.SPACE) && this.physics.onFloor) {
             this.jump();
+            if (this.body.left) {
+                this.fsm.jumpLeft();
+            } else {
+                this.fsm.jumpRight();
+            }
+        }
+
+        // Left while jumping
+        if (Keyboard.isDown(Keyboard.LEFT_ARROW) && this.physics.jumping) {
+            this.physics.addForce(-this.speed.x, 0);
+            if (!this.fsm.is(Cat.JUMPING_LEFT)) {
+                this.fsm.jumpLeft();
+            }
+        }
+
+        // Right while jumping
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW) && this.physics.jumping) {
+            this.physics.addForce(this.speed.x, 0);
+            if (!this.fsm.is(Cat.JUMPING_RIGHT)) {
+                this.fsm.jumpRight();
+            }
+        }
+
+        // Left while falling
+        if (!this.physics.onFloor && !this.physics.jumping) {
+            
+            if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
+                this.physics.addForce(-this.speed.x, 0);
+            }
+            if (this.body.left && !this.fsm.is(Cat.FALLING_LEFT)) {
+                this.fsm.fallLeft();
+            }
+
+            // Right while falling
+            if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
+                this.physics.addForce(this.speed.x, 0);
+            }
+            if (!this.body.left && !this.fsm.is(Cat.FALLING_RIGHT)) {
+                this.fsm.fallRight();
+            }
         }
 
         // Idle
