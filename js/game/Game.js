@@ -122,7 +122,7 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
         this.world = new World();
         this.world.setEnvironment('ghost', this.map, this.assets);
 
-        this.player = new Cat(500, 10, this.map.TS, this.assets.images.characters.cat);
+        this.player = new Woodsman(500, 10, this.map.TS, this.assets.images.characters.woodsman);
         this.player.onPossess(this.map);
 
         // Launching the main loop
