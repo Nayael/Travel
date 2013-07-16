@@ -126,7 +126,6 @@
         },
         "characters": {
             "ghost": {
-                "idleSprite": ["sprites/ghost/right.png", "game"],
                 "walkRSprite": ["sprites/ghost/right.png", "game"],
                 "walkLSprite": ["sprites/ghost/left.png", "game"],
                 "possLSprite": ["sprites/ghost/poss_l.png", "game"],

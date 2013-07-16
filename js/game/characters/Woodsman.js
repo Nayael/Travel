@@ -1,16 +1,15 @@
 // The Woodsman class
-define(['Engine', 'StateMachine', 'Keyboard', 'inheritance', 'game/characters/Character', 'game/characters/Npc'],
+define(['Engine', 'StateMachine', 'Keyboard', 'Engine/Map', 'inheritance', 'game/characters/Character', 'game/characters/Npc'],
 
-function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
+function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
 
     /**
      * @constructor
      * @param {integer} x       The x position
      * @param {integer} y       The y position
-     * @param {integer} ts      The map's tile size
      * @param {Object} sprites  The sprites for this character
      */
-    var Woodsman = function(x, y, ts, sprites) {
+    var Woodsman = function(x, y, sprites) {
         this.parent.constructor.apply(this, arguments);
         this.name  = 'woodsman';
 
@@ -24,7 +23,7 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
         }
 
         // Body
-        this.body = new Engine.Body(this, 2, 3, ts);
+        this.body = new Engine.Body(this, 2, 3, Map.TS);
 
         // Physics
         this.physics = new Engine.Physics(this);
@@ -120,9 +119,9 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
                 sprite: this.subject.sprites.walkLSprite,
                 localX: 0,
                 localY: 0,
-                width: 44,
+                width: 58,
                 height: 108,
-                totalFrames: 5,
+                totalFrames: 8,
                 frameRate: 120
             });
         };
@@ -130,11 +129,11 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
         this.fsm.onwalkRight = function(e) {
             this.subject.view = new Engine.View(this.subject, {
                 sprite: this.subject.sprites.walkRSprite,
-                localX: this.subject.body.getWidth() - 44,
+                localX: this.subject.body.getWidth() - 58,
                 localY: 0,
-                width: 44,
+                width: 58,
                 height: 108,
-                totalFrames: 5,
+                totalFrames: 8,
                 frameRate: 120
             });
         };
@@ -189,11 +188,11 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
     /**
      * Called on each frame
      */
-    Woodsman.prototype.update = function(map, canvasWidth, canvasHeight) {
+    Woodsman.prototype.update = function() {
         // The character scroll with the map if he is not controlled by the player
         if (this.isPlayer && this.controllable) {
-            this.realX = this.x + map.scrollX;
-            this.realY = this.y + map.scrollY;
+            this.realX = this.x + Map.scrollX;
+            this.realY = this.y + Map.scrollY;
         }
 
         var realX0 = this.realX,

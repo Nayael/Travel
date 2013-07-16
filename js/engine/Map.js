@@ -1,10 +1,16 @@
 // The Map class file
 define(function() {
+
     /**
      * @constructor
+     */
+    var Map = function() { };
+    
+    /**
+     * Initializes the Map singleton
      * @param {Canvas2D} canvas The map's canvas
      */
-    var Map = function(canvas) {
+    Map.prototype.init = function(canvas) {
         this.canvas = canvas;
         this.CANVAS_WIDTH  = this.canvas.width;
         this.CANVAS_HEIGHT = this.canvas.height;
@@ -226,5 +232,5 @@ define(function() {
         this.limitY     = this.background.height - this.CANVAS_HEIGHT;
     };
 
-    return Map;
+    return new Map();
 });

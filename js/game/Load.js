@@ -1,4 +1,7 @@
-define(['json!../../data/assets/assets.json', 'PxLoader', 'PxLoaderImage', 'buzz'], function(assets, PxLoader, PxLoaderImage, buzz) {
+define(['json!../../data/assets/assets.json', 'PxLoader', 'PxLoaderImage', 'buzz', 'game/Globals'],
+
+function(assets, PxLoader, PxLoaderImage, buzz, Globals) {
+
     var Loader = {};
 
     /**
@@ -15,7 +18,7 @@ define(['json!../../data/assets/assets.json', 'PxLoader', 'PxLoaderImage', 'buzz
                 if (typeof current === 'object' && current.length == undefined) {
                     parseImageData(game, current)
                 } else {
-                    obj[prop] = game.loader.addImage(game.assets.IMAGE_PATH + current[0], current[1]);
+                    obj[prop] = game.loader.addImage(Globals.IMAGE_PATH + current[0], current[1]);
                 }
             }
         }
@@ -36,7 +39,7 @@ define(['json!../../data/assets/assets.json', 'PxLoader', 'PxLoaderImage', 'buzz
                 current = obj[prop];
                 if (typeof current === 'object' && current.length == undefined) {
                     if (current.path && current.formats && current.preload && current.loop) {
-                        obj[prop] = new buzz.sound(game.assets.AUDIO_PATH + current.path, {
+                        obj[prop] = new buzz.sound(Globals.AUDIO_PATH + current.path, {
                             formats: current.formats,
                             preload: current.preload,
                             loop: current.loop,

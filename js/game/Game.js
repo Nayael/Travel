@@ -1,13 +1,8 @@
-define(['onEachFrame', 'Engine', 'StateMachine', 'Keyboard', 'game/Load', 'game/World', 'game/characters/Ghost', 'game/characters/Cat', 'game/characters/Woodsman'],
+define(['onEachFrame', 'Engine', 'StateMachine', 'Keyboard', 'game/Globals', 'game/Load', 'game/World', 'game/characters/Ghost', 'game/characters/Cat', 'game/characters/Woodsman'],
 
-function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat, Woodsman) {
+function (onEachFrame, Engine, StateMachine, Keyboard, Globals, Loader, World, Ghost, Cat, Woodsman) {
     var Game = function() {
-        this.CANVAS_WIDTH  = 800;
-        this.CANVAS_HEIGHT = 576;
-
         this.assets = {};
-        this.assets.IMAGE_PATH = 'data/assets/images/';
-        this.assets.AUDIO_PATH = 'data/assets/audio/';
 
         // State machine
         this.initFsm();
@@ -15,10 +10,10 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
         this.canvas            = document.createElement('canvas');
         this.context           = this.canvas.getContext('2d');
         this.canvas.id         = 'main';
-        this.canvas.width      = this.CANVAS_WIDTH;
-        this.canvas.height     = this.CANVAS_HEIGHT;
+        this.canvas.width      = Globals.CANVAS_WIDTH;
+        this.canvas.height     = Globals.CANVAS_HEIGHT;
         this.context.fillStyle = 'rgb(0, 0, 0)';
-        this.context.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+        this.context.fillRect(0, 0, Globals.CANVAS_WIDTH, Globals.CANVAS_HEIGHT);
     };
 
     Game.prototype.init = function() {
@@ -36,7 +31,6 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
     Game.prototype.initFsm = function() {
         // Declaring the FSM
         this.fsm = StateMachine.create({
-            initial: 'none',
             error: function(eventName, from, to, args, errorCode, errorMessage) {
                 console.log('Error on event ' + eventName + '. From [' + from + '] to [' + to + '] : ' + errorMessage);
             },
@@ -55,8 +49,8 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
             var game = this.subject,
                 loaderAnim = new Engine.View(null, {
                     sprite: game.assets.images.loading,
-                    localX: (game.CANVAS_WIDTH >> 1) - (71 >> 1),
-                    localY: (game.CANVAS_HEIGHT >> 2) - (72 >> 1),
+                    localX: (Globals.CANVAS_WIDTH >> 1) - (71 >> 1),
+                    localY: (Globals.CANVAS_HEIGHT >> 2) - (72 >> 1),
                     width: 71,
                     height: 72,
                     totalFrames: 8,
@@ -100,7 +94,7 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
          */
         this.fsm.onleavemenu = function(e) {
             this.subject.context.fillStyle = 'rgb(0, 0, 0)';
-            this.subject.context.fillRect(0, 0, this.subject.CANVAS_WIDTH, this.subject.CANVAS_HEIGHT);
+            this.subject.context.fillRect(0, 0, Globals.CANVAS_WIDTH, Globals.CANVAS_HEIGHT);
         };
 
         /**
@@ -118,12 +112,13 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
         this.entities = [];
         this.player = null;
         
-        this.map = new Engine.Map(this.canvas);
+        this.map = Engine.Map;
+        this.map.init(this.canvas);
         this.world = new World();
-        this.world.setEnvironment('ghost', this.map, this.assets);
+        this.world.setEnvironment('ghost', this.assets);
 
-        this.player = new Woodsman(500, 10, this.map.TS, this.assets.images.characters.woodsman);
-        this.player.onPossess(this.map);
+        this.player = new Ghost(500, 10, this.assets.images.characters.ghost);
+        this.player.onPossess();
 
         // Launching the main loop
         onEachFrame(this.update, 'game', this);
@@ -135,7 +130,7 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
     Game.prototype.update = function() {
         // Clearing the canvas
         // this.context.fillStyle = 'rgb(0, 0, 0)';
-        // this.context.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+        // this.context.fillRect(0, 0, Globals.CANVAS_WIDTH, Globals.CANVAS_HEIGHT);
 
         // We draw the map
         this.map.drawBackground();
@@ -148,7 +143,7 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
         //         npc = this.npcs[entity];
         //         npc.update();
         //         // If the character steps out of the view, we destroy it
-        //         if (npc.x < -npc.body.width || npc.x > this.CANVAS_WIDTH || npc.y < -npc.body.height || npc.y > this.CANVAS_HEIGHT) {
+        //         if (npc.x < -npc.body.width || npc.x > Globals.CANVAS_WIDTH || npc.y < -npc.body.height || npc.y > Globals.CANVAS_HEIGHT) {
         //             delete this.npcs[entity];
         //             continue;
         //         }
@@ -158,12 +153,11 @@ function (onEachFrame, Engine, StateMachine, Keyboard, Loader, World, Ghost, Cat
 
 
         // Updating and rendering the player's character
-        this.player.update(this.map, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+        this.player.update(this.map, Globals.CANVAS_WIDTH, Globals.CANVAS_HEIGHT);
         this.player.render(this.context);
-        if (this.player.renderFX) {
-            this.player.renderFX(this.context);
-        }
         this.player.control();
+
+        // TODO render world FX
     };
 
     /**

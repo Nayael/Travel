@@ -1,16 +1,15 @@
 // The Ghost character class file
-define(['Engine', 'StateMachine', 'Keyboard', 'inheritance', 'game/characters/Character'],
+define(['Engine', 'StateMachine', 'Keyboard', 'inheritance', 'game/characters/Character', 'Engine/Map'],
 
-function(Engine, StateMachine, Keyboard, inherits, Character) {
+function(Engine, StateMachine, Keyboard, inherits, Character, Map) {
 
     /**
      * @constructor
      * @param {integer} x       The x position
      * @param {integer} y       The y position
-     * @param {integer} ts      The map's tile size
      * @param {Object} sprites  The sprites for this character
      */
-    var Ghost = function(x, y, ts, sprites) {
+    var Ghost = function(x, y, sprites) {
         this.parent.constructor.apply(this, arguments);
         this.name = 'ghost';
 
@@ -24,29 +23,17 @@ function(Engine, StateMachine, Keyboard, inherits, Character) {
         }
 
         // Body
-        this.body = new Engine.Body(this, 1, 1.3, ts);
+        this.body = new Engine.Body(this, 1, 1.3, Map.TS);
         this.body.limitToBounds = true;
         
         // Physics
         this.physics = new Engine.Physics(this);
-        // this.physics.useGravity = false;
-        // this.physics.useCollisions = false;
+        this.physics.useGravity = false;
+        this.physics.useCollisions = false;
         
         // View
-        this.view = new Engine.View(this, {
-            sprite: this.sprites.walkRSprite,
-            localX: 0,
-            localY: 0,
-            width: 31.5,
-            height: 43,
-            totalFrames: 6,
-            frameRate: 130
-        });
-
-        // this.useTileFade = true;
-
-        // State Machine
         this.initFSM();
+        this.fsm.walkRight();
     };
     Ghost.inheritsFrom(Character);
 
@@ -61,13 +48,12 @@ function(Engine, StateMachine, Keyboard, inherits, Character) {
      */
     Ghost.prototype.initFSM = function() {
         this.fsm = StateMachine.create({
-            initial: Ghost.WALKING_RIGHT,
             error: function(eventName, from, to, args, errorCode, errorMessage) {
                 console.log('Error on event ' + eventName + '. From [' + from + '] to [' + to + '] : ' + errorMessage);
             },
             events: [
-                { name: 'walkLeft', from: [Ghost.IDLE, Ghost.WALKING_RIGHT], to: Ghost.WALKING_LEFT },
-                { name: 'walkRight', from: [Ghost.IDLE, Ghost.WALKING_LEFT], to: Ghost.WALKING_RIGHT }
+                { name: 'walkLeft', from: [Character.NONE, Ghost.WALKING_RIGHT], to: Ghost.WALKING_LEFT },
+                { name: 'walkRight', from: [Character.NONE, Ghost.WALKING_LEFT], to: Ghost.WALKING_RIGHT }
             ]
         });
         this.fsm.subject = this;
@@ -99,25 +85,15 @@ function(Engine, StateMachine, Keyboard, inherits, Character) {
 
     /**
      * Called on each frame
-     * @param  {Map} map          The game's map object
-     * @param  {integer} canvasWidth  The game's canvas' width
-     * @param  {integer} canvasHeight The game's canvas' height
      */
-    Ghost.prototype.update = function(map, canvasWidth, canvasHeight) {
-        this.realX = this.x + map.scrollX;
-        this.realY = this.y + map.scrollY;
+    Ghost.prototype.update = function() {
+        this.realX = this.x + Map.scrollX;
+        this.realY = this.y + Map.scrollY;
 
         var realX0 = this.realX,
             realY0 = this.realY;
 
-        this.parent.update.call(this, map, canvasWidth, canvasHeight);
-
-        // Update the state
-        if (this.realX < realX0 && !this.fsm.is(Ghost.WALKING_LEFT)) {
-            this.fsm.walkLeft();
-        } else if (this.realX > realX0 && !this.fsm.is(Ghost.WALKING_RIGHT)) {
-            this.fsm.walkRight();
-        }
+        this.parent.update.call(this, arguments);
     };
 
     /**
@@ -128,18 +104,33 @@ function(Engine, StateMachine, Keyboard, inherits, Character) {
             return;
         }
 
+        // Move up
         if (Keyboard.isDown(Keyboard.UP_ARROW)) {
             this.physics.addForce(0, -this.speed.y)
-        } else if (Keyboard.isDown(Keyboard.DOWN_ARROW)) {
+        }
+
+        // Move down
+        if (Keyboard.isDown(Keyboard.DOWN_ARROW)) {
             this.physics.addForce(0, this.speed.y)
         }
 
+        // Walk left
         if (Keyboard.isDown(Keyboard.LEFT_ARROW)) {
+            if (this.body.left && !this.fsm.is(Ghost.WALKING_LEFT)) {
+                this.fsm.walkLeft();
+            }
             this.physics.addForce(-this.speed.x, 0);
-        } else if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
+        }
+
+        // Walk right
+        if (Keyboard.isDown(Keyboard.RIGHT_ARROW)) {
+            if (!this.body.left && !this.fsm.is(Ghost.WALKING_RIGHT)) {
+                this.fsm.walkRight();
+            }
             this.physics.addForce(this.speed.x, 0);
         }
 
+        // Take control of an entity
         if (Keyboard.isDown(Keyboard.CTRL)) {
             this.takeControl(npcs);
         }
@@ -148,7 +139,7 @@ function(Engine, StateMachine, Keyboard, inherits, Character) {
     /**
      * The ghost takes control of a NPC
      */
-    Ghost.prototype.takeControl = function(map, npcs) {
+    Ghost.prototype.takeControl = function(npcs) {
         // Take control of the npc he is colliding
         for (var npc in npcs) {
             // if (Game.npcs.hasOwnProperty(npc) && this.body.collide(Game.npcs[npc])) {
@@ -164,8 +155,9 @@ function(Engine, StateMachine, Keyboard, inherits, Character) {
     /**
      * Triggered when the character is being possessed
      */
-    Ghost.prototype.onPossess = function(map) {
-        map.scrollable = false;
+    Ghost.prototype.onPossess = function() {
+        this.parent.onPossess.call(this, arguments);
+        Map.scrollable = false;
     };
 
     return Ghost;

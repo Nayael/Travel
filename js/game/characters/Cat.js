@@ -1,16 +1,15 @@
 // The Cat class
-define(['Engine', 'StateMachine', 'Keyboard', 'inheritance', 'game/characters/Character', 'game/characters/Npc'],
+define(['Engine', 'StateMachine', 'Keyboard', 'Engine/Map', 'inheritance', 'game/characters/Character', 'game/characters/Npc'],
 
-function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
+function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
 
     /**
      * @constructor
      * @param {integer} x       The x position
      * @param {integer} y       The y position
-     * @param {integer} ts      The map's tile size
      * @param {Object} sprites  The sprites for this character
      */
-    var Cat = function(x, y, ts, sprites) {
+    var Cat = function(x, y, sprites) {
         this.parent.constructor.apply(this, arguments);
         this.name = 'cat';
 
@@ -24,7 +23,7 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
         }
 
         // Body
-        this.body = new Engine.Body(this, 1, 1, ts);
+        this.body = new Engine.Body(this, 1, 1, Map.TS);
 
         // Physics
         this.physics = new Engine.Physics(this);
@@ -60,7 +59,7 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
                     to: Cat.IDLE_LEFT
                 }, {
                     name: 'turnRight',
-                    from: ['none', Cat.IDLE_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_RIGHT, Cat.FALLING_RIGHT],
+                    from: [Character.NONE, Cat.IDLE_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_RIGHT, Cat.FALLING_RIGHT],
                     to: Cat.IDLE_RIGHT
                 }, {
                     name: 'walkLeft',
@@ -189,11 +188,11 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Npc) {
     /**
      * Called on each frame
      */
-    Cat.prototype.update = function(map, canvasWidth, canvasHeight) {
+    Cat.prototype.update = function() {
         // The character scroll with the map if he is not controlled by the player
         if (this.isPlayer && this.controllable) {
-            this.realX = this.x + map.scrollX;
-            this.realY = this.y + map.scrollY;
+            this.realX = this.x + Map.scrollX;
+            this.realY = this.y + Map.scrollY;
         }
 
         var realX0 = this.realX,
