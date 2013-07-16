@@ -1,4 +1,8 @@
 (function() {
+
+    ///////////////////////////////////////////////////////
+    // Assuring compatibility with requestAnimationFrame //
+    ///////////////////////////////////////////////////////
     var lastTime = 0;
     var vendors = ['webkit', 'moz'];
     for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -24,8 +28,18 @@
         };
     }
 
+    /**
+     * A list containing all the callbacks running on each frame that were registered with a name
+     * @type {Object}
+     */
     var requestAnimationFrameCallbacks = {};
 
+    /**
+     * Triggers a callback on each rendering frame
+     * @param  {Function} cb     The callback to call on each frame
+     * @param  {String}   label  The loop label. If not null, the callback will be registered, in a list, and cancellable with onEachFrame.cancel()
+     * @param  {Object}   target The object to bind to the call on each frame (the "this"-object in the callback)
+     */
     window.onEachFrame = function(cb, label, target) {
         var callback = cb;
 
@@ -36,6 +50,11 @@
         }
 
         var _cb = function() {
+            // If the label is set, and the corresponding callback is set to null, it means it was canceled, so we definitively delete it, and stop here
+            if (label && requestAnimationFrameCallbacks[label] === null) {
+                delete requestAnimationFrameCallbacks[label];
+                return;
+            }
             callback();
 
             var anim = requestAnimationFrame(_cb);
@@ -46,24 +65,32 @@
         requestAnimationFrame(_cb);
     };
 
-    window.onEachFrame.cancel = function(index) {
-        if (typeof index == 'string') { // If the given index is a label, cancel the callback with the given label
-            var label = index;
-            index = requestAnimationFrameCallbacks[label];
-            delete requestAnimationFrameCallbacks[label];
+    /**
+     * Cancels an onEachFrame() loop
+     * @param  {String} loopLabel The label of the loop to cancel
+     * @return {[type]}       [description]
+     */
+    window.onEachFrame.cancel = function(loopLabel) {
+        if (typeof loopLabel == 'string') { // If the given index is a label, cancel the callback with the given label
+            var label = loopLabel;
+            loopLabel = requestAnimationFrameCallbacks[label];
+            requestAnimationFrameCallbacks[label] = null;   // We pass it to null. On the next iteration, we will delete it definitively
         }
-        if (index == undefined) {
+        if (loopLabel == undefined) {
             return;
         }
-        window.cancelAnimationFrame(index);
+        window.cancelAnimationFrame(loopLabel);
     }
 
-    // Initializing a global delta-time
+    // Initializing a global time/delta-time
     window.Time = {
         time: null,
         deltaTime: null
     };
 
+    /**
+     * Launching a callback to always update the passed time and delta-time
+     */
     onEachFrame(function() {
         Time.time = Time.time || Date.now();
         var t = Date.now();
@@ -73,4 +100,4 @@
         }
         Time.time = t;
     });
-}());
+})();
