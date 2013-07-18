@@ -3,18 +3,19 @@ define(function() {
     var View = function(entity, data) {
         this.entity       = entity;
         this.sprite       = data.sprite;
-
+        
         // The local position of the sprite in the entity
         this.localX       = data.localX || 0;
         this.localY       = data.localY || 0;
         
         this.width        = data.width;
         this.height       = data.height;
-
+        
         this.currentFrame = 0;     // The current frame to draw
         this.frameCount   = 0;     // The number of frames elapsed since the first draw
         this.totalFrames  = data.totalFrames || 1;
         this.frameRate    = data.frameRate   || 60;
+        this.enabled      = true;
     };
 
     /**

@@ -20,6 +20,7 @@ function(Engine, Keyboard, Globals, Map) {
         this.y = y || 0;
         this.sprites = sprites;
         this.controllable = false;
+        this.enabled = true;
 
         this.speed = {
             x: 15,
@@ -40,6 +41,9 @@ function(Engine, Keyboard, Globals, Map) {
      * Called on each frame
      */
     Character.prototype.update = function() {
+        if (!this.enabled) {
+            return;
+        }
         this.realX = this.x + Map.scrollX;
         this.realY = this.y + Map.scrollY;
 
@@ -85,7 +89,7 @@ function(Engine, Keyboard, Globals, Map) {
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Character.prototype.render = function(context) {
-        if (this.view) {
+        if (this.view && this.view.enabled && this.enabled) {
             this.view.draw(context);
         }
     };
@@ -94,7 +98,7 @@ function(Engine, Keyboard, Globals, Map) {
      * Applies the player's controls on the character
      */
     Character.prototype.control = function() {
-        if (!this.controllable) {
+        if (!this.controllable || !this.enabled) {
             return;
         }
 

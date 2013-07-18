@@ -1,7 +1,7 @@
 // The Cat class
-define(['Engine', 'StateMachine', 'Keyboard', 'Engine/Map', 'inheritance', 'game/characters/Character', 'game/characters/Npc'],
+define(['Engine', 'StateMachine', 'Keyboard', 'Engine/Map', 'inheritance', 'game/characters/Character'],
 
-function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
+function(Engine, StateMachine, Keyboard, Map, inherits, Character) {
 
     /**
      * @constructor
@@ -189,6 +189,9 @@ function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
      * Called on each frame
      */
     Cat.prototype.update = function() {
+        if (!this.enabled) {
+            return;
+        }
         // The character scroll with the map if he is not controlled by the player
         if (this.isPlayer && this.controllable) {
             this.realX = this.x + Map.scrollX;
@@ -212,7 +215,7 @@ function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
      * Applies the player's controls on the cat
      */
     Cat.prototype.control = function() {
-        if (!this.controllable) {
+        if (!this.controllable || !this.enabled) {
             return;
         }
 

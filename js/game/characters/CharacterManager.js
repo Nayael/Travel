@@ -1,12 +1,22 @@
-// The Npc class
-define(['Engine', 'Keyboard', 'inheritance', 'game/characters/Character'],
+// The CharacterManager class
+define(['Engine', 'Engine/Map', 'game/characters/Character', 'game/characters/Ghost', 'game/characters/Cat', 'game/characters/Woodsman'],
 
-function(Engine, Keyboard, inherits, Character) {
+function(Engine, Map, Character, Ghost, Cat, Woodsman) {
 
-    var Npc = {};
+    /**
+     * @constructor
+     */
+    var CharacterManager = function() { };
 
-    // Constants
-    Npc.INDEXES = {      // The list of all the NPCs available in the game, and their values in the tilemap
+    /**
+     * Constants
+     */
+    
+    /**
+     * The list of all the NPCs available in the game, and their values in the tilemap
+     * @type {Object}
+     */
+    CharacterManager.INDEXES = {
         200: 'Cat',
         300: 'Oldwoman',
         400: 'Woodsman',
@@ -15,10 +25,22 @@ function(Engine, Keyboard, inherits, Character) {
     };
 
     /**
+     * Initializes all the characters in the scene
+     * @param  {Array} tilemap The tilemap containing the characters
+     */
+    CharacterManager.prototype.init = function(tilemap) {
+        
+    };
+
+    CharacterManager.prototype.update = function() {
+        
+    };
+
+    /**
      * Takes possession of a NPC
      * @param  {Character} index The index of the NPC to possess
      */
-    Npc.possessNpc = function(index) {
+    CharacterManager.prototype.possessCharacter = function(index) {
         // Game.previousPlayer = Game.player;
         // Game.map.overlayAlpha = 1;
 
@@ -43,7 +65,7 @@ function(Engine, Keyboard, inherits, Character) {
      * Stops the possession of a NPC
      * @param  {Character} npc The NPC to leave
      */
-    Npc.leaveNpc = function(npc) {
+    CharacterManager.prototype.leaveCharacter  = function(npc) {
         // Can't leave a npc when colliding with another npc
         // for (var i in Game.npcs) {
         //     if (Game.npcs.hasOwnProperty(i) && npc.body.collide(Game.npcs[i])) {
@@ -78,18 +100,18 @@ function(Engine, Keyboard, inherits, Character) {
      * @param  {integer} x
      * @param  {integer} y
      */
-    Npc.pop = function(value, x, y) {
+    CharacterManager.prototype.pop = function(value, x, y) {
         // If there is no NPC for the given value, return
-        // if (!Npc.list[value]) {
+        // if (!CharacterManager.list[value]) {
         //     return;
         // }
 
         // // We create the NPC regarding the value given in the tile
         // var npcMapIndex = y * Game.map.tilemap[0].length + x;
-        // Game.npcs[npcMapIndex] = new Npc.list[value](x * Game.map.TS - Game.map.scrollX, y * Game.map.TS - Game.map.scrollY);
+        // Game.npcs[npcMapIndex] = new Character.list[value](x * Game.map.TS - Game.map.scrollX, y * Game.map.TS - Game.map.scrollY);
         // Game.npcs[npcMapIndex].npcMapIndex = npcMapIndex;
         // Game.npcs[npcMapIndex].npcValue = value;
     };
 
-    return Npc;
+    return new CharacterManager();
 });

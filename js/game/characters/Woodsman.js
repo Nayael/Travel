@@ -1,7 +1,7 @@
 // The Woodsman class
-define(['Engine', 'StateMachine', 'Keyboard', 'Engine/Map', 'inheritance', 'game/characters/Character', 'game/characters/Npc'],
+define(['Engine', 'StateMachine', 'Keyboard', 'Engine/Map', 'inheritance', 'game/characters/Character'],
 
-function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
+function(Engine, StateMachine, Keyboard, Map, inherits, Character) {
 
     /**
      * @constructor
@@ -11,7 +11,7 @@ function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
      */
     var Woodsman = function(x, y, sprites) {
         this.parent.constructor.apply(this, arguments);
-        this.name  = 'woodsman';
+        this.name ='woodsman';
 
         this.speed = {
             x: 20,
@@ -189,6 +189,10 @@ function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
      * Called on each frame
      */
     Woodsman.prototype.update = function() {
+        if (!this.enabled) {
+            return;
+        }
+
         // The character scroll with the map if he is not controlled by the player
         if (this.isPlayer && this.controllable) {
             this.realX = this.x + Map.scrollX;
@@ -212,7 +216,7 @@ function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
      * Applies the player's controls on the Woodsman
      */
     Woodsman.prototype.control = function() {
-        if (!this.controllable) {
+        if (!this.controllable || !this.enabled) {
             return;
         }
 
