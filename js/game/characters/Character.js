@@ -1,5 +1,6 @@
 // The Character character class file
 define(['Engine', 'Keyboard', 'game/Globals', 'Engine/Map'],
+
 function(Engine, Keyboard, Globals, Map) {
 
     /**

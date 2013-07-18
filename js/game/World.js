@@ -1,4 +1,5 @@
 define(['json!../../data/maps/fx.json', 'json!../../data/maps/common.json', 'json!../../data/maps/woodsman.json', 'json!../../data/maps/oldwoman.json', 'Engine/Map', 'invert', 'pixastic'],
+
 function(mapsFx, common, woodsman, oldwoman, Map, invert, Pixastic) {
 
     /**

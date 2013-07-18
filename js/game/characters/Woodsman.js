@@ -59,7 +59,7 @@ function(Engine, StateMachine, Keyboard, Map, inherits, Character, Npc) {
                     to: Woodsman.IDLE_LEFT
                 }, {
                     name: 'turnRight',
-                    from: ['none', Woodsman.IDLE_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_RIGHT],
+                    from: [Character.NONE, Woodsman.IDLE_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_RIGHT],
                     to: Woodsman.IDLE_RIGHT
                 }, {
                     name: 'walkLeft',

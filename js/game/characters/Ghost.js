@@ -23,7 +23,7 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Map) {
         }
 
         // Body
-        this.body = new Engine.Body(this, 1, 1.3, Map.TS);
+        this.body = new Engine.Body(this, 1, 1.8, Map.TS);
         this.body.limitToBounds = true;
         
         // Physics

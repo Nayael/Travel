@@ -1,3 +1,4 @@
+// The main Game file
 define(['onEachFrame', 'Engine', 'StateMachine', 'Keyboard', 'game/Globals', 'game/Load', 'game/World', 'game/characters/Ghost', 'game/characters/Cat', 'game/characters/Woodsman'],
 
 function (onEachFrame, Engine, StateMachine, Keyboard, Globals, Loader, World, Ghost, Cat, Woodsman) {
