@@ -50,11 +50,6 @@
         }
 
         var _cb = function() {
-            // If the label is set, and the corresponding callback is set to null, it means it was canceled, so we definitively delete it, and stop here
-            if (label && requestAnimationFrameCallbacks[label] === null) {
-                delete requestAnimationFrameCallbacks[label];
-                return;
-            }
             callback();
 
             var anim = requestAnimationFrame(_cb);
@@ -74,7 +69,7 @@
         if (typeof loopLabel == 'string') { // If the given index is a label, cancel the callback with the given label
             var label = loopLabel;
             loopLabel = requestAnimationFrameCallbacks[label];
-            requestAnimationFrameCallbacks[label] = null;   // We pass it to null. On the next iteration, we will delete it definitively
+            delete requestAnimationFrameCallbacks[label];
         }
         if (loopLabel == undefined) {
             return;

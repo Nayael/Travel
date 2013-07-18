@@ -95,7 +95,7 @@ function(assets, PxLoader, PxLoaderImage, buzz, Globals) {
             if (!game.fsm.is('loading')) {
                 return;
             }
-            self.showLoadingText(e, game.context, game.CANVAS_WIDTH, game.CANVAS_HEIGHT);
+            self.showLoadingText(e, game.context);
         }, ['loading', 'menu']);
 
         // Once the loading of the loader assets is done, go to the Loading state
@@ -123,7 +123,7 @@ function(assets, PxLoader, PxLoaderImage, buzz, Globals) {
             if (!game.fsm.is('loading')) {
                 return;
             }
-            self.showLoadingText(e, game.context, game.CANVAS_WIDTH, game.CANVAS_HEIGHT);
+            self.showLoadingText(e, game.context);
         }, 'game');
 
         // Once the loading of the game assets is done, draw the canvas buffers go to the Game state
@@ -151,10 +151,8 @@ function(assets, PxLoader, PxLoaderImage, buzz, Globals) {
      * Shows the text "Loading" with the loaded percent
      * @param  {event} e The PxLoader event
      * @param  {Canvas2DContext} context The context to write in
-     * @param  {integer} CANVAS_WIDTH    The canvas' width
-     * @param  {integer} CANVAS_HEIGHT   The canvas' height
      */
-    Loader.showLoadingText = function(e, context, CANVAS_WIDTH, CANVAS_HEIGHT) {
+    Loader.showLoadingText = function(e, context) {
         context.font = 'bold 30px sans-serif';
 
         var loadingText = 'Loading ' + ((e.completedCount * 100 / e.totalCount) | 0) + '%',
@@ -164,11 +162,11 @@ function(assets, PxLoader, PxLoaderImage, buzz, Globals) {
 
         // Clearing the canvas
         context.fillStyle = 'rgb(0, 0, 0)';
-        context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        context.fillRect(0, 0, Globals.CANVAS_WIDTH, Globals.CANVAS_HEIGHT);
 
         // Writing the loading text
         context.fillStyle = '#89BC94';
-        context.fillText(loadingText, (CANVAS_WIDTH >> 1) - (textWidth >> 1), (CANVAS_HEIGHT >> 1) - (textHeight >> 1));
+        context.fillText(loadingText, (Globals.CANVAS_WIDTH >> 1) - (textWidth >> 1), (Globals.CANVAS_HEIGHT >> 1) - (textHeight >> 1));
     };
 
     return Loader;
