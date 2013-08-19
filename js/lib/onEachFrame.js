@@ -1,4 +1,5 @@
-(function() {
+var onEachFrame = (function() {
+    'use strict';
 
     ///////////////////////////////////////////////////////
     // Assuring compatibility with requestAnimationFrame //
@@ -33,6 +34,7 @@
      * @type {Object}
      */
     var requestAnimationFrameCallbacks = {};
+    var cancelledAnimationFrameCallbacks = {};
 
     /**
      * Triggers a callback on each rendering frame
@@ -40,7 +42,7 @@
      * @param  {String}   label  The loop label. If not null, the callback will be registered, in a list, and cancellable with onEachFrame.cancel()
      * @param  {Object}   target The object to bind to the call on each frame (the "this"-object in the callback)
      */
-    window.onEachFrame = function(cb, label, target) {
+    var onEachFrame = function(cb, label, target) {
         var callback = cb;
 
         if (target != undefined) {
@@ -50,7 +52,18 @@
         }
 
         var _cb = function() {
+            // We check if the callback was unregistered before calling it, so that we don't call it if not necessary
+            if (cancelledAnimationFrameCallbacks[label]) {
+                delete cancelledAnimationFrameCallbacks[label];
+            }
+            
             callback();
+
+            // If the callback was just cancelled, then we stop here, and don't call the next requestAnimationFrame
+            if (cancelledAnimationFrameCallbacks[label]) {
+                delete cancelledAnimationFrameCallbacks[label];
+                return;
+            }
 
             var anim = requestAnimationFrame(_cb);
             if (label) {
@@ -63,16 +76,16 @@
     /**
      * Cancels an onEachFrame() loop
      * @param  {String} loopLabel The label of the loop to cancel
-     * @return {[type]}       [description]
      */
-    window.onEachFrame.cancel = function(loopLabel) {
+    onEachFrame.cancel = function(loopLabel) {
+        if (loopLabel == undefined) {
+            return;
+        }
         if (typeof loopLabel == 'string') { // If the given index is a label, cancel the callback with the given label
             var label = loopLabel;
             loopLabel = requestAnimationFrameCallbacks[label];
+            cancelledAnimationFrameCallbacks[label] = true;
             delete requestAnimationFrameCallbacks[label];
-        }
-        if (loopLabel == undefined) {
-            return;
         }
         window.cancelAnimationFrame(loopLabel);
     }
@@ -95,4 +108,6 @@
         }
         Time.time = t;
     });
+
+    return onEachFrame;
 })();
