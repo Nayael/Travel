@@ -25,12 +25,12 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Map) {
         // Body
         this.body = new Engine.Body(this, 1, 1.8, Map.TS);
         this.body.limitToBounds = true;
-        
+
         // Physics
         this.physics = new Engine.Physics(this);
         this.physics.useGravity = false;
         this.physics.useCollisions = false;
-        
+
         // View
         this.initFSM();
         this.fsm.walkRight();
@@ -48,39 +48,38 @@ function(Engine, StateMachine, Keyboard, inherits, Character, Map) {
      */
     Ghost.prototype.initFSM = function() {
         this.fsm = StateMachine.create({
-            error: function(eventName, from, to, args, errorCode, errorMessage) {
-                console.log('Error on event ' + eventName + '. From [' + from + '] to [' + to + '] : ' + errorMessage);
-            },
-            events: [
-                { name: 'walkLeft', from: [Character.NONE, Ghost.WALKING_RIGHT], to: Ghost.WALKING_LEFT },
-                { name: 'walkRight', from: [Character.NONE, Ghost.WALKING_LEFT], to: Ghost.WALKING_RIGHT }
-            ]
+            events: [{
+                name: 'walkLeft',
+                from: [Character.NONE, Ghost.WALKING_RIGHT],
+                to: Ghost.WALKING_LEFT
+            }, {
+                name: 'walkRight',
+                from: [Character.NONE, Ghost.WALKING_LEFT],
+                to: Ghost.WALKING_RIGHT
+            }],
+            callbacks: {
+                onwalkLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.walkLSprite,
+                        width      : 31.5,
+                        height     : 43,
+                        totalFrames: 6,
+                        frameRate  : 130
+                    });
+                },
+
+                onwalkRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.walkRSprite,
+                        width      : 31.5,
+                        height     : 43,
+                        totalFrames: 6,
+                        frameRate  : 130
+                    });
+                }
+            }
         });
         this.fsm.subject = this;
-
-        this.fsm.onwalkLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.walkLSprite,
-                localX: 0,
-                localY: 0,
-                width: 31.5,
-                height: 43,
-                totalFrames: 6,
-                frameRate: 130
-            });
-        };
-
-        this.fsm.onwalkRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.walkRSprite,
-                localX: 0,
-                localY: 0,
-                width: 31.5,
-                height: 43,
-                totalFrames: 6,
-                frameRate: 130
-            });
-        };
     };
 
     /**

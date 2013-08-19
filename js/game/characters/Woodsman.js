@@ -50,139 +50,124 @@ function(Engine, StateMachine, Keyboard, Map, inherits, Character) {
      */
     Woodsman.prototype.initFSM = function() {
         this.fsm = StateMachine.create({
-            error: function(eventName, from, to, args, errorCode, errorMessage) {
-                console.log('Error # ' + errorCode + ' on event ' + eventName + '. From [' + from + '] to [' + to + '] : ' + errorMessage + ' (' + args + ')');
-            },
             events: [{
-                    name: 'turnLeft',
-                    from: [Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.JUMPING_LEFT, Woodsman.FALLING_LEFT],
-                    to: Woodsman.IDLE_LEFT
-                }, {
-                    name: 'turnRight',
-                    from: [Character.NONE, Woodsman.IDLE_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_RIGHT],
-                    to: Woodsman.IDLE_RIGHT
-                }, {
-                    name: 'walkLeft',
-                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
-                    to: Woodsman.WALKING_LEFT
-                }, {
-                    name: 'walkRight',
-                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
-                    to: Woodsman.WALKING_RIGHT
-                }, {
-                    name: 'jumpLeft',
-                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
-                    to: Woodsman.JUMPING_LEFT
-                }, {
-                    name: 'jumpRight',
-                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
-                    to: Woodsman.JUMPING_RIGHT
-                }, {
-                    name: 'fallLeft',
-                    from:[Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_RIGHT],
-                    to: Woodsman.FALLING_LEFT
-                }, {
-                    name: 'fallRight',
-                    from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT],
-                    to: Woodsman.FALLING_RIGHT
+                name: 'turnLeft',
+                from: [Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.JUMPING_LEFT, Woodsman.FALLING_LEFT],
+                to: Woodsman.IDLE_LEFT
+            }, {
+                name: 'turnRight',
+                from: [Character.NONE, Woodsman.IDLE_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_RIGHT],
+                to: Woodsman.IDLE_RIGHT
+            }, {
+                name: 'walkLeft',
+                from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
+                to: Woodsman.WALKING_LEFT
+            }, {
+                name: 'walkRight',
+                from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
+                to: Woodsman.WALKING_RIGHT
+            }, {
+                name: 'jumpLeft',
+                from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
+                to: Woodsman.JUMPING_LEFT
+            }, {
+                name: 'jumpRight',
+                from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.FALLING_LEFT, Woodsman.FALLING_RIGHT],
+                to: Woodsman.JUMPING_RIGHT
+            }, {
+                name: 'fallLeft',
+                from:[Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_RIGHT],
+                to: Woodsman.FALLING_LEFT
+            }, {
+                name: 'fallRight',
+                from: [Woodsman.IDLE_LEFT, Woodsman.IDLE_RIGHT, Woodsman.WALKING_LEFT, Woodsman.WALKING_RIGHT, Woodsman.JUMPING_LEFT, Woodsman.JUMPING_RIGHT, Woodsman.FALLING_LEFT],
+                to: Woodsman.FALLING_RIGHT
+            }],
+            callbacks: {
+                onturnLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.idleLSprite,
+                        width      : 47,
+                        height     : 108,
+                        totalFrames: 2,
+                        frameRate  : 50
+                    });
+                },
+
+                onturnRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.idleRSprite,
+                        localX     : this.subject.body.getWidth() - 47,
+                        width      : 47,
+                        height     : 108,
+                        totalFrames: 2,
+                        frameRate  : 50
+                    });
+                },
+
+                onwalkLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.walkLSprite,
+                        width      : 58,
+                        height     : 108,
+                        totalFrames: 8,
+                        frameRate  : 120
+                    });
+                },
+
+                onwalkRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.walkRSprite,
+                        localX     : this.subject.body.getWidth() - 58,
+                        width      : 58,
+                        height     : 108,
+                        totalFrames: 8,
+                        frameRate  : 120
+                    });
+                },
+
+                onjumpLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.jumpLSprite,
+                        width      : 57,
+                        height     : 111,
+                        totalFrames: 7,
+                        frameRate  : 120
+                    });
+                },
+
+                onjumpRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.jumpRSprite,
+                        localX     : this.subject.body.getWidth() - 57,
+                        width      : 57,
+                        height     : 111,
+                        totalFrames: 7,
+                        frameRate  : 120
+                    });
+                },
+
+                onfallLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.fallLSprite,
+                        width      : 57,
+                        height     : 111,
+                        totalFrames: 1
+                    });
+                },
+
+                onfallRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.fallRSprite,
+                        localX     : this.subject.body.getWidth() - 57,
+                        width      : 57,
+                        height     : 111,
+                        totalFrames: 1
+                    });
                 }
-            ]
+            }
         });
         this.fsm.subject = this;
-
-        this.fsm.onturnLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.idleLSprite,
-                localX: 0,
-                localY: 0,
-                width: 47,
-                height: 108,
-                totalFrames: 2,
-                frameRate: 50
-            });
-        };
-
-        this.fsm.onturnRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.idleRSprite,
-                localX: this.subject.body.getWidth() - 47,
-                localY: 0,
-                width: 47,
-                height: 108,
-                totalFrames: 2,
-                frameRate: 50
-            });
-        };
-
-        this.fsm.onwalkLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.walkLSprite,
-                localX: 0,
-                localY: 0,
-                width: 58,
-                height: 108,
-                totalFrames: 8,
-                frameRate: 120
-            });
-        };
-
-        this.fsm.onwalkRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.walkRSprite,
-                localX: this.subject.body.getWidth() - 58,
-                localY: 0,
-                width: 58,
-                height: 108,
-                totalFrames: 8,
-                frameRate: 120
-            });
-        };
-
-        this.fsm.onjumpLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.jumpLSprite,
-                localX: 0,
-                localY: 0,
-                width: 57,
-                height: 111,
-                totalFrames: 7,
-                frameRate: 120
-            });
-        };
-
-        this.fsm.onjumpRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.jumpRSprite,
-                localX: this.subject.body.getWidth() - 57,
-                localY: 0,
-                width: 57,
-                height: 111,
-                totalFrames: 7,
-                frameRate: 120
-            });
-        };
-
-        this.fsm.onfallLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.fallLSprite,
-                localX: 0,
-                localY: 0,
-                width: 57,
-                height: 111,
-                totalFrames: 1
-            });
-        };
-
-        this.fsm.onfallRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.fallRSprite,
-                localX: this.subject.body.getWidth() - 57,
-                localY: 0,
-                width: 57,
-                height: 111,
-                totalFrames: 1
-            });
-        };
     };
 
     /**

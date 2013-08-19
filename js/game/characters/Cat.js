@@ -50,139 +50,125 @@ function(Engine, StateMachine, Keyboard, Map, inherits, Character) {
      */
     Cat.prototype.initFSM = function() {
         this.fsm = StateMachine.create({
-            error: function(eventName, from, to, args, errorCode, errorMessage) {
-                console.log('Error # ' + errorCode + ' on event ' + eventName + '. From [' + from + '] to [' + to + '] : ' + errorMessage + ' (' + args + ')');
-            },
             events: [{
-                    name: 'turnLeft',
-                    from: [Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.JUMPING_LEFT, Cat.FALLING_LEFT],
-                    to: Cat.IDLE_LEFT
-                }, {
-                    name: 'turnRight',
-                    from: [Character.NONE, Cat.IDLE_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_RIGHT, Cat.FALLING_RIGHT],
-                    to: Cat.IDLE_RIGHT
-                }, {
-                    name: 'walkLeft',
-                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
-                    to: Cat.WALKING_LEFT
-                }, {
-                    name: 'walkRight',
-                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
-                    to: Cat.WALKING_RIGHT
-                }, {
-                    name: 'jumpLeft',
-                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
-                    to: Cat.JUMPING_LEFT
-                }, {
-                    name: 'jumpRight',
-                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
-                    to: Cat.JUMPING_RIGHT
-                }, {
-                    name: 'fallLeft',
-                    from:[Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_RIGHT],
-                    to: Cat.FALLING_LEFT
-                }, {
-                    name: 'fallRight',
-                    from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT],
-                    to: Cat.FALLING_RIGHT
+                name: 'turnLeft',
+                from: [Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.JUMPING_LEFT, Cat.FALLING_LEFT],
+                to: Cat.IDLE_LEFT
+            }, {
+                name: 'turnRight',
+                from: [Character.NONE, Cat.IDLE_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_RIGHT, Cat.FALLING_RIGHT],
+                to: Cat.IDLE_RIGHT
+            }, {
+                name: 'walkLeft',
+                from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
+                to: Cat.WALKING_LEFT
+            }, {
+                name: 'walkRight',
+                from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
+                to: Cat.WALKING_RIGHT
+            }, {
+                name: 'jumpLeft',
+                from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
+                to: Cat.JUMPING_LEFT
+            }, {
+                name: 'jumpRight',
+                from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.FALLING_LEFT, Cat.FALLING_RIGHT],
+                to: Cat.JUMPING_RIGHT
+            }, {
+                name: 'fallLeft',
+                from:[Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_RIGHT],
+                to: Cat.FALLING_LEFT
+            }, {
+                name: 'fallRight',
+                from: [Cat.IDLE_LEFT, Cat.IDLE_RIGHT, Cat.WALKING_LEFT, Cat.WALKING_RIGHT, Cat.JUMPING_LEFT, Cat.JUMPING_RIGHT, Cat.FALLING_LEFT],
+                to: Cat.FALLING_RIGHT
+            }],
+            callbacks: {
+                onturnLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.idleLSprite,
+                        width      : 35,
+                        height     : 34,
+                        totalFrames: 4,
+                        frameRate  : 50
+                    });
+                },
+
+                onturnRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.idleRSprite,
+                        localX     : this.subject.body.getWidth() - 35,
+                        width      : 35,
+                        height     : 34,
+                        totalFrames: 4,
+                        frameRate  : 50
+                    });
+                },
+
+                onwalkLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.walkLSprite,
+                        width      : 44,
+                        height     : 33,
+                        totalFrames: 5,
+                        frameRate  : 120
+                    });
+                },
+
+                onwalkRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.walkRSprite,
+                        localX     : this.subject.body.getWidth() - 44,
+                        width      : 44,
+                        height     : 33,
+                        totalFrames: 5,
+                        frameRate  : 120
+                    });
+                },
+
+                onjumpLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.jumpLSprite,
+                        width      : 61,
+                        height     : 42,
+                        totalFrames: 8,
+                        frameRate  : 120
+                    });
+                },
+
+                onjumpRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.jumpRSprite,
+                        localX     : this.subject.body.getWidth() - 61,
+                        width      : 61,
+                        height     : 42,
+                        totalFrames: 8,
+                        frameRate  : 120
+                    });
+                },
+
+                onfallLeft: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.fallLSprite,
+                        width      : 58,
+                        height     : 36,
+                        totalFrames: 1
+                    });
+                },
+
+                onfallRight: function(e) {
+                    this.subject.view = new Engine.View(this.subject, {
+                        spritesheet: this.subject.sprites.fallRSprite,
+                        localX     : this.subject.body.getWidth() - 58,
+                        width      : 58,
+                        height     : 36,
+                        totalFrames: 1
+                    });
                 }
-            ]
+            }
         });
         this.fsm.subject = this;
 
-        this.fsm.onturnLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.idleLSprite,
-                localX: 0,
-                localY: 0,
-                width: 35,
-                height: 34,
-                totalFrames: 4,
-                frameRate: 50
-            });
-        };
-
-        this.fsm.onturnRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.idleRSprite,
-                localX: this.subject.body.getWidth() - 35,
-                localY: 0,
-                width: 35,
-                height: 34,
-                totalFrames: 4,
-                frameRate: 50
-            });
-        };
-
-        this.fsm.onwalkLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.walkLSprite,
-                localX: 0,
-                localY: 0,
-                width: 44,
-                height: 33,
-                totalFrames: 5,
-                frameRate: 120
-            });
-        };
-
-        this.fsm.onwalkRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.walkRSprite,
-                localX: this.subject.body.getWidth() - 44,
-                localY: 0,
-                width: 44,
-                height: 33,
-                totalFrames: 5,
-                frameRate: 120
-            });
-        };
-
-        this.fsm.onjumpLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.jumpLSprite,
-                localX: 0,
-                localY: 0,
-                width: 61,
-                height: 42,
-                totalFrames: 8,
-                frameRate: 120
-            });
-        };
-
-        this.fsm.onjumpRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.jumpRSprite,
-                localX: this.subject.body.getWidth() - 61,
-                localY: 0,
-                width: 61,
-                height: 42,
-                totalFrames: 8,
-                frameRate: 120
-            });
-        };
-
-        this.fsm.onfallLeft = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.fallLSprite,
-                localX: 0,
-                localY: 0,
-                width: 58,
-                height: 36,
-                totalFrames: 1
-            });
-        };
-
-        this.fsm.onfallRight = function(e) {
-            this.subject.view = new Engine.View(this.subject, {
-                sprite: this.subject.sprites.fallRSprite,
-                localX: this.subject.body.getWidth() - 58,
-                localY: 0,
-                width: 58,
-                height: 36,
-                totalFrames: 1
-            });
-        };
     };
 
     /**

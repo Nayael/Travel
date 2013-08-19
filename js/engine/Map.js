@@ -71,7 +71,7 @@ define(function() {
                         tileX, tileY, this.TS, this.TS + this.yShiftUp + this.yShiftDown);
 
                 // Creating NPCs that will be drawn
-                } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < this.CANVAS_WIDTH && tileY > -this.TS && tileY < this.CANVAS_HEIGHT) {
+                // } else if (this.npcs.indexOf(this.tilemap[i][j]) != -1 && tileX > -this.TS && tileX < this.CANVAS_WIDTH && tileY > -this.TS && tileY < this.CANVAS_HEIGHT) {
                     // If the NPC ins't already on the stage
                     // if (Game.npcs[i * this.tilemap[i].length + j] == undefined && entity.npcMapIndex != (i * this.tilemap[i].length + j)) {
                     //     Game.Npc.pop(this.tilemap[i][j], j, i);

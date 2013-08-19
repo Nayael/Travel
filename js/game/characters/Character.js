@@ -10,17 +10,17 @@ function(Engine, Keyboard, Globals, Map) {
      * @param {Object} sprites  The sprites for this character
      */
     var Character = function(x, y, sprites) {
-        this.name = null;
-        this.body = null;
+        this.name    = null;
+        this.body    = null;
         this.physics = null;
-        this.view = null;
-        this.fsm = null
+        this.view    = null;
+        this.fsm     = null
 
-        this.x = x || 0;
-        this.y = y || 0;
-        this.sprites = sprites;
+        this.x            = x || 0;
+        this.y            = y || 0;
+        this.sprites      = sprites;
         this.controllable = false;
-        this.enabled = true;
+        this.enabled      = true;
 
         this.speed = {
             x: 15,

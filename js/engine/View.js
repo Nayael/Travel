@@ -2,7 +2,7 @@
 define(function() {
     var View = function(entity, data) {
         this.entity       = entity;
-        this.sprite       = data.sprite;
+        this.spritesheet  = data.spritesheet;
         
         // The local position of the sprite in the entity
         this.localX       = data.localX || 0;
@@ -26,7 +26,7 @@ define(function() {
         var globalX = this.localX + (this.entity ? this.entity.x : 0),
             globalY = this.localY + (this.entity ? this.entity.y : 0);
         
-        context.drawImage(this.sprite, this.width * this.currentFrame, 0, this.width, this.height, globalX, globalY, this.width, this.height);
+        context.drawImage(this.spritesheet, this.width * this.currentFrame, 0, this.width, this.height, globalX, globalY, this.width, this.height);
         this.frameCount++;
 
         if (this.frameCount % ( (1000 / (this.frameRate) ) | 0) == 0) {

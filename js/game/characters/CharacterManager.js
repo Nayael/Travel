@@ -6,22 +6,24 @@ function(Engine, Map, Character, Ghost, Cat, Woodsman) {
     /**
      * @constructor
      */
-    var CharacterManager = function() { };
+    var CharacterManager = function() {
+        /**
+         * The list of all the NPCs available in the game, and their values in the tilemap
+         * @type {Object}
+         */
+        this.INDEXES = {
+            200: 'Cat',
+            300: 'Oldwoman',
+            400: 'Woodsman',
+            500: 'Bat',
+            600: 'Dove'
+        };
 
-    /**
-     * Constants
-     */
-    
-    /**
-     * The list of all the NPCs available in the game, and their values in the tilemap
-     * @type {Object}
-     */
-    CharacterManager.INDEXES = {
-        200: 'Cat',
-        300: 'Oldwoman',
-        400: 'Woodsman',
-        500: 'Bat',
-        600: 'Dove'
+        /**
+         * The default character at the beginning of the game
+         * @type {Class}
+         */
+        this.DEFAULT_CHARACTER = Ghost;
     };
 
     /**
@@ -113,5 +115,6 @@ function(Engine, Map, Character, Ghost, Cat, Woodsman) {
         // Game.npcs[npcMapIndex].npcValue = value;
     };
 
+    // Return an instance (so that it's a "static class")
     return new CharacterManager();
 });

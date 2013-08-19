@@ -1,9 +1,9 @@
 // The Bat character class file
 define(function() {
     var Bat = function(x, y) {
-        this.name  = 'bat';
-        this.x     = x || 0;
-        this.y     = y || 0;
+        this.name = 'bat';
+        this.x = x || 0;
+        this.y = y || 0;
         this.realX = this.x + Game.map.scrollX;
         this.realY = this.y + Game.map.scrollY;
         this.speed = {
@@ -18,13 +18,13 @@ define(function() {
 
         this.body = new Game.Body(this, 1, 1);
 
-        this.physics               = new Game.Physics(this);
-        this.physics.jumpHeight    = 90;
-        this.physics.useGravity    = false;
+        this.physics = new Game.Physics(this);
+        this.physics.jumpHeight = 90;
+        this.physics.useGravity = false;
 
-        this.state         = 'WALK_L';
+        this.state = 'WALK_L';
         this.previousState = this.state;
-        this.frame         = 0;
+        this.frame = 0;
     };
 
     /**
@@ -100,14 +100,13 @@ define(function() {
      * @param  {Canvas2DContext} context The 2D context of the canvas to render in
      */
     Bat.prototype.render = function(context) {
-        switch (this.state){
+        switch (this.state) {
             case 'WALK_R':
                 context.drawImage(Game.images[Game.player.name].tiles,
-                    9 * Game.map.TS, 0, Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown,
-                    (this.x | 0), (this.y | 0), Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown);
-                context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame),0, 59,46,this.x - 30,this.y,59,46);
+                    9 * Game.map.TS, 0, Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown, (this.x | 0), (this.y | 0), Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown);
+                context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame), 0, 59, 46, this.x - 30, this.y, 59, 46);
                 // context.drawImage(Game.images[this.name].walkrImage, 59 * (this.frame),0, 59,46,this.x - 30,this.y,59,46);
-                if (Game.frameCount % 8  == 0) {
+                if (Game.frameCount % 8 == 0) {
                     this.frame--;
                 }
                 if (this.frame == 0) {
@@ -117,10 +116,9 @@ define(function() {
 
             case 'WALK_L':
                 context.drawImage(Game.images[Game.player.name].tiles,
-                    9 * Game.map.TS, 0, Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown,
-                    (this.x | 0), (this.y | 0), Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown);
-                context.drawImage(Game.images[this.name].walklImage, 59 * (this.frame),0, 59,46,this.x + 4,this.y,59,46);
-                if (Game.frameCount % 8  == 0) {
+                    9 * Game.map.TS, 0, Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown, (this.x | 0), (this.y | 0), Game.map.TS, Game.map.TS + Game.map.yShiftUp + Game.map.yShiftDown);
+                context.drawImage(Game.images[this.name].walklImage, 59 * (this.frame), 0, 59, 46, this.x + 4, this.y, 59, 46);
+                if (Game.frameCount % 8 == 0) {
                     this.frame++;
                 }
                 if (this.frame >= 6) {
@@ -172,7 +170,7 @@ define(function() {
     Bat.prototype.onLeave = function() {
         if (this.state == 'WALK_L' || this.state == 'WALK_L') {
             this.state = 'WALK_L';
-        } else{
+        } else {
             this.state = 'WALK_R';
         }
     };
