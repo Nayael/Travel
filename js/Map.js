@@ -141,7 +141,6 @@
             Game.player.y = this.scrollYMin;
             this.scrollY += dY;
         }
-        console.log(this.scrollY);
 
         if (this.scrollX < 0) {
             this.scrollX = 0;

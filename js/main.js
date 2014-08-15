@@ -244,7 +244,7 @@ Game.load = function() {
 
     // Progression bar
     this.loader.addProgressListener(function(e) {
-        console.log(e.completedCount * 100 / e.totalCount + '%');
+        // console.log(e.completedCount * 100 / e.totalCount + '%');
     });
 
     // Starting the loading
